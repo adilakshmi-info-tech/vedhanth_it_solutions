@@ -1,22 +1,9 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { getCounts } from '@/lib/data';
 
-export default function AdminDashboard() {
-  const [counts, setCounts] = useState({ categories: 0, products: 0, reviews: 0 });
+export const dynamic = 'force-dynamic';
 
-  useEffect(() => {
-    async function load() {
-      const [cats, prods, revs] = await Promise.all([
-        getDocs(collection(db, 'categories')),
-        getDocs(collection(db, 'products')),
-        getDocs(collection(db, 'reviews')),
-      ]);
-      setCounts({ categories: cats.size, products: prods.size, reviews: revs.size });
-    }
-    load();
-  }, []);
+export default async function AdminDashboard() {
+  const counts = await getCounts();
 
   return (
     <div>

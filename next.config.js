@@ -1,14 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone', // produces a self-contained server for your custom server / PM2 deployment
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com',
-      },
-    ],
-  },
+  output: 'standalone', // self-contained server for the PM2 deployment on the private server
+  // Product images are served as local static files from /public/uploads,
+  // so next/image needs no remotePatterns.
 };
 
 module.exports = nextConfig;

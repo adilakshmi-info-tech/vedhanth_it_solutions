@@ -1,0 +1,2 @@
+# Product images uploaded through the admin panel are written here at runtime.
+# The directory is tracked; its contents are ignored (see .gitignore).

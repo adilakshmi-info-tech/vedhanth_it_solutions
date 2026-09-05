@@ -1,28 +1,22 @@
-'use client';
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { notFound } from 'next/navigation';
+import { getProductBySlug } from '@/lib/data';
 
-export default function ProductDetailPage({ params }) {
-  const { slug } = params;
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+// Server-rendered per request from the live database.
+export const dynamic = 'force-dynamic';
 
-  useEffect(() => {
-    async function load() {
-      const q = query(collection(db, 'products'), where('slug', '==', slug));
-      const snap = await getDocs(q);
-      if (!snap.empty) {
-        setProduct({ id: snap.docs[0].id, ...snap.docs[0].data() });
-      }
-      setLoading(false);
-    }
-    load();
-  }, [slug]);
+export async function generateMetadata({ params }) {
+  const product = await getProductBySlug(params.slug);
+  if (!product) return { title: 'Product not found' };
+  return {
+    title: product.name,
+    description: product.description || `${product.name} — available from Vedhanth IT Solutions, Bengaluru.`,
+  };
+}
 
-  if (loading) return <section className="py-20 text-center text-inksoft">Loading…</section>;
-  if (!product) return <section className="py-20 text-center text-inksoft">Product not found.</section>;
+export default async function ProductDetailPage({ params }) {
+  const product = await getProductBySlug(params.slug);
+  if (!product) notFound();
 
   return (
     <section className="py-20">

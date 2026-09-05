@@ -1,5 +1,10 @@
 import Link from 'next/link';
 import ReviewsSection from '@/components/ReviewsSection';
+import { getApprovedReviews } from '@/lib/data';
+
+// Rendered per request on the server so it always reflects the live database
+// (no build-time DB dependency, no stale cache after an admin edit).
+export const dynamic = 'force-dynamic';
 
 const services = [
   {
@@ -20,7 +25,9 @@ const services = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const reviews = await getApprovedReviews(3);
+
   return (
     <>
       {/* HERO */}
@@ -77,7 +84,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ReviewsSection />
+      <ReviewsSection reviews={reviews} />
 
       {/* CONTACT CTA */}
       <section className="py-16">

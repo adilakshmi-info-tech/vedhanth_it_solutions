@@ -1,35 +1,6 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-
-export default function ReviewsSection() {
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const q = query(
-          collection(db, 'reviews'),
-          where('approved', '==', true),
-          orderBy('createdAt', 'desc'),
-          limit(3)
-        );
-        const snap = await getDocs(q);
-        setReviews(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-      } catch (e) {
-        // Firestore composite index or empty collection — fail quietly on the public site
-        console.error('Could not load reviews', e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-  }, []);
-
-  if (loading) return null;
-
+// Presentational — approved reviews are fetched on the server (see app/page.js)
+// and passed in, so this content is in the HTML before it reaches the browser.
+export default function ReviewsSection({ reviews = [] }) {
   if (reviews.length === 0) {
     return (
       <section className="py-20 bg-paper">

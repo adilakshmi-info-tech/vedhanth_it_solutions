@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { submitReview } from '@/lib/actions/reviews';
 
 export default function ReviewForm() {
   const [form, setForm] = useState({ name: '', rating: 5, comment: '' });
@@ -12,12 +11,10 @@ export default function ReviewForm() {
     if (!form.name.trim() || !form.comment.trim()) return;
     setStatus('sending');
     try {
-      await addDoc(collection(db, 'reviews'), {
+      await submitReview({
         name: form.name,
         rating: Number(form.rating),
         comment: form.comment,
-        approved: false, // hidden until an admin approves it
-        createdAt: serverTimestamp(),
       });
       setForm({ name: '', rating: 5, comment: '' });
       setStatus('sent');
