@@ -1,6 +1,6 @@
 // Seeds one AdminUser so there's a login on day one.
 //
-//   ADMIN_EMAIL=admin@vedhanthitsolutions.com ADMIN_PASSWORD='a-strong-password' npm run db:seed
+//   ADMIN_EMAIL=admin@vedhanthitsolutions.in ADMIN_PASSWORD='a-strong-password' npm run db:seed
 //
 // Re-running with the same email updates that user's password (upsert).
 const { PrismaClient } = require('@prisma/client');
@@ -15,7 +15,7 @@ async function main() {
   if (!email || !password) {
     throw new Error(
       'Set ADMIN_EMAIL and ADMIN_PASSWORD environment variables before seeding.\n' +
-        "Example: ADMIN_EMAIL=admin@vedhanthitsolutions.com ADMIN_PASSWORD='...' npm run db:seed"
+        "Example: ADMIN_EMAIL=admin@vedhanthitsolutions.in ADMIN_PASSWORD='...' npm run db:seed"
     );
   }
   if (password.length < 8) {

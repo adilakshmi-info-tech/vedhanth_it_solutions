@@ -42,7 +42,7 @@ Then edit `.env`:
 | Variable | What it is |
 |---|---|
 | `DATABASE_URL` | `postgresql://vedhanth:PASSWORD@localhost:5432/vedhanth?schema=public` |
-| `NEXTAUTH_URL` | The public URL of the site (`https://vedhanthitsolutions.com` in production) |
+| `NEXTAUTH_URL` | The public URL of the site (`https://vedhanthitsolutions.in` in production) |
 | `NEXTAUTH_SECRET` | Random string — generate with `openssl rand -base64 32` |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Only read by the seed script to create the first admin login |
 
@@ -71,7 +71,7 @@ To add another admin later, re-run the seed with different `ADMIN_EMAIL` / `ADMI
 
 ## 6. Production deploy — Docker on the shared WACRM VM
 
-This is the deploy path actually used for `vedhanthitsolutions.com`: the VM already runs a shared
+This is the deploy path actually used for `vedhanthitsolutions.in`: the VM already runs a shared
 `wacrm_nginx` reverse proxy for several sites (see `Deploy_New_Website_on_WACRM_VM.md` for the full
 runbook). Vedhanth gets its **own** app + Postgres containers in `/opt/vedhanth`, on the VM's
 existing `wacrm_wacrm_network` — nothing about WACRM's own stack is touched.
@@ -147,7 +147,7 @@ rsync -a /path/to/deploy/public/uploads/  ./public/uploads/
 ```nginx
 server {
     listen 80;
-    server_name vedhanthitsolutions.com www.vedhanthitsolutions.com;
+    server_name vedhanthitsolutions.in www.vedhanthitsolutions.in;
     client_max_body_size 6M;   # product image uploads
 
     location / {
@@ -164,7 +164,7 @@ server {
 Then add HTTPS with **Certbot** (Let's Encrypt):
 
 ```bash
-sudo certbot --nginx -d vedhanthitsolutions.com -d www.vedhanthitsolutions.com
+sudo certbot --nginx -d vedhanthitsolutions.in -d www.vedhanthitsolutions.in
 ```
 
 ## 7. Database migrations

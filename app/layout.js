@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 
 export const metadata = {
-  metadataBase: new URL('https://vedhanthitsolutions.com'), // update once domain is live
+  metadataBase: new URL('https://vedhanthitsolutions.in'), // update once domain is live
   title: {
     default: 'Vedhanth IT Solutions — CCTV, Networking & IT Security Solutions, Bengaluru',
     template: '%s | Vedhanth IT Solutions',

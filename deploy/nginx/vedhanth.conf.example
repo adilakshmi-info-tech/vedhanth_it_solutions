@@ -5,7 +5,7 @@
 # --- HTTP (use alone until DNS points at the server / cert is issued) -----
 server {
   listen 80;
-  server_name vedhanthitsolutions.com www.vedhanthitsolutions.com;
+  server_name vedhanthitsolutions.in www.vedhanthitsolutions.in;
   client_max_body_size 6M; # product image uploads (lib/uploads.js caps at 5MB)
 
   location / {
@@ -24,11 +24,11 @@ server {
 # --- HTTPS (add once `certbot certonly` has issued the cert) --------------
 # server {
 #   listen 443 ssl;
-#   server_name vedhanthitsolutions.com www.vedhanthitsolutions.com;
+#   server_name vedhanthitsolutions.in www.vedhanthitsolutions.in;
 #   client_max_body_size 6M; # product image uploads (lib/uploads.js caps at 5MB)
 #
-#   ssl_certificate     /etc/letsencrypt/live/vedhanthitsolutions.com/fullchain.pem;
-#   ssl_certificate_key /etc/letsencrypt/live/vedhanthitsolutions.com/privkey.pem;
+#   ssl_certificate     /etc/letsencrypt/live/vedhanthitsolutions.in/fullchain.pem;
+#   ssl_certificate_key /etc/letsencrypt/live/vedhanthitsolutions.in/privkey.pem;
 #   ssl_protocols       TLSv1.2 TLSv1.3;
 #
 #   location / {

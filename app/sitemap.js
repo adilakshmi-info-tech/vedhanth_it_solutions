@@ -1,5 +1,5 @@
 export default function sitemap() {
-  const base = 'https://vedhanthitsolutions.com'; // update once domain is live
+  const base = 'https://vedhanthitsolutions.in'; // update once domain is live
   const routes = ['', '/about', '/services', '/products', '/contact'];
   return routes.map((route) => ({
     url: `${base}${route}`,
