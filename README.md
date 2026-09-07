@@ -69,9 +69,44 @@ npm run dev
 To add another admin later, re-run the seed with different `ADMIN_EMAIL` / `ADMIN_PASSWORD`
 (existing emails have their password updated rather than duplicated).
 
-## 6. Production build & deploy (custom server)
+## 6. Production deploy — Docker on the shared WACRM VM
 
-Because `next.config.js` sets `output: 'standalone'`, the build produces a self-contained server.
+This is the deploy path actually used for `vedhanthitsolutions.com`: the VM already runs a shared
+`wacrm_nginx` reverse proxy for several sites (see `Deploy_New_Website_on_WACRM_VM.md` for the full
+runbook). Vedhanth gets its **own** app + Postgres containers in `/opt/vedhanth`, on the VM's
+existing `wacrm_wacrm_network` — nothing about WACRM's own stack is touched.
+
+```bash
+# one-time: clone via the deploy key, per the runbook
+git clone github-vedhanth:adilakshmi-info-tech/vedhanth_it_solutions.git /opt/vedhanth
+cd /opt/vedhanth
+cp .env.example .env    # fill in POSTGRES_*, DATABASE_URL (host: vedhanth_db), NEXTAUTH_*, ADMIN_*
+
+docker compose up -d --build
+docker compose exec web npx prisma migrate deploy
+docker compose exec web npm run db:seed
+```
+
+Then add `/opt/nginx-extra/conf.d/vedhanth.conf` (template in `deploy/nginx/vedhanth.conf.example`)
+and recreate `wacrm_nginx` so it picks up the new bind — full steps in the runbook.
+
+**Redeploying after a code change:**
+
+```bash
+cd /opt/vedhanth
+git pull
+docker compose up -d --build
+docker compose exec web npx prisma migrate deploy   # only if the schema changed
+```
+
+Postgres data and uploaded product images live under `/opt/vedhanth/data/` (bind-mounted, outside
+the containers) — back that directory up.
+
+## 6b. Alternative: bare-metal / PM2 (no Docker)
+
+Because `next.config.js` sets `output: 'standalone'`, the build also produces a self-contained
+server that runs directly under PM2 on any Linux host with its own Postgres — useful if a future
+deploy target doesn't have Docker.
 
 ```bash
 # On the server, with .env in place and Postgres reachable:

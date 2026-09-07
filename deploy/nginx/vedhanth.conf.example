@@ -1,0 +1,49 @@
+# Reference copy only — the file that actually matters lives outside git on
+# the VM at /opt/nginx-extra/conf.d/vedhanth.conf (see
+# Deploy_New_Website_on_WACRM_VM.md). Keep this copy in sync by hand.
+
+# --- HTTP (use alone until DNS points at the server / cert is issued) -----
+server {
+  listen 80;
+  server_name vedhanthitsolutions.com www.vedhanthitsolutions.com;
+  client_max_body_size 6M; # product image uploads (lib/uploads.js caps at 5MB)
+
+  location / {
+    proxy_pass http://vedhanth_web:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+  }
+
+  access_log /var/log/nginx/vedhanth.access.log;
+  error_log  /var/log/nginx/vedhanth.error.log;
+}
+
+# --- HTTPS (add once `certbot certonly` has issued the cert) --------------
+# server {
+#   listen 443 ssl;
+#   server_name vedhanthitsolutions.com www.vedhanthitsolutions.com;
+#   client_max_body_size 6M; # product image uploads (lib/uploads.js caps at 5MB)
+#
+#   ssl_certificate     /etc/letsencrypt/live/vedhanthitsolutions.com/fullchain.pem;
+#   ssl_certificate_key /etc/letsencrypt/live/vedhanthitsolutions.com/privkey.pem;
+#   ssl_protocols       TLSv1.2 TLSv1.3;
+#
+#   location / {
+#     proxy_pass http://vedhanth_web:3000;
+#     proxy_http_version 1.1;
+#     proxy_set_header Host $host;
+#     proxy_set_header X-Real-IP $remote_addr;
+#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#     proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+#   }
+#
+#   add_header X-Frame-Options        "SAMEORIGIN"                       always;
+#   add_header X-Content-Type-Options "nosniff"                          always;
+#   add_header Referrer-Policy        "strict-origin-when-cross-origin"  always;
+#
+#   access_log /var/log/nginx/vedhanth.access.log;
+#   error_log  /var/log/nginx/vedhanth.error.log;
+# }
