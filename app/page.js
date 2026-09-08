@@ -8,20 +8,20 @@ export const dynamic = 'force-dynamic';
 
 const services = [
   {
-    title: 'CCTV & Security Solutions',
-    desc: 'Dome, bullet & PTZ camera installation, monitoring and support.',
+    title: 'Electrical & LT Panels',
+    desc: 'House wiring, LT panel installation, cable laying & glanding, and panel/motor/UPS maintenance.',
   },
   {
-    title: 'Networking & IT Infrastructure',
-    desc: 'Wired & wireless network setup for offices and homes.',
+    title: 'CCTV & Security Solutions',
+    desc: 'Dome, bullet, PTZ & solar camera installation, monitoring and support.',
   },
   {
     title: 'Biometric & Access Control',
-    desc: 'Fingerprint & face-recognition attendance and access systems.',
+    desc: 'Fingerprint attendance systems and door access control installation.',
   },
   {
-    title: 'Sales & Service Support',
-    desc: 'Equipment sales backed by ongoing service and AMC support.',
+    title: 'Fire Alarm Systems',
+    desc: 'Fire alarm panel, detector and alarm installation for your premises.',
   },
 ];
 

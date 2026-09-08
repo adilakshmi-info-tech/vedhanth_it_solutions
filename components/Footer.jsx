@@ -24,10 +24,10 @@ export default function Footer() {
           <div>
             <h5 className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4">Services</h5>
             <ul className="space-y-3 text-sm">
+              <li>Electrical &amp; LT Panels</li>
               <li>CCTV &amp; Security Solutions</li>
-              <li>Networking &amp; IT Infrastructure</li>
               <li>Biometric &amp; Access Control</li>
-              <li>Sales &amp; Service Support</li>
+              <li>Fire Alarm Systems</li>
             </ul>
           </div>
           <div>
