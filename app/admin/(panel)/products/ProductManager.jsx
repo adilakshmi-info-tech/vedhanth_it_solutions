@@ -2,6 +2,7 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { createProduct, updateProduct, deleteProduct } from '@/lib/actions/products';
+import { uploadImage, deleteImage, pathFromImageUrl } from '@/lib/imageUpload';
 
 const emptyForm = { name: '', description: '', categoryId: '' };
 
@@ -9,39 +10,55 @@ export default function ProductManager({ initialCategories, initialProducts }) {
   const router = useRouter();
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null); // existing image path or object URL
+  const [preview, setPreview] = useState(null); // shown in the form
+  const [uploadedUrl, setUploadedUrl] = useState(null); // newly uploaded image, if any
+  const [existingImageUrl, setExistingImageUrl] = useState(null); // image being replaced, if editing
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [isPending, startTransition] = useTransition();
 
   function resetForm() {
     setForm(emptyForm);
     setEditingId(null);
-    setFile(null);
     setPreview(null);
+    setUploadedUrl(null);
+    setExistingImageUrl(null);
   }
 
-  function handleFileChange(e) {
-    const f = e.target.files?.[0] || null;
-    setFile(f);
-    setPreview(f ? URL.createObjectURL(f) : null);
+  async function handleFileChange(e) {
+    const file = e.target.files?.[0] || null;
+    if (!file) return;
+
+    setPreview(URL.createObjectURL(file)); // instant feedback while it uploads
+    setUploading(true);
+    setError('');
+    try {
+      const uploaded = await uploadImage(file, 'products');
+      setUploadedUrl(uploaded.url);
+      setPreview(uploaded.url);
+    } catch (err) {
+      setError(err.message || 'Image upload failed.');
+      setPreview(existingImageUrl);
+    } finally {
+      setUploading(false);
+    }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!form.name.trim() || !form.categoryId) return;
+    if (!form.name.trim() || !form.categoryId || uploading) return;
 
-    const fd = new FormData();
-    fd.set('name', form.name);
-    fd.set('description', form.description);
-    fd.set('categoryId', form.categoryId);
-    if (file) fd.set('image', file);
+    const payload = { ...form, imageUrl: uploadedUrl || undefined };
+    const replacedImage = editingId && uploadedUrl && existingImageUrl && uploadedUrl !== existingImageUrl
+      ? existingImageUrl
+      : null;
 
     setError('');
     startTransition(async () => {
       try {
-        if (editingId) await updateProduct(editingId, fd);
-        else await createProduct(fd);
+        if (editingId) await updateProduct(editingId, payload);
+        else await createProduct(payload);
+        if (replacedImage) deleteImage(pathFromImageUrl(replacedImage)); // best-effort, don't block on it
         resetForm();
         router.refresh();
       } catch (err) {
@@ -54,7 +71,8 @@ export default function ProductManager({ initialCategories, initialProducts }) {
     setError('');
     setEditingId(p.id);
     setForm({ name: p.name, description: p.description || '', categoryId: p.categoryId || '' });
-    setFile(null);
+    setUploadedUrl(null);
+    setExistingImageUrl(p.images?.[0] || null);
     setPreview(p.images?.[0] || null);
   }
 
@@ -63,7 +81,8 @@ export default function ProductManager({ initialCategories, initialProducts }) {
     setError('');
     startTransition(async () => {
       try {
-        await deleteProduct(id);
+        const images = await deleteProduct(id);
+        (images || []).forEach((url) => deleteImage(pathFromImageUrl(url)));
         router.refresh();
       } catch (err) {
         setError(err.message || 'Something went wrong.');
@@ -111,8 +130,9 @@ export default function ProductManager({ initialCategories, initialProducts }) {
         />
 
         <label className="block text-xs font-semibold text-inksoft mb-1">Image</label>
-        <input type="file" accept="image/*" onChange={handleFileChange} className="mb-3 text-sm" />
-        {editingId && !file && (
+        <input type="file" accept="image/*" onChange={handleFileChange} disabled={uploading} className="mb-3 text-sm" />
+        {uploading && <p className="text-xs text-inksoft mb-3">Uploading…</p>}
+        {editingId && !uploadedUrl && !uploading && (
           <p className="text-xs text-inksoft mb-3">Leave empty to keep the current image.</p>
         )}
         {preview && (
@@ -122,7 +142,7 @@ export default function ProductManager({ initialCategories, initialProducts }) {
         {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
 
         <div className="flex gap-2">
-          <button type="submit" disabled={isPending} className="btn btn-primary">
+          <button type="submit" disabled={isPending || uploading} className="btn btn-primary">
             {editingId ? 'Save Changes' : 'Add Product'}
           </button>
           {editingId && (

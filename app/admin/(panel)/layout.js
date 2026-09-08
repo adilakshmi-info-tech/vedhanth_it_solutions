@@ -1,13 +1,15 @@
 import { redirect } from 'next/navigation';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { cookies } from 'next/headers';
+import { verifyAdminToken } from '@/lib/firebaseVerify';
 import AdminNav from './AdminNav';
 
-// Middleware already blocks unauthenticated access; this is the server-side
-// backstop and also gives us the session for the layout.
+// Middleware already blocks unauthenticated access; this is the
+// server-side backstop, consistent with how requireAdmin() re-checks
+// inside every Server Action rather than trusting the page layer alone.
 export default async function AdminPanelLayout({ children }) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) redirect('/admin/login');
+  const token = cookies().get('fb_token')?.value;
+  const email = await verifyAdminToken(token);
+  if (!email) redirect('/admin/login');
 
   return (
     <div className="max-w-6xl mx-auto px-8 py-10 flex gap-10">

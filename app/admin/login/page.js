@@ -1,7 +1,8 @@
 'use client';
 import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -16,14 +17,20 @@ function LoginForm() {
     e.preventDefault();
     setError('');
     setLoading(true);
-    const res = await signIn('credentials', { redirect: false, email, password });
-    setLoading(false);
-
-    if (res?.ok) {
+    try {
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      // Write the cookie directly here rather than waiting on
+      // FirebaseSessionSync's onIdTokenChanged listener — that one keeps
+      // it fresh on later token refreshes, but relying on it for this
+      // very first write races the redirect below against middleware.
+      const token = await cred.user.getIdToken();
+      document.cookie = `fb_token=${token}; path=/; max-age=3600; SameSite=Lax`;
       router.push(callbackUrl);
       router.refresh();
-    } else {
+    } catch (err) {
       setError('Invalid email or password.');
+    } finally {
+      setLoading(false);
     }
   }
 

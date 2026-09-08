@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { signOut } from 'next-auth/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard' },
@@ -12,6 +13,17 @@ const navItems = [
 
 export default function AdminNav() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleSignOut() {
+    await signOut(auth);
+    // FirebaseSessionSync's onIdTokenChanged also clears the cookie on
+    // sign-out, but clear it here too so the redirect below is immediate
+    // rather than racing that listener.
+    document.cookie = 'fb_token=; path=/; max-age=0; SameSite=Lax';
+    router.push('/admin/login');
+    router.refresh();
+  }
 
   return (
     <nav className="flex flex-col gap-1">
@@ -27,7 +39,7 @@ export default function AdminNav() {
         </Link>
       ))}
       <button
-        onClick={() => signOut({ callbackUrl: '/admin/login' })}
+        onClick={handleSignOut}
         className="mt-4 px-3 py-2 text-left text-sm font-semibold text-red-600 hover:bg-red-50 rounded-lg"
       >
         Sign Out

@@ -24,14 +24,10 @@ yarn-error.log*
 .env*.local
 !.env.example
 
-# uploaded product images (kept: the directory, via .gitkeep)
-/public/uploads/*
-!/public/uploads/.gitkeep
-
 # prisma
 /prisma/*.db
 
-# docker-compose bind mounts on the deploy VM (postgres data, uploads)
+# docker-compose bind mounts on the deploy VM (postgres data)
 /data/
 
 # vercel

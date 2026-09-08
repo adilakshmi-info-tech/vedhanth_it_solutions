@@ -6,7 +6,7 @@
 server {
   listen 80;
   server_name vedhanthitsolutions.in www.vedhanthitsolutions.in;
-  client_max_body_size 6M; # product image uploads (lib/uploads.js caps at 5MB)
+  client_max_body_size 2M; # generous headroom for form posts (product images now go straight to the shared upload API, not through this app)
 
   location / {
     proxy_pass http://vedhanth_web:3000;
@@ -25,7 +25,7 @@ server {
 # server {
 #   listen 443 ssl;
 #   server_name vedhanthitsolutions.in www.vedhanthitsolutions.in;
-#   client_max_body_size 6M; # product image uploads (lib/uploads.js caps at 5MB)
+#   client_max_body_size 2M; # generous headroom for form posts (product images now go straight to the shared upload API, not through this app)
 #
 #   ssl_certificate     /etc/letsencrypt/live/vedhanthitsolutions.in/fullchain.pem;
 #   ssl_certificate_key /etc/letsencrypt/live/vedhanthitsolutions.in/privkey.pem;

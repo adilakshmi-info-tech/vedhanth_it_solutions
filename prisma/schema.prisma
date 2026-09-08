@@ -39,8 +39,5 @@ model Review {
   createdAt DateTime @default(now())
 }
 
-model AdminUser {
-  id           String @id @default(cuid())
-  email        String @unique
-  passwordHash String
-}
+// No AdminUser table — admin identity now lives in Firebase Auth
+// (the shared sjs-technology project). See lib/actions/require-admin.js.
