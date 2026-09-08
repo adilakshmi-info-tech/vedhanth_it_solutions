@@ -27,7 +27,7 @@ export default async function ProductDetailPage({ params }) {
           )}
         </div>
         <div>
-          <h1 className="font-display text-3xl text-navy-900 mb-4">{product.name}</h1>
+          <h1 className="font-display font-extrabold text-3xl text-navy-900 mb-4 tracking-tight">{product.name}</h1>
           <p className="text-inksoft leading-relaxed mb-8">{product.description}</p>
           <div className="flex gap-3 flex-wrap">
             <a href="tel:+917483528453" className="btn btn-primary">Call for pricing</a>

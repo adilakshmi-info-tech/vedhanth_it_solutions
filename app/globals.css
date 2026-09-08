@@ -2,22 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  color: #152436;
+  color: #1C1A1A;
   background: #ffffff;
 }
 
 .btn {
-  @apply inline-flex items-center gap-2 rounded-full px-5 py-3 font-bold text-sm transition;
+  @apply inline-flex items-center gap-2 rounded-md px-5 py-3 font-bold text-sm transition;
+}
+.btn-lg {
+  @apply px-6 py-3.5 text-base;
 }
 .btn-primary {
   @apply bg-cyan-500 text-white hover:bg-cyan-600;
+}
+.btn-primary::after {
+  content: '\2192'; /* → */
+  display: inline-block;
+  transition: transform 200ms ease;
+}
+.btn-primary:hover::after {
+  transform: translateX(5px);
 }
 .btn-white {
   @apply bg-white text-navy-900 hover:bg-slate-100;
@@ -30,5 +41,43 @@ body {
 }
 
 .card {
-  @apply bg-white border border-slate-200 rounded-2xl p-6 text-center transition hover:-translate-y-1 hover:shadow-lg;
+  @apply bg-white border border-slate-200 rounded-xl p-6 text-center transition hover:-translate-y-1 hover:shadow-lg;
+}
+
+/* --- Scroll reveal (components/ScrollReveal.jsx) --------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 550ms ease, transform 550ms ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- Technical / blueprint grid backdrop, used on dark sections ------ */
+.bg-blueprint {
+  background-image:
+    linear-gradient(rgba(0, 140, 193, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 140, 193, 0.16) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Fine engineering line — a thin blue rule that draws itself in on reveal */
+.tech-line {
+  height: 2px;
+  background: linear-gradient(90deg, #008CC1, transparent);
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 700ms ease;
+}
+.reveal.is-visible .tech-line {
+  transform: scaleX(1);
 }

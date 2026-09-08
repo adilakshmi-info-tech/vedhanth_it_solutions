@@ -45,16 +45,18 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <section className="py-20">
-      <div className="max-w-6xl mx-auto px-8">
+    <section className="py-24">
+      <div className="max-w-6xl mx-auto px-6 md:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="text-xs font-bold tracking-widest uppercase text-cyan-600">What we do</span>
-          <h1 className="font-display text-4xl text-navy-900 mt-3">Our Services</h1>
+          <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">What We Do</span>
+          <h1 className="font-display font-extrabold text-4xl md:text-5xl text-navy-900 mt-3 tracking-tight">
+            COMPLETE TECHNICAL SOLUTIONS UNDER ONE ROOF
+          </h1>
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {services.map((s) => (
             <div key={s.title} className="card text-left">
-              <h3 className="font-display text-xl text-navy-900 mb-2">{s.title}</h3>
+              <h3 className="font-display font-extrabold text-lg text-navy-900 mb-2">{s.title}</h3>
               <p className="text-inksoft text-sm leading-relaxed">{s.desc}</p>
             </div>
           ))}

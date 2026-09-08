@@ -6,7 +6,7 @@ export default function ReviewsSection({ reviews = [] }) {
       <section className="py-20 bg-paper">
         <div className="max-w-3xl mx-auto px-8 text-center">
           <span className="text-xs font-bold tracking-widest uppercase text-cyan-600">Client Gallery</span>
-          <h2 className="font-display text-3xl text-navy-900 mt-3">Building trust, one installation at a time</h2>
+          <h2 className="font-display font-extrabold text-3xl text-navy-900 mt-3 tracking-tight">Building trust, one installation at a time</h2>
           <p className="text-inksoft mt-4 leading-relaxed">
             We&apos;re a newly registered dealer serving Mudalapalya and the wider Bengaluru area — client
             reviews will appear here as we take on projects. Get in touch to be one of our first.
@@ -21,7 +21,7 @@ export default function ReviewsSection({ reviews = [] }) {
       <div className="max-w-6xl mx-auto px-8">
         <div className="text-center mb-12">
           <span className="text-xs font-bold tracking-widest uppercase text-cyan-600">What customers say</span>
-          <h2 className="font-display text-3xl text-navy-900 mt-3">Trusted by homes &amp; businesses nearby</h2>
+          <h2 className="font-display font-extrabold text-3xl text-navy-900 mt-3 tracking-tight">Trusted by homes &amp; businesses nearby</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {reviews.map((r) => (

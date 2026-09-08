@@ -19,8 +19,8 @@ export default async function ProductsPage() {
     <section className="py-20">
       <div className="max-w-6xl mx-auto px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="text-xs font-bold tracking-widest uppercase text-cyan-600">Solutions</span>
-          <h1 className="font-display text-4xl text-navy-900 mt-3">Our Products</h1>
+          <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">Catalog</span>
+          <h1 className="font-display font-extrabold text-4xl md:text-5xl text-navy-900 mt-3 tracking-tight">Our Products</h1>
           <p className="text-inksoft mt-4">
             Browse by category, or call/WhatsApp us directly if you&apos;d rather just describe what you need.
           </p>
@@ -34,7 +34,7 @@ export default async function ProductsPage() {
 
         {withProducts.map((cat) => (
           <div key={cat.id} className="mb-16">
-            <h2 className="font-display text-2xl text-navy-900 mb-1">{cat.name}</h2>
+            <h2 className="font-display font-extrabold text-2xl text-navy-900 mb-1 tracking-tight">{cat.name}</h2>
             {cat.description && <p className="text-inksoft text-sm mb-6">{cat.description}</p>}
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
               {cat.products.map((p) => (
