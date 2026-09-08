@@ -6,3 +6,8 @@ node_modules
 public/uploads/*
 !public/uploads/.gitkeep
 npm-debug.log*
+
+# docker-compose bind mounts on the deploy VM (postgres data owned by the
+# container's internal uid — unreadable by the host user, must never be
+# swept into the build context)
+data
