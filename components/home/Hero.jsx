@@ -72,7 +72,7 @@ export default function Hero({ dbSlides = [] }) {
             className={`absolute inset-0 transition-opacity duration-700 ${i === active ? 'opacity-100' : 'opacity-0'}`}
           >
             {s.image ? (
-              <Image src={s.image} alt={s.label} fill priority={i === 0} className="object-cover" />
+              <Image src={s.image} alt={s.label} fill unoptimized priority={i === 0} className="object-cover" />
             ) : (
               <div className="absolute inset-0 bg-blueprint" />
             )}

@@ -41,7 +41,7 @@ export default async function ProductsPage() {
                 <Link href={`/products/${p.slug}`} key={p.id} className="card text-left block">
                   {p.images?.[0] && (
                     <div className="relative w-full aspect-square mb-4 rounded-lg overflow-hidden bg-navy-100">
-                      <Image src={p.images[0]} alt={p.name} fill className="object-cover" />
+                      <Image src={p.images[0]} alt={p.name} fill unoptimized className="object-cover" />
                     </div>
                   )}
                   <h3 className="font-semibold text-navy-900 text-[15px]">{p.name}</h3>

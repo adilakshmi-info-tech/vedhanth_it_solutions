@@ -23,7 +23,7 @@ export default async function ProductDetailPage({ params }) {
       <div className="max-w-4xl mx-auto px-8 grid md:grid-cols-2 gap-10">
         <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-navy-100">
           {product.images?.[0] && (
-            <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
+            <Image src={product.images[0]} alt={product.name} fill unoptimized className="object-cover" />
           )}
         </div>
         <div>
