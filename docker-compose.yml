@@ -42,13 +42,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      # Loopback-only — reachable from the VM's own localhost, never the
-      # internet. This exists solely so a developer can reach prod
-      # Postgres from their own machine via an SSH tunnel
-      # (ssh -L 5433:127.0.0.1:5433 ...); remove this if that's no
-      # longer needed.
-      - "127.0.0.1:5433:5432"
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
     healthcheck:
