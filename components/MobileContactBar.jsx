@@ -4,10 +4,10 @@ export default function MobileContactBar() {
       <a href="tel:+917483528453" className="flex flex-col items-center justify-center py-2.5 text-xs font-bold gap-0.5 border-r border-white/10">
         <span>Call</span>
       </a>
-      <a href="https://wa.me/917483528453" className="flex flex-col items-center justify-center py-2.5 text-xs font-bold gap-0.5 border-r border-white/10 text-cyan-200">
+      <a href="https://wa.me/917483528453" className="flex flex-col items-center justify-center py-2.5 text-xs font-bold gap-0.5 border-r border-white/10 text-green-200">
         <span>WhatsApp</span>
       </a>
-      <a href="/contact" className="flex flex-col items-center justify-center py-2.5 text-xs font-bold gap-0.5 bg-cyan-500">
+      <a href="/contact" className="flex flex-col items-center justify-center py-2.5 text-xs font-bold gap-0.5 bg-green-500">
         <span>Quote</span>
       </a>
     </div>

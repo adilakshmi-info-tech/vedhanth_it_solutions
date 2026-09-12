@@ -48,7 +48,7 @@ export default function Header() {
 
         <nav className="hidden md:flex gap-7">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="text-sm font-semibold text-navy-800 hover:text-cyan-500 transition">
+            <Link key={item.href} href={item.href} className="text-sm font-semibold text-navy-800 hover:text-green-500 transition">
               {item.label}
             </Link>
           ))}
@@ -83,7 +83,7 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          <a href="tel:+917483528453" className="py-2.5 text-sm font-bold text-cyan-500">Call — 7483528453</a>
+          <a href="tel:+917483528453" className="py-2.5 text-sm font-bold text-green-500">Call — 7483528453</a>
         </nav>
       )}
     </header>

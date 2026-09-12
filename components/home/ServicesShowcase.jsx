@@ -70,7 +70,7 @@ export default function ServicesShowcase() {
             onClick={() => setActive(c.key)}
             className={`px-4 py-3 text-sm font-bold border-b-2 -mb-px transition ${
               active === c.key
-                ? 'border-cyan-500 text-navy-900'
+                ? 'border-green-500 text-navy-900'
                 : 'border-transparent text-inksoft hover:text-navy-800'
             }`}
           >
@@ -82,7 +82,7 @@ export default function ServicesShowcase() {
       <div key={current.key} className="grid sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-4 animate-fadeIn">
         {current.items.map((item) => (
           <div key={item} className="flex items-start gap-3">
-            <span className="mt-[7px] w-1.5 h-1.5 bg-cyan-500 shrink-0" />
+            <span className="mt-[7px] w-1.5 h-1.5 bg-green-500 shrink-0" />
             <span className="text-sm text-inksoft">{item}</span>
           </div>
         ))}

@@ -10,7 +10,7 @@ export default function ContactPage() {
     <section className="py-20">
       <div className="max-w-4xl mx-auto px-8">
         <div className="text-center mb-14">
-          <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">Get In Touch</span>
+          <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">Get In Touch</span>
           <h1 className="font-display font-extrabold text-4xl md:text-5xl text-navy-900 mt-3 tracking-tight">Contact Us</h1>
         </div>
 
@@ -18,7 +18,7 @@ export default function ContactPage() {
           <div className="card text-left">
             <h3 className="font-display font-extrabold text-navy-900 mb-2">Call or WhatsApp</h3>
             <a href="tel:+917483528453" className="block text-inksoft text-sm mb-1">7483528453</a>
-            <a href="https://wa.me/917483528453" className="text-cyan-600 text-sm font-semibold">Chat on WhatsApp →</a>
+            <a href="https://wa.me/917483528453" className="text-green-600 text-sm font-semibold">Chat on WhatsApp →</a>
           </div>
           <div className="card text-left">
             <h3 className="font-display font-extrabold text-navy-900 mb-2">Email &amp; Address</h3>

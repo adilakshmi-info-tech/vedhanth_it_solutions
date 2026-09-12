@@ -7,7 +7,7 @@ export default function AboutPage() {
   return (
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 md:px-8">
-        <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">About Us</span>
+        <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">About Us</span>
         <h1 className="font-display font-extrabold text-4xl md:text-5xl text-navy-900 mt-3 mb-6 tracking-tight">
           Vedhanth IT Solutions
         </h1>

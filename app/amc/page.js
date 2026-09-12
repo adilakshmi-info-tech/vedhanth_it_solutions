@@ -31,14 +31,14 @@ export default function AmcPage() {
       <section className="bg-navy-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-blueprint opacity-30" />
         <div className="relative max-w-4xl mx-auto px-6 md:px-8 pt-24 pb-20 text-center">
-          <span className="inline-flex items-center gap-2 border border-white/25 text-cyan-200 text-xs font-bold tracking-[0.2em] uppercase px-3.5 py-1.5 mb-6">
-            <span className="w-1.5 h-1.5 bg-cyan-500" />
+          <span className="inline-flex items-center gap-2 border border-white/25 text-green-200 text-xs font-bold tracking-[0.2em] uppercase px-3.5 py-1.5 mb-6">
+            <span className="w-1.5 h-1.5 bg-green-500" />
             Annual Maintenance Contracts
           </span>
           <h1 className="font-display font-extrabold text-4xl md:text-5xl tracking-tight leading-[1.05]">
             DON&apos;T WAIT FOR A BREAKDOWN.
             <br />
-            <span className="text-cyan-500">PREVENT IT.</span>
+            <span className="text-green-500">PREVENT IT.</span>
           </h1>
           <p className="text-slate-300 mt-6 max-w-2xl mx-auto leading-relaxed">
             Keep your electrical, security, networking and IT systems reliable with planned
@@ -55,7 +55,7 @@ export default function AmcPage() {
       <section className="py-24">
         <div className="max-w-6xl mx-auto px-6 md:px-8">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">What&apos;s Covered</span>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">What&apos;s Covered</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl text-navy-900 mt-3 tracking-tight">
               ONE CONTRACT. EVERY SYSTEM.
             </h2>
@@ -76,12 +76,12 @@ export default function AmcPage() {
         <div className="absolute inset-0 bg-blueprint opacity-30" />
         <div className="relative max-w-4xl mx-auto px-6 md:px-8 text-center">
           <ScrollReveal>
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-200">How It Works</span>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-200">How It Works</span>
             <div className="flex flex-wrap justify-center gap-3 mt-6">
               {LOOP.map((s, i) => (
                 <span key={s} className="flex items-center gap-3 text-sm font-bold tracking-widest uppercase text-white">
-                  <span className="border border-cyan-500/50 px-4 py-2">{s}</span>
-                  {i < LOOP.length - 1 && <span className="text-cyan-500">&rarr;</span>}
+                  <span className="border border-green-500/50 px-4 py-2">{s}</span>
+                  {i < LOOP.length - 1 && <span className="text-green-500">&rarr;</span>}
                 </span>
               ))}
             </div>
@@ -93,12 +93,12 @@ export default function AmcPage() {
       <section className="py-24 bg-paper">
         <div className="max-w-6xl mx-auto px-6 md:px-8">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">Why AMC</span>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">Why AMC</span>
           </ScrollReveal>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8">
             {BENEFITS.map((b, i) => (
               <ScrollReveal key={b.title} delay={i * 80}>
-                <div className="w-8 h-8 border-2 border-cyan-500 mb-4" />
+                <div className="w-8 h-8 border-2 border-green-500 mb-4" />
                 <h3 className="font-display font-extrabold text-navy-900 mb-1.5">{b.title}</h3>
                 <p className="text-sm text-inksoft leading-relaxed">{b.desc}</p>
               </ScrollReveal>

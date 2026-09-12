@@ -19,7 +19,7 @@ export default function AdminLogoutButton() {
   return (
     <button
       onClick={handleSignOut}
-      className="btn border border-cyan-500 text-cyan-600 hover:bg-cyan-500/10 bg-transparent shrink-0"
+      className="btn border border-green-500 text-green-600 hover:bg-green-500/10 bg-transparent shrink-0"
     >
       <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4" strokeLinecap="round" strokeLinejoin="round" />

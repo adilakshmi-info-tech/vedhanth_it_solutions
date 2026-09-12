@@ -104,7 +104,7 @@ export default function CategoryManager({ initialCategories }) {
               <div className="text-xs text-inksoft">{cat.description}</div>
             </div>
             <div className="flex gap-4 text-sm">
-              <button onClick={() => startEdit(cat)} className="text-navy-700 font-bold hover:text-cyan-600">Edit</button>
+              <button onClick={() => startEdit(cat)} className="text-navy-700 font-bold hover:text-green-600">Edit</button>
               <button onClick={() => handleDelete(cat.id)} className="text-red-600 font-bold hover:text-red-700">Delete</button>
             </div>
           </div>

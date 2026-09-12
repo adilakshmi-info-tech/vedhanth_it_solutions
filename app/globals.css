@@ -20,7 +20,7 @@ body {
   @apply px-6 py-3.5 text-base;
 }
 .btn-primary {
-  @apply bg-cyan-500 text-white hover:bg-cyan-600;
+  @apply bg-green-500 text-white hover:bg-green-600;
 }
 .btn-primary::after {
   content: '\2192'; /* → */
@@ -63,20 +63,28 @@ body {
 }
 
 /* --- Technical / blueprint grid backdrop, used on dark sections ------ */
+/* Uses the lighter green-200 tint, not the exact dark brand green — the
+   raw #0D3D0E is too close to the navy-900 background to read clearly. */
 .bg-blueprint {
   background-image:
-    linear-gradient(rgba(0, 140, 193, 0.16) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 140, 193, 0.16) 1px, transparent 1px);
+    linear-gradient(rgba(146, 168, 147, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(146, 168, 147, 0.16) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
-/* Fine engineering line — a thin blue rule that draws itself in on reveal */
+/* Fine engineering line — a thin accent rule that draws itself in on reveal.
+   Default is the exact dark brand green, for use on light backgrounds;
+   .tech-line-invert swaps in the lighter tint for use on dark ones (the
+   exact dark green reads too close to a navy-900 background). */
 .tech-line {
   height: 2px;
-  background: linear-gradient(90deg, #008CC1, transparent);
+  background: linear-gradient(90deg, #0D3D0E, transparent);
   transform-origin: left;
   transform: scaleX(0);
   transition: transform 700ms ease;
+}
+.tech-line-invert {
+  background: linear-gradient(90deg, #92A893, transparent);
 }
 .reveal.is-visible .tech-line {
   transform: scaleX(1);

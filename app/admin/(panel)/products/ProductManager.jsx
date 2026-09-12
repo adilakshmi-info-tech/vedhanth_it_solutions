@@ -176,11 +176,11 @@ export default function ProductManager({ initialCategories, initialProducts }) {
             <div className="p-4 flex-1 flex flex-col">
               <h3 className="font-bold text-navy-900 text-sm truncate">{p.name}</h3>
               <p className="text-xs text-inksoft mt-1 line-clamp-2 flex-1">{p.description || 'No description.'}</p>
-              <span className="inline-block mt-3 self-start text-[11px] font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-600">
+              <span className="inline-block mt-3 self-start text-[11px] font-bold px-2.5 py-1 rounded-full bg-green-500/10 text-green-600">
                 {categoryName(p.categoryId)}
               </span>
               <div className="flex gap-4 mt-4 pt-3 border-t border-slate-100 text-xs">
-                <button onClick={() => startEdit(p)} className="font-bold text-navy-700 hover:text-cyan-600">Edit</button>
+                <button onClick={() => startEdit(p)} className="font-bold text-navy-700 hover:text-green-600">Edit</button>
                 <button onClick={() => handleDelete(p.id)} className="font-bold text-red-600 hover:text-red-700">Delete</button>
               </div>
             </div>

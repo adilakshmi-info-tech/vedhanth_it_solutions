@@ -38,7 +38,7 @@ export default function ReviewManager({ initialReviews }) {
             <div className="flex justify-between items-start gap-4">
               <div>
                 <div className="font-bold text-navy-900 text-sm">{r.name}</div>
-                <div className="text-cyan-500 text-xs mb-1">{'★'.repeat(r.rating || 5)}</div>
+                <div className="text-green-500 text-xs mb-1">{'★'.repeat(r.rating || 5)}</div>
                 <p className="text-sm text-ink">{r.comment}</p>
               </div>
               <div className="flex gap-2 text-sm shrink-0">

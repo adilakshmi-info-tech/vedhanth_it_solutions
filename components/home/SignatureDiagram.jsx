@@ -8,7 +8,7 @@ export default function SignatureDiagram() {
       <div className="absolute inset-0 bg-blueprint opacity-40" />
       <div className="relative max-w-6xl mx-auto px-6 md:px-8 text-center">
         <ScrollReveal as="div">
-          <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-200">One Connected System</span>
+          <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-200">One Connected System</span>
           <h2 className="font-display font-extrabold text-3xl md:text-4xl text-white mt-3 tracking-tight">
             FROM POWER TO IT — WE CONNECT THE ENTIRE SYSTEM.
           </h2>
@@ -16,8 +16,8 @@ export default function SignatureDiagram() {
 
         <ScrollReveal as="div" delay={150} className="mt-16">
           <div className="inline-flex flex-col items-center gap-1 mb-10">
-            <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-cyan-500">Central</span>
-            <span className="font-display font-extrabold text-lg text-white border border-cyan-500/50 px-6 py-2">
+            <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-green-500">Central</span>
+            <span className="font-display font-extrabold text-lg text-white border border-green-500/50 px-6 py-2">
               YOUR INFRASTRUCTURE
             </span>
           </div>
@@ -29,7 +29,7 @@ export default function SignatureDiagram() {
                   {node}
                 </div>
                 {i < NODES.length - 1 && (
-                  <div className="w-[2px] h-6 md:h-[2px] md:w-10 tech-line" />
+                  <div className="w-[2px] h-6 md:h-[2px] md:w-10 tech-line tech-line-invert" />
                 )}
               </div>
             ))}

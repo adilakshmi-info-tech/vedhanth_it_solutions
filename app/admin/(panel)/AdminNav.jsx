@@ -58,7 +58,7 @@ export default function AdminNav() {
             key={item.href}
             href={item.href}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-bold border-b-2 whitespace-nowrap transition ${
-              active ? 'border-cyan-500 text-navy-900' : 'border-transparent text-inksoft hover:text-navy-800'
+              active ? 'border-green-500 text-navy-900' : 'border-transparent text-inksoft hover:text-navy-800'
             }`}
           >
             {item.icon}

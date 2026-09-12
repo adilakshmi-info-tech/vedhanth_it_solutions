@@ -7,21 +7,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Brand system per the design brief: primary blue #008CC1, deep
-        // black #231F20 (both taken directly from the logo). Kept under
-        // the existing navy/cyan token names so every file that already
-        // uses them picks up the new brand automatically.
+        // Brand system taken directly from the current logo (logo.svg /
+        // "Vedhanth it solutions logo.svg"): deep navy #001736 (the
+        // wordmark + mark) and accent green #0D3D0E (the "IT SOLUTIONS"
+        // sub-wordmark). navy/green kept as the token names — green
+        // replaces the earlier cyan/blue accent.
         navy: {
-          900: '#231F20', // brief's deep black — dark sections, headings
-          800: '#332D2E',
-          700: '#4A4344',
-          500: '#6B6364',
-          100: '#EFEEEE',
+          900: '#001736', // exact logo navy — dark sections, headings
+          800: '#243752',
+          700: '#4C5D72',
+          500: '#808B9A',
+          100: '#F0F1F3',
         },
-        cyan: {
-          600: '#006C97', // hover/darker shade
-          500: '#008CC1', // exact brief primary blue
-          200: '#8FD3EA',
+        green: {
+          600: '#0A310B', // hover/darker shade
+          500: '#0D3D0E', // exact logo accent green
+          200: '#92A893',
         },
         paper: '#F7F7F5',
         ink: '#1C1A1A',

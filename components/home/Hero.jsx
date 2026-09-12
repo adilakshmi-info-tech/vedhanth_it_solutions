@@ -83,15 +83,15 @@ export default function Hero({ dbSlides = [] }) {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-8 pt-28 pb-20 md:pt-36 md:pb-28">
         <div className="max-w-[640px]">
-          <div className="inline-flex items-center gap-2 border border-white/25 text-cyan-200 text-xs font-bold tracking-[0.2em] uppercase px-3.5 py-1.5 mb-6 transition-all">
-            <span className="w-1.5 h-1.5 bg-cyan-500" />
+          <div className="inline-flex items-center gap-2 border border-white/25 text-green-200 text-xs font-bold tracking-[0.2em] uppercase px-3.5 py-1.5 mb-6 transition-all">
+            <span className="w-1.5 h-1.5 bg-green-500" />
             {current.label}
           </div>
 
           <h1 className="font-display font-extrabold text-4xl md:text-6xl text-white leading-[1.05] tracking-tight">
             POWERING INFRASTRUCTURE.
             <br />
-            <span className="text-cyan-500">CONNECTING TECHNOLOGY.</span>
+            <span className="text-green-500">CONNECTING TECHNOLOGY.</span>
           </h1>
 
           <p className="mt-6 text-lg text-slate-300 max-w-[540px] leading-relaxed">
@@ -113,7 +113,7 @@ export default function Hero({ dbSlides = [] }) {
             key={s.label}
             aria-label={`Show ${s.label}`}
             onClick={() => setActive(i)}
-            className={`h-[3px] transition-all ${i === active ? 'w-10 bg-cyan-500' : 'w-5 bg-white/30 hover:bg-white/50'}`}
+            className={`h-[3px] transition-all ${i === active ? 'w-10 bg-green-500' : 'w-5 bg-white/30 hover:bg-white/50'}`}
           />
         ))}
       </div>

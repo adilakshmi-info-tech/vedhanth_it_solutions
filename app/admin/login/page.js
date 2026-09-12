@@ -37,8 +37,8 @@ function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
       <div className="flex flex-col items-center text-center mb-2">
-        <div className="w-14 h-14 rounded-full bg-cyan-500/10 flex items-center justify-center mb-4">
-          <svg viewBox="0 0 24 24" className="w-6 h-6 text-cyan-500" fill="none" stroke="currentColor" strokeWidth="2">
+        <div className="w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center mb-4">
+          <svg viewBox="0 0 24 24" className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="5" y="11" width="14" height="9" rx="1.5" />
             <path d="M8 11V7a4 4 0 0 1 8 0v4" strokeLinecap="round" />
           </svg>
@@ -58,7 +58,7 @@ function LoginForm() {
         placeholder="you@vedhanthitsolutions.in"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500"
+        className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500"
       />
 
       <label className="block text-sm font-semibold text-navy-900 mt-4 mb-1">
@@ -70,7 +70,7 @@ function LoginForm() {
         placeholder="Enter your password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500"
+        className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500"
       />
 
       <button type="submit" disabled={loading} className="btn btn-primary w-full justify-center mt-6">

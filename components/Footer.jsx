@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-white/10">
           <div>
             <span className="font-display font-extrabold text-white text-lg tracking-tight">Vedhanth IT Solutions</span>
-            <p className="text-xs font-semibold tracking-[0.14em] uppercase text-cyan-200 mt-3">
+            <p className="text-xs font-semibold tracking-[0.14em] uppercase text-green-200 mt-3">
               Electrical &middot; ELV &middot; Security &middot; Networking &middot; IT
             </p>
             <p className="text-sm text-slate-400 mt-4 max-w-[280px]">

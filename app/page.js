@@ -49,7 +49,7 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto px-6 md:px-8 py-4 flex flex-wrap gap-x-8 gap-y-2 justify-center">
           {TRUST_STRIP.map((t) => (
             <span key={t} className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-inksoft">
-              <span className="w-1.5 h-1.5 bg-cyan-500 shrink-0" />
+              <span className="w-1.5 h-1.5 bg-green-500 shrink-0" />
               {t}
             </span>
           ))}
@@ -59,7 +59,7 @@ export default async function HomePage() {
       {/* WHO WE ARE */}
       <section className="py-24">
         <ScrollReveal className="max-w-3xl mx-auto px-6 md:px-8 text-center">
-          <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">Who We Are</span>
+          <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">Who We Are</span>
           <h2 className="font-display font-extrabold text-3xl md:text-4xl text-navy-900 mt-3 tracking-tight">
             ONE PARTNER FOR YOUR COMPLETE TECHNICAL REQUIREMENTS.
           </h2>
@@ -76,7 +76,7 @@ export default async function HomePage() {
       <section className="py-24 bg-paper" id="services">
         <div className="max-w-6xl mx-auto px-6 md:px-8">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">What We Do</span>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">What We Do</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl text-navy-900 mt-3 tracking-tight">
               COMPLETE TECHNICAL SOLUTIONS UNDER ONE ROOF
             </h2>
@@ -96,7 +96,7 @@ export default async function HomePage() {
       <section className="py-24 bg-navy-900 text-white">
         <div className="max-w-6xl mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-14 items-center">
           <ScrollReveal>
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-200">Electrical</span>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-200">Electrical</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl mt-3 tracking-tight leading-tight">
               ENGINEERED FOR POWER.
               <br />BUILT FOR RELIABILITY.
@@ -104,7 +104,7 @@ export default async function HomePage() {
             <ul className="mt-6 space-y-3 text-sm text-slate-300">
               {['New wiring', 'LT panel installation', 'Cable laying & glanding', 'Panel maintenance', 'Motor / transformer / UPS support', 'Troubleshooting'].map((item) => (
                 <li key={item} className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-cyan-500 shrink-0" />
+                  <span className="w-1.5 h-1.5 bg-green-500 shrink-0" />
                   {item}
                 </li>
               ))}
@@ -115,8 +115,8 @@ export default async function HomePage() {
               <div className="absolute inset-0 bg-blueprint opacity-30" />
               <div className="relative grid grid-cols-2 gap-3">
                 {['LT PANEL', 'POWER DISTRIBUTION', 'CONTROL', 'CABLE MANAGEMENT'].map((label) => (
-                  <div key={label} className="border border-cyan-500/30 px-3 py-6 text-center">
-                    <span className="text-[11px] font-bold tracking-widest uppercase text-cyan-200">{label}</span>
+                  <div key={label} className="border border-green-500/30 px-3 py-6 text-center">
+                    <span className="text-[11px] font-bold tracking-widest uppercase text-green-200">{label}</span>
                   </div>
                 ))}
               </div>
@@ -129,7 +129,7 @@ export default async function HomePage() {
       <section className="py-24">
         <div className="max-w-6xl mx-auto px-6 md:px-8">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">Security &amp; ELV</span>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">Security &amp; ELV</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl text-navy-900 mt-3 tracking-tight">
               SECURITY THAT WATCHES. SYSTEMS THAT RESPOND.
             </h2>
@@ -143,7 +143,7 @@ export default async function HomePage() {
               { name: 'PA Systems', desc: 'Public address installation' },
             ].map((s, i) => (
               <ScrollReveal key={s.name} delay={i * 80}>
-                <Link href="/services" className="group block border border-slate-200 p-5 h-full transition hover:border-cyan-500 hover:shadow-lg">
+                <Link href="/services" className="group block border border-slate-200 p-5 h-full transition hover:border-green-500 hover:shadow-lg">
                   <div className="tech-line w-8 mb-4 group-hover:w-12 transition-all" />
                   <h3 className="font-display font-extrabold text-navy-900">{s.name}</h3>
                   <p className="text-xs text-inksoft mt-1.5 leading-relaxed">{s.desc}</p>
@@ -158,7 +158,7 @@ export default async function HomePage() {
       <section className="py-24 bg-paper">
         <div className="max-w-6xl mx-auto px-6 md:px-8">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">Networking &amp; IT</span>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">Networking &amp; IT</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl text-navy-900 mt-3 tracking-tight">
               KEEPING YOUR BUSINESS CONNECTED.
             </h2>
@@ -191,14 +191,14 @@ export default async function HomePage() {
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mb-10">
             {SALES_STAGES.map((s, i) => (
               <ScrollReveal key={s.n} delay={i * 80} className="text-center">
-                <div className="font-display font-extrabold text-4xl text-cyan-500/30">{s.n}</div>
+                <div className="font-display font-extrabold text-4xl text-green-500/30">{s.n}</div>
                 <h3 className="font-display font-extrabold text-navy-900 mt-1">{s.title}</h3>
                 <p className="text-xs text-inksoft mt-1.5">{s.desc}</p>
               </ScrollReveal>
             ))}
           </div>
           <div className="text-center">
-            <span className="font-display font-extrabold text-xl text-cyan-500">All Brands Sales &amp; Services</span>
+            <span className="font-display font-extrabold text-xl text-green-500">All Brands Sales &amp; Services</span>
           </div>
         </div>
       </section>
@@ -217,9 +217,9 @@ export default async function HomePage() {
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8 mb-10">
               {['Inspect', 'Maintain', 'Monitor', 'Support', 'Repeat'].map((s, i, arr) => (
-                <span key={s} className="flex items-center gap-3 text-xs font-bold tracking-widest uppercase text-cyan-200">
+                <span key={s} className="flex items-center gap-3 text-xs font-bold tracking-widest uppercase text-green-200">
                   {s}
-                  {i < arr.length - 1 && <span className="text-cyan-500">&rarr;</span>}
+                  {i < arr.length - 1 && <span className="text-green-500">&rarr;</span>}
                 </span>
               ))}
             </div>
@@ -232,12 +232,12 @@ export default async function HomePage() {
       <section className="py-24">
         <div className="max-w-6xl mx-auto px-6 md:px-8">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">Why Choose Us</span>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">Why Choose Us</span>
           </ScrollReveal>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
             {WHY_US.map((w, i) => (
               <ScrollReveal key={w.title} delay={i * 60}>
-                <div className="w-8 h-8 border-2 border-cyan-500 mb-4" />
+                <div className="w-8 h-8 border-2 border-green-500 mb-4" />
                 <h3 className="font-display font-extrabold text-navy-900 mb-1.5">{w.title}</h3>
                 <p className="text-sm text-inksoft leading-relaxed">{w.desc}</p>
               </ScrollReveal>
@@ -250,14 +250,14 @@ export default async function HomePage() {
       <section className="py-24 bg-paper">
         <div className="max-w-6xl mx-auto px-6 md:px-8">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">Where We Work</span>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">Where We Work</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl text-navy-900 mt-3 tracking-tight">
               BUILT FOR DIFFERENT ENVIRONMENTS.
             </h2>
           </ScrollReveal>
           <div className="flex flex-wrap justify-center gap-3">
             {INDUSTRIES.map((ind) => (
-              <span key={ind} className="border border-slate-300 px-4 py-2 text-sm font-semibold text-navy-800 hover:border-cyan-500 hover:text-cyan-600 transition cursor-default">
+              <span key={ind} className="border border-slate-300 px-4 py-2 text-sm font-semibold text-navy-800 hover:border-green-500 hover:text-green-600 transition cursor-default">
                 {ind}
               </span>
             ))}
@@ -269,7 +269,7 @@ export default async function HomePage() {
       <section className="py-24">
         <div className="max-w-6xl mx-auto px-6 md:px-8">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">How We Work</span>
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">How We Work</span>
           </ScrollReveal>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8">
             {PROCESS.map((p, i) => (

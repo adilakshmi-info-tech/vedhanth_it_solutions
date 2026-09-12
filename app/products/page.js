@@ -19,7 +19,7 @@ export default async function ProductsPage() {
     <section className="py-20">
       <div className="max-w-6xl mx-auto px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="text-xs font-bold tracking-[0.2em] uppercase text-cyan-600">Catalog</span>
+          <span className="text-xs font-bold tracking-[0.2em] uppercase text-green-600">Catalog</span>
           <h1 className="font-display font-extrabold text-4xl md:text-5xl text-navy-900 mt-3 tracking-tight">Our Products</h1>
           <p className="text-inksoft mt-4">
             Browse by category, or call/WhatsApp us directly if you&apos;d rather just describe what you need.
