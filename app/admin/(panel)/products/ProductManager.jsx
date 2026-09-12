@@ -8,6 +8,7 @@ const emptyForm = { name: '', description: '', categoryId: '' };
 
 export default function ProductManager({ initialCategories, initialProducts }) {
   const router = useRouter();
+  const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [preview, setPreview] = useState(null); // shown in the form
@@ -23,6 +24,7 @@ export default function ProductManager({ initialCategories, initialProducts }) {
     setPreview(null);
     setUploadedUrl(null);
     setExistingImageUrl(null);
+    setShowForm(false);
   }
 
   async function handleFileChange(e) {
@@ -74,6 +76,7 @@ export default function ProductManager({ initialCategories, initialProducts }) {
     setUploadedUrl(null);
     setExistingImageUrl(p.images?.[0] || null);
     setPreview(p.images?.[0] || null);
+    setShowForm(true);
   }
 
   function handleDelete(id) {
@@ -95,81 +98,97 @@ export default function ProductManager({ initialCategories, initialProducts }) {
 
   return (
     <div>
-      <h1 className="font-display text-2xl text-navy-900 mb-6">Products</h1>
-
-      <form onSubmit={handleSubmit} className="card text-left mb-8 max-w-md">
-        <h3 className="font-semibold text-navy-900 mb-4">{editingId ? 'Edit product' : 'Add new product'}</h3>
-
-        <label className="block text-xs font-semibold text-inksoft mb-1">Name</label>
-        <input
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          required
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm"
-        />
-
-        <label className="block text-xs font-semibold text-inksoft mb-1">Category</label>
-        <select
-          value={form.categoryId}
-          onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-          required
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm"
+      <div className="flex items-center gap-4 mb-8">
+        <button
+          onClick={() => (showForm && !editingId ? resetForm() : setShowForm(true))}
+          className="btn btn-primary"
         >
-          <option value="">Select a category…</option>
-          {initialCategories.map((c) => (
-            <option key={c.id} value={c.id}>{c.name}</option>
-          ))}
-        </select>
+          <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+          </svg>
+          {showForm && !editingId ? 'Close Form' : 'Add Product'}
+        </button>
+        <span className="text-sm text-inksoft">Total Products: <span className="font-bold text-navy-900">{initialProducts.length}</span></span>
+      </div>
 
-        <label className="block text-xs font-semibold text-inksoft mb-1">Description</label>
-        <textarea
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-          rows={3}
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm"
-        />
+      {showForm && (
+        <form onSubmit={handleSubmit} className="card text-left mb-10 max-w-md">
+          <h3 className="font-display font-extrabold text-navy-900 mb-4">{editingId ? 'Edit product' : 'Add new product'}</h3>
 
-        <label className="block text-xs font-semibold text-inksoft mb-1">Image</label>
-        <input type="file" accept="image/*" onChange={handleFileChange} disabled={uploading} className="mb-3 text-sm" />
-        {uploading && <p className="text-xs text-inksoft mb-3">Uploading…</p>}
-        {editingId && !uploadedUrl && !uploading && (
-          <p className="text-xs text-inksoft mb-3">Leave empty to keep the current image.</p>
-        )}
-        {preview && (
-          <img src={preview} alt="Preview" className="w-24 h-24 object-cover rounded-lg mb-3" />
-        )}
+          <label className="block text-xs font-semibold text-inksoft mb-1">Name</label>
+          <input
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
+            className="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm"
+          />
 
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+          <label className="block text-xs font-semibold text-inksoft mb-1">Category</label>
+          <select
+            value={form.categoryId}
+            onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
+            required
+            className="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm"
+          >
+            <option value="">Select a category…</option>
+            {initialCategories.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
 
-        <div className="flex gap-2">
-          <button type="submit" disabled={isPending || uploading} className="btn btn-primary">
-            {editingId ? 'Save Changes' : 'Add Product'}
-          </button>
-          {editingId && (
+          <label className="block text-xs font-semibold text-inksoft mb-1">Description</label>
+          <textarea
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            rows={3}
+            className="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm"
+          />
+
+          <label className="block text-xs font-semibold text-inksoft mb-1">Image</label>
+          <input type="file" accept="image/*" onChange={handleFileChange} disabled={uploading} className="mb-3 text-sm" />
+          {uploading && <p className="text-xs text-inksoft mb-3">Uploading…</p>}
+          {editingId && !uploadedUrl && !uploading && (
+            <p className="text-xs text-inksoft mb-3">Leave empty to keep the current image.</p>
+          )}
+          {preview && (
+            <img src={preview} alt="Preview" className="w-24 h-24 object-cover rounded-lg mb-3" />
+          )}
+
+          {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+
+          <div className="flex gap-2">
+            <button type="submit" disabled={isPending || uploading} className="btn btn-primary">
+              {editingId ? 'Save Changes' : 'Add Product'}
+            </button>
             <button type="button" onClick={resetForm} className="btn btn-ghost">
               Cancel
             </button>
-          )}
-        </div>
-      </form>
+          </div>
+        </form>
+      )}
 
-      <div className="space-y-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
         {initialProducts.map((p) => (
-          <div key={p.id} className="flex items-center justify-between border border-slate-200 rounded-lg px-4 py-3">
-            <div className="flex items-center gap-3">
-              {p.images?.[0] && <img src={p.images[0]} alt={p.name} className="w-10 h-10 object-cover rounded" />}
-              <div>
-                <div className="font-semibold text-navy-900 text-sm">{p.name}</div>
-                <div className="text-xs text-inksoft">{categoryName(p.categoryId)}</div>
-              </div>
+          <div key={p.id} className="bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col">
+            <div className="relative aspect-square bg-navy-100">
+              {p.images?.[0] && <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />}
             </div>
-            <div className="flex gap-2 text-sm">
-              <button onClick={() => startEdit(p)} className="text-navy-700 font-semibold">Edit</button>
-              <button onClick={() => handleDelete(p.id)} className="text-red-600 font-semibold">Delete</button>
+            <div className="p-4 flex-1 flex flex-col">
+              <h3 className="font-bold text-navy-900 text-sm truncate">{p.name}</h3>
+              <p className="text-xs text-inksoft mt-1 line-clamp-2 flex-1">{p.description || 'No description.'}</p>
+              <span className="inline-block mt-3 self-start text-[11px] font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-600">
+                {categoryName(p.categoryId)}
+              </span>
+              <div className="flex gap-4 mt-4 pt-3 border-t border-slate-100 text-xs">
+                <button onClick={() => startEdit(p)} className="font-bold text-navy-700 hover:text-cyan-600">Edit</button>
+                <button onClick={() => handleDelete(p.id)} className="font-bold text-red-600 hover:text-red-700">Delete</button>
+              </div>
             </div>
           </div>
         ))}
-        {initialProducts.length === 0 && <p className="text-inksoft text-sm">No products yet.</p>}
+        {initialProducts.length === 0 && (
+          <p className="text-inksoft text-sm col-span-full">No products yet.</p>
+        )}
       </div>
     </div>
   );

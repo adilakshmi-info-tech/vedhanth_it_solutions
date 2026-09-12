@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { verifyAdminToken } from '@/lib/firebaseVerify';
 import AdminNav from './AdminNav';
+import AdminLogoutButton from './AdminLogoutButton';
 
 // Middleware already blocks unauthenticated access; this is the
 // server-side backstop, consistent with how requireAdmin() re-checks
@@ -12,11 +13,21 @@ export default async function AdminPanelLayout({ children }) {
   if (!email) redirect('/admin/login');
 
   return (
-    <div className="max-w-6xl mx-auto px-8 py-10 flex gap-10">
-      <aside className="w-48 shrink-0">
-        <AdminNav />
-      </aside>
-      <div className="flex-1 min-w-0">{children}</div>
+    <div className="bg-paper min-h-screen">
+      <header className="bg-white border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-6 md:px-8 py-6 flex items-center justify-between gap-4">
+          <div>
+            <h1 className="font-display font-extrabold text-2xl text-navy-900 tracking-tight">Admin Dashboard</h1>
+            <p className="text-sm text-inksoft mt-0.5">Manage your categories, products and reviews</p>
+          </div>
+          <AdminLogoutButton />
+        </div>
+        <div className="max-w-6xl mx-auto px-6 md:px-8">
+          <AdminNav />
+        </div>
+      </header>
+
+      <div className="max-w-6xl mx-auto px-6 md:px-8 py-10">{children}</div>
     </div>
   );
 }

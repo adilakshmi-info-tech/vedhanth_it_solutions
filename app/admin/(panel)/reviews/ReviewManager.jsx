@@ -22,8 +22,10 @@ export default function ReviewManager({ initialReviews }) {
 
   return (
     <div>
-      <h1 className="font-display text-2xl text-navy-900 mb-6">Reviews</h1>
-      <p className="text-sm text-inksoft mb-6">
+      <div className="flex items-center gap-4 mb-2">
+        <span className="text-sm text-inksoft">Total Reviews: <span className="font-bold text-navy-900">{initialReviews.length}</span></span>
+      </div>
+      <p className="text-sm text-inksoft mb-8">
         Reviews are submitted by customers via the form on the Contact page and stay hidden from the
         site until approved here.
       </p>
@@ -32,10 +34,10 @@ export default function ReviewManager({ initialReviews }) {
 
       <div className="space-y-3">
         {initialReviews.map((r) => (
-          <div key={r.id} className="border border-slate-200 rounded-lg px-4 py-3">
+          <div key={r.id} className="bg-white border border-slate-200 rounded-lg px-4 py-3">
             <div className="flex justify-between items-start gap-4">
               <div>
-                <div className="font-semibold text-navy-900 text-sm">{r.name}</div>
+                <div className="font-bold text-navy-900 text-sm">{r.name}</div>
                 <div className="text-cyan-500 text-xs mb-1">{'★'.repeat(r.rating || 5)}</div>
                 <p className="text-sm text-ink">{r.comment}</p>
               </div>
