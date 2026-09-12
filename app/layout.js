@@ -1,9 +1,9 @@
 import './globals.css';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import WhatsAppFloat from '@/components/WhatsAppFloat';
-import MobileContactBar from '@/components/MobileContactBar';
 
+// The public Header/Footer/WhatsApp float/mobile bar live in
+// app/(site)/layout.js, not here — this root layout is shared by
+// /admin/* too, and admin has its own chrome (see
+// app/admin/(panel)/layout.js).
 export const metadata = {
   metadataBase: new URL('https://vedhanthitsolutions.in'), // update once domain is live
   title: {
@@ -23,13 +23,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="font-sans pb-14 md:pb-0">
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <WhatsAppFloat />
-        <MobileContactBar />
-      </body>
+      <body className="font-sans pb-14 md:pb-0">{children}</body>
     </html>
   );
 }
