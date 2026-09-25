@@ -1,0 +1,58 @@
+# Deployed on the shared WACRM VM as its own stack (see
+# Deploy_New_Website_on_WACRM_VM.md) — wacrm_nginx proxies to `vedhanth_web`
+# over the pre-existing `wacrm_wacrm_network`. This stack owns nothing on
+# that VM except its own two containers and ./data.
+name: vedhanth
+
+services:
+  web:
+    container_name: vedhanth_web
+    build:
+      context: .
+      # NEXT_PUBLIC_* vars are inlined into the client bundle at build
+      # time — env_file below is a runtime-only mechanism and doesn't
+      # reach `next build`, so they have to be passed here too. Compose
+      # auto-substitutes these from the .env file sitting next to this
+      # compose file.
+      args:
+        NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY}
+        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}
+        NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID}
+        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}
+        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}
+        NEXT_PUBLIC_FIREBASE_APP_ID: ${NEXT_PUBLIC_FIREBASE_APP_ID}
+        NEXT_PUBLIC_IMAGE_UPLOAD_BASE_URL: ${NEXT_PUBLIC_IMAGE_UPLOAD_BASE_URL}
+        NEXT_PUBLIC_IMAGE_UPLOAD_APP_SLUG: ${NEXT_PUBLIC_IMAGE_UPLOAD_APP_SLUG}
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [wacrm_wacrm_network]
+    # No `ports:` — only reachable from other containers on the shared
+    # network; wacrm_nginx proxy_passes to it by container name.
+    # No image-upload volume either — product photos now live entirely on
+    # the shared store.adilakshmi.co service, never touching this disk.
+
+  db:
+    container_name: vedhanth_db
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./data/pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [wacrm_wacrm_network]
+    # Deliberately not on the shared network's WACRM db — this is vedhanth's
+    # own private Postgres, just co-located on the same VM.
+
+networks:
+  wacrm_wacrm_network:
+    external: true

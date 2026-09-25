@@ -1,0 +1,42 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env
+.env*.local
+!.env.example
+
+# prisma
+/prisma/*.db
+
+# raw source photos for prisma/seed-catalog.js — already uploaded to the
+# shared image API and referenced there by URL; don't bloat the repo
+/vedhanth_it_solutions_images/
+
+# docker-compose bind mounts on the deploy VM (postgres data)
+/data/
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
