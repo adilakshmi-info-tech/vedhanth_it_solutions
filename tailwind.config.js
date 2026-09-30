@@ -24,15 +24,29 @@ module.exports = {
           500: '#0D3D0E', // exact logo accent green
           200: '#92A893',
         },
+        // Accent system from the Figma design — warm amber/orange for CTAs,
+        // links and eyebrow labels; rose for the "Touch" highlight word.
+        accent: {
+          600: '#c26f0d',
+          500: '#e58411',
+          100: '#fbe7cf',
+        },
+        rose: '#dd5471',
         paper: '#F7F7F5',
         ink: '#1C1A1A',
         inksoft: '#5C5758',
       },
       fontFamily: {
-        // Geometric sans throughout, per the brief — Manrope for display
-        // (extra-bold headings), Inter for body copy.
-        display: ['Manrope', 'sans-serif'],
-        sans: ['Inter', 'sans-serif'],
+        // SF Pro per the Figma spec — falls back to the platform system font
+        // stack (renders as SF Pro on Apple devices) and Inter elsewhere.
+        display: [
+          '-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"',
+          'Inter', 'Manrope', 'sans-serif',
+        ],
+        sans: [
+          '-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"SF Pro Display"',
+          'Inter', 'sans-serif',
+        ],
       },
       keyframes: {
         fadeIn: {

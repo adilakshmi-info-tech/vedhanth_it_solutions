@@ -39,9 +39,55 @@ body {
 .btn-ghost {
   @apply border border-navy-700 text-navy-800 hover:bg-navy-100;
 }
+.btn-accent {
+  @apply bg-accent-500 text-white hover:bg-accent-600;
+}
+.btn-pill {
+  @apply rounded-full px-8 py-3.5 text-[15px] font-semibold border transition;
+}
+.btn-pill-solid {
+  @apply btn-pill bg-navy-900 border-white text-white hover:bg-navy-800;
+}
+.btn-pill-outline {
+  @apply btn-pill bg-white/15 border-white/60 text-white backdrop-blur-sm hover:bg-white/25;
+}
 
 .card {
   @apply bg-white border border-slate-200 rounded-xl p-6 text-center transition hover:-translate-y-1 hover:shadow-lg;
+}
+
+.eyebrow {
+  @apply text-accent-500 text-sm font-semibold tracking-[0.2em] uppercase;
+}
+
+.link-accent {
+  @apply inline-flex items-center gap-1.5 text-accent-500 font-semibold text-sm hover:gap-2.5 transition-all;
+}
+
+/* --- Hide scrollbar while staying scrollable (category tab bar) --------- */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Marquee (components/Marquee.jsx) ----------------------------------- */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-scroll linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
 }
 
 /* --- Scroll reveal (components/ScrollReveal.jsx) --------------------- */
