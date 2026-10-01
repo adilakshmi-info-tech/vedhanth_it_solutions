@@ -20,9 +20,9 @@ Built for deployment on your own server (not Vercel), backed by a self-hosted Po
   email allowlist (`ADMIN_ALLOWED_EMAILS`), since the Firebase project is shared across other apps
 - **Server Actions** — all admin create/edit/delete and the public review form run on the server;
   each one independently re-verifies the caller's Firebase session server-side
-- **Shared image-upload API** (`store.adilakshmi.co`) — product photos upload directly from the
-  admin's browser (authenticated with their own Firebase session) to that S3-backed service; this
-  app's own disk never holds product images
+- **Shared image-upload API** (`store.adilakshmi.co`) — product photos pass through an
+  authenticated same-origin Next.js proxy to the S3-backed service; Firebase admin credentials and
+  upload-service settings stay server-side, and this app's disk never holds product images
 - **Tailwind CSS** — styling, matches the brand (navy + cyan)
 
 ## 1. Prerequisites
@@ -55,7 +55,7 @@ Then edit `.env`:
 | `DATABASE_URL` | `postgresql://vedhanth:PASSWORD@localhost:5432/vedhanth?schema=public` |
 | `NEXT_PUBLIC_FIREBASE_*` | The `sjs-technology` Firebase project's web config — not secret, safe in git (Firebase web API keys aren't privileged credentials; see [Firebase's own docs](https://firebase.google.com/docs/projects/api-keys)) |
 | `ADMIN_ALLOWED_EMAILS` | Comma-separated allowlist — only these Firebase-authenticated emails can pass `requireAdmin()` / middleware, since the project is shared with other apps |
-| `NEXT_PUBLIC_IMAGE_UPLOAD_*` | Base URL + app slug for the shared image-upload API |
+| `IMAGE_UPLOAD_BASE_URL`, `IMAGE_UPLOAD_APP_SLUG` | Server-only base URL + app slug for the shared image-upload API |
 
 There is deliberately no admin password anywhere in this app's config — Firebase owns that entirely.
 
@@ -78,9 +78,9 @@ Log in with the Firebase user's email/password directly — there's no seed step
 - Log in at `/admin/login` with a Firebase account whose email is in `ADMIN_ALLOWED_EMAILS`.
 - **Categories** — add categories first (e.g. "CCTV & Security Solutions").
   A category can't be deleted while it still has products.
-- **Products** — add products, assign a category, upload an image. The browser uploads the file
-  directly to the shared image API using your own Firebase session — this app's server never
-  touches the image bytes. Editing without choosing a new image keeps the existing one; replacing
+- **Products** — add products, assign a category, upload up to five images. The browser sends files
+  to this app's authenticated proxy, which forwards them to the shared image API. Editing without
+  choosing a new image keeps the existing one; replacing
   or deleting a product's image also deletes the old file from the shared storage.
 - **Reviews** — customers submit reviews via the form on the Contact page; they stay hidden until
   you click **Approve**. Approved reviews then show on the homepage automatically.

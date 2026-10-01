@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Marquee from '@/components/Marquee';
+import styles from './ClientReviews.module.css';
 
 function Stars({ rating = 4 }) {
   return (
@@ -48,38 +49,44 @@ function ReviewCard({ name, role, comment, rating, photo, avatar }) {
 }
 
 const FALLBACK_REVIEWS = [
-  { id: 'a', name: 'Anil Reddy', role: 'Facility Manager', rating: 4, comment: 'From electrical panel work to CCTV, Vedhanth delivered quality solutions on time and within budget.', photo: '/images/home/review-bg-anil.jpg', avatar: '/images/home/avatar-anil.jpg' },
-  { id: 'b', name: 'Rajesh Kumar', role: 'Operations Manager', rating: 4, comment: 'Vedhanth handled our CCTV and networking installation professionally. The team was responsive and completed the work as planned.', photo: '/images/home/review-bg-rajesh.jpg', avatar: '/images/home/avatar-rajesh.jpg' },
-  { id: 'c', name: 'Priya Sharma', role: 'Office Administrator', rating: 4, comment: 'Excellent biometric and fire alarm installation. Their AMC support has been reliable and timely.', photo: '/images/home/review-bg-priya.jpg', avatar: '/images/home/avatar-priya.jpg' },
+  { id: 'static-anil', name: 'Anil Reddy', role: 'Facility Manager', rating: 4, comment: 'From electrical panel work to CCTV, Vedhanth delivered quality solutions on time and within budget.', photo: '/images/home/review-bg-anil.jpg', avatar: '/images/home/avatar-anil.jpg' },
+  { id: 'static-rajesh', name: 'Rajesh Kumar', role: 'Operations Manager', rating: 4, comment: 'Vedhanth handled our CCTV and networking installation professionally. The team was responsive and completed the work as planned.', photo: '/images/home/review-bg-rajesh.jpg', avatar: '/images/home/avatar-rajesh.jpg' },
+  { id: 'static-priya', name: 'Priya Sharma', role: 'Office Administrator', rating: 4, comment: 'Excellent biometric and fire alarm installation. Their AMC support has been reliable and timely.', photo: '/images/home/review-bg-priya.jpg', avatar: '/images/home/avatar-priya.jpg' },
 ];
 
 export default function ClientReviews({ reviews = [] }) {
-  const items = reviews.length
-    ? reviews.map((r, i) => ({
-        id: r.id,
-        name: r.name,
-        role: r.role || 'Client',
-        rating: r.rating || 5,
-        comment: r.comment,
-        photo: FALLBACK_REVIEWS[i % FALLBACK_REVIEWS.length].photo,
-        avatar: FALLBACK_REVIEWS[i % FALLBACK_REVIEWS.length].avatar,
-      }))
-    : FALLBACK_REVIEWS;
+  const backgroundPhotos = FALLBACK_REVIEWS;
+  const known = new Set(FALLBACK_REVIEWS.map((review) => `${review.name.toLowerCase()}|${review.comment.toLowerCase()}`));
+  const dynamicReviews = reviews
+    .filter((review) => {
+      const key = `${review.name.trim().toLowerCase()}|${review.comment.trim().toLowerCase()}`;
+      if (known.has(key)) return false;
+      known.add(key);
+      return true;
+    })
+    .map((review, index) => ({
+      id: review.id,
+      name: review.name,
+      role: review.role || 'Client',
+      rating: review.rating || 5,
+      comment: review.comment,
+      photo: backgroundPhotos[index % backgroundPhotos.length].photo,
+      avatar: backgroundPhotos[index % backgroundPhotos.length].avatar,
+    }));
+  const items = [...FALLBACK_REVIEWS, ...dynamicReviews];
 
   return (
-    <section id="reviews" className="scroll-mt-20 py-16 md:py-20 bg-[#f2f2f2]">
+    <section id="reviews" className="scroll-mt-20 pt-16 pb-16 md:pt-20 md:pb-[68px] bg-[#f2f2f2]">
       <div className="max-w-[1440px] mx-auto">
-        <div className="text-center px-6 mb-14">
+        <div className="text-center px-6 mb-[49px]">
           <span className="eyebrow">Testimonials</span>
-          <h2 className="font-display font-bold text-[32px] md:text-[42px] text-[#1e1e1e] mt-4 capitalize">
+          <h2 className="font-display font-bold text-[32px] md:text-[42px] text-[#1e1e1e] mt-[22px] capitalize">
             Our Client Reviews
           </h2>
         </div>
 
-        <Marquee gap={38} speed={items.length * 6} className="[mask-image:linear-gradient(90deg,transparent,black_5%,black_95%,transparent)] pb-4">
-          {items.map((r) => (
-            <ReviewCard key={r.id} {...r} />
-          ))}
+        <Marquee gap={38} speed={items.length * 6} className={styles.carouselViewport}>
+          {items.map((r) => <ReviewCard key={r.id} {...r} />)}
         </Marquee>
       </div>
     </section>

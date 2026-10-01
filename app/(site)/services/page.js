@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import DeliveryCarousel from './DeliveryCarousel';
 import './services.css';
 
 export const metadata = {
@@ -237,18 +238,6 @@ function ServiceRow({ service }) {
   );
 }
 
-function DeliveryCard({ kind, title, children, image, alt }) {
-  return (
-    <article className={`delivery-card delivery-card-${kind}`}>
-      <Image src={asset(image)} alt={alt} width={kind === 'site' ? 139 : kind === 'installation' ? 307 : 205} height={kind === 'site' ? 113 : kind === 'installation' ? 198 : 171} className="delivery-card-image" />
-      <div className="delivery-card-copy">
-        <h3>{title}</h3>
-        <p>{children}</p>
-      </div>
-    </article>
-  );
-}
-
 function DeliverySection() {
   return (
     <section className="delivery-section" aria-labelledby="delivery-title">
@@ -256,17 +245,7 @@ function DeliverySection() {
         <h2 id="delivery-title">How We Deliver Reliable Solutions</h2>
         <p>From the first inspection to long-term support, every project is handled with care, precision, and accountability.</p>
       </div>
-      <div className="delivery-panel">
-        <DeliveryCard kind="site" title="Site Assessment" image="delivery-assessment.png" alt="Site assessment checklist illustration">
-          We understand your requirements, inspect your location, and identify the right technical solution for your property or business.
-        </DeliveryCard>
-        <DeliveryCard kind="installation" title="Professional Installation" image="delivery-installation.png" alt="Professional installation checklist illustration">
-          Our trained team installs, configures, tests, and commissions every system with proper safety and technical standards.
-        </DeliveryCard>
-        <DeliveryCard kind="support" title="Ongoing Support" image="delivery-support.png" alt="Ongoing maintenance and support illustration">
-          We provide maintenance, troubleshooting, AMC, and multi-brand technical support to keep your systems working reliably.
-        </DeliveryCard>
-      </div>
+      <DeliveryCarousel />
     </section>
   );
 }

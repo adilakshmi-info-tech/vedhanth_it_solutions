@@ -1,68 +1,35 @@
 'use client';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import styles from './admin.module.css';
 
-const navItems = [
-  {
-    href: '/admin',
-    label: 'Dashboard',
-    icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="3.5" y="3.5" width="7" height="7" rx="1" />
-        <rect x="13.5" y="3.5" width="7" height="7" rx="1" />
-        <rect x="3.5" y="13.5" width="7" height="7" rx="1" />
-        <rect x="13.5" y="13.5" width="7" height="7" rx="1" />
-      </svg>
-    ),
-  },
-  {
-    href: '/admin/categories',
-    label: 'Categories',
-    icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M3.5 6.5a1 1 0 0 1 1-1h4l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1z" strokeLinejoin="round" />
-      </svg>
-    ),
-  },
-  {
-    href: '/admin/products',
-    label: 'Products',
-    icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="3.5" y="3.5" width="17" height="17" rx="1.5" />
-        <circle cx="8.5" cy="8.5" r="1.5" />
-        <path d="M20.5 15.5 15 10l-9 9" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-  },
-  {
-    href: '/admin/reviews',
-    label: 'Reviews',
-    icon: (
-      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M4 5.5h16v11h-9l-4 3.5v-3.5H4z" strokeLinejoin="round" />
-      </svg>
-    ),
-  },
+const items = [
+  ['Dashboard', '/admin', 'grid'],
+  ['Client Reviews', '/admin/reviews', 'review'],
+  ['Enquiries', '/admin/enquiries', 'inbox'],
+  ['Products', '/admin/products', 'box'],
+  ['Categories', '/admin/categories', 'folder'],
 ];
 
-export default function AdminNav() {
-  const pathname = usePathname();
+const paths = {
+  grid: <><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></>,
+  review: <><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-9.5A7.5 7.5 0 0 1 10.5 4H12"/><path d="m15 5 2 2 4-4"/></>,
+  inbox: <><path d="M4 4h16v16H4z"/><path d="M4 13h4l2 3h4l2-3h4"/></>,
+  box: <><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="M3 8v9l9 5 9-5V8M12 13v9"/></>,
+  folder: <><path d="M3 6a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Z"/></>,
+};
 
+export default function AdminNav({ onNavigate, mobile = false }) {
+  const pathname = usePathname();
   return (
-    <nav className="flex gap-1 -mb-px overflow-x-auto">
-      {navItems.map((item) => {
-        const active = pathname === item.href;
+    <nav className={mobile ? styles.mobileNav : styles.nav} aria-label="Admin navigation">
+      {items.map(([label, href, icon]) => {
+        const active = href === '/admin' ? pathname === href : pathname.startsWith(href);
         return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-bold border-b-2 whitespace-nowrap transition ${
-              active ? 'border-green-500 text-navy-900' : 'border-transparent text-inksoft hover:text-navy-800'
-            }`}
-          >
-            {item.icon}
-            {item.label}
+          <Link key={href} href={href} onClick={onNavigate} aria-current={active ? 'page' : undefined} className={`${styles.navLink} ${active ? styles.navLinkActive : ''}`}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{paths[icon]}</svg>
+            <span>{label}</span>
           </Link>
         );
       })}

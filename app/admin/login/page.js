@@ -1,33 +1,37 @@
 'use client';
-import { Suspense, useState } from 'react';
+
+import { Suspense, useId, useState } from 'react';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import styles from './login.module.css';
 
 function LoginForm() {
+  const id = useId();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/admin';
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
     setError('');
     setLoading(true);
+
     try {
-      const cred = await signInWithEmailAndPassword(auth, email, password);
-      // Write the cookie directly here rather than waiting on
-      // FirebaseSessionSync's onIdTokenChanged listener — that one keeps
-      // it fresh on later token refreshes, but relying on it for this
-      // very first write races the redirect below against middleware.
-      const token = await cred.user.getIdToken();
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+      // Write the first Firebase token before redirecting so middleware sees
+      // the authenticated session on the dashboard request.
+      const token = await credential.user.getIdToken();
       document.cookie = `fb_token=${token}; path=/; max-age=3600; SameSite=Lax`;
       router.push(callbackUrl);
       router.refresh();
-    } catch (err) {
+    } catch (authError) {
       setError('Invalid email or password.');
     } finally {
       setLoading(false);
@@ -35,61 +39,85 @@ function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-      <div className="flex flex-col items-center text-center mb-2">
-        <div className="w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center mb-4">
-          <svg viewBox="0 0 24 24" className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="5" y="11" width="14" height="9" rx="1.5" />
-            <path d="M8 11V7a4 4 0 0 1 8 0v4" strokeLinecap="round" />
-          </svg>
-        </div>
-        <h1 className="font-display font-extrabold text-2xl text-navy-900 tracking-tight">Admin Login</h1>
-        <p className="text-sm text-inksoft mt-1">Access the admin dashboard</p>
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <div className={styles.formIntro}>
+        <span className={styles.loginBadge} aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        </span>
+        <h1 className={styles.pageTitle}>Admin Login</h1>
+        <p>Sign in to manage Vedhanth IT Solutions</p>
       </div>
 
-      {error && <p className="text-red-600 text-sm text-center mt-4">{error}</p>}
+      <div className={`${styles.field} ${styles.emailField}`}>
+        <label className={styles.label} htmlFor={`${id}-email`}>Email</label>
+        <input
+          id={`${id}-email`}
+          name="email"
+          type="email"
+          autoComplete="username"
+          inputMode="email"
+          required
+          placeholder="username@gmail.com"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          className={styles.input}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${id}-error` : undefined}
+        />
+      </div>
 
-      <label className="block text-sm font-semibold text-navy-900 mt-6 mb-1">
-        Email <span className="text-red-500">*</span>
-      </label>
-      <input
-        type="email"
-        required
-        placeholder="you@vedhanthitsolutions.in"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500"
-      />
+      <div className={`${styles.field} ${styles.passwordField}`}>
+        <label className={styles.label} htmlFor={`${id}-password`}>Password</label>
+        <div className={styles.passwordControl}>
+          <input
+            id={`${id}-password`}
+            name="password"
+            type={passwordVisible ? 'text' : 'password'}
+            autoComplete="current-password"
+            required
+            placeholder="Password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className={styles.input}
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? `${id}-error` : undefined}
+          />
+          <button
+            className={styles.visibilityToggle}
+            type="button"
+            onClick={() => setPasswordVisible((visible) => !visible)}
+            aria-label={passwordVisible ? 'Hide password' : 'Show password'}
+            aria-pressed={passwordVisible}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z" />
+              <circle cx="12" cy="12" r="2.6" />
+              {!passwordVisible && <path d="m4 4 16 16" />}
+            </svg>
+          </button>
+        </div>
+      </div>
 
-      <label className="block text-sm font-semibold text-navy-900 mt-4 mb-1">
-        Password <span className="text-red-500">*</span>
-      </label>
-      <input
-        type="password"
-        required
-        placeholder="Enter your password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500"
-      />
+      <p className={styles.forgotPassword}>Forgot Password?</p>
 
-      <button type="submit" disabled={loading} className="btn btn-primary w-full justify-center mt-6">
-        {loading ? 'Signing in…' : 'Sign In'}
+      <button type="submit" disabled={loading} className={styles.submitButton}>
+        {loading ? 'Signing in…' : 'Sign in'}
       </button>
 
-      <p className="text-xs text-inksoft text-center mt-5 leading-relaxed">
-        This is a restricted area. Only authorized administrators can access.
-      </p>
+      {error && <p className={styles.error} id={`${id}-error`} role="alert">{error}</p>}
     </form>
   );
 }
 
 export default function AdminLoginPage() {
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-6 bg-paper">
-      <Suspense fallback={null}>
-        <LoginForm />
-      </Suspense>
-    </div>
+    <main className={styles.stage}>
+      <div className={styles.loginBrand}><Image src="/logo-full.svg" alt="Vedhanth IT Solutions" width={202} height={52} priority /></div>
+      <section className={styles.loginCard} aria-label="Administrator sign in">
+        <Suspense fallback={null}>
+          <LoginForm />
+        </Suspense>
+      </section>
+    </main>
   );
 }

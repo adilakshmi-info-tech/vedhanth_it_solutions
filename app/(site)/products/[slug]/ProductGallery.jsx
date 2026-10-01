@@ -6,16 +6,17 @@ import styles from './product-detail.module.css';
 
 export default function ProductGallery({ images, title }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeImage = images[activeIndex] || images[0];
+  const availableImages = Array.isArray(images) ? images : [];
+  const activeImage = availableImages[activeIndex] || availableImages[0];
 
   return (
     <div className={styles.gallery}>
       <div className={styles.mainImage}>
-        <Image src={activeImage} alt={title} fill priority unoptimized sizes="(max-width: 760px) 100vw, 573px" />
+        {activeImage ? <Image src={activeImage} alt={title} fill priority unoptimized sizes="(max-width: 760px) 100vw, 573px" /> : <span className={styles.imageFallback}>Product image unavailable</span>}
       </div>
-      {images.length > 1 && (
+      {availableImages.length > 1 && (
         <div className={styles.thumbnails} aria-label="Product images">
-          {images.map((image, index) => (
+          {availableImages.map((image, index) => (
             <button
               key={`${image}-${index}`}
               type="button"

@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
+import { submitEnquiry } from '@/lib/actions/enquiries';
 
 const inputClass =
   'w-full h-[50px] rounded-[10px] border border-[#e0e0e0] px-5 text-sm text-[#1e1e1e] placeholder:text-[#828282] outline-none focus:border-accent-500 transition';
@@ -8,13 +9,31 @@ const inputClass =
 export default function ContactSection({ showHeading = true }) {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const text = `Hi, I'm ${formData.name}.%0A%0A${formData.message}%0A%0APhone: ${formData.phone}%0AEmail: ${formData.email}`;
-    window.open(`https://wa.me/917483528453?text=${text}`, '_blank');
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setSubmitting(true);
+    setError('');
+    // Open synchronously inside the submit gesture so browser popup blockers
+    // still allow the requested WhatsApp handoff after the save completes.
+    const whatsappWindow = window.open('', '_blank');
+    try {
+      await submitEnquiry(formData);
+      const text = `Hi, I'm ${formData.name}.\n\n${formData.message}\n\nPhone: ${formData.phone}\nEmail: ${formData.email}`;
+      const url = `https://wa.me/917483528453?text=${encodeURIComponent(text)}`;
+      if (whatsappWindow) whatsappWindow.location.href = url;
+      else window.location.href = url;
+      setSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      setTimeout(() => setSubmitted(false), 4000);
+    } catch (cause) {
+      whatsappWindow?.close();
+      setError(cause.message || 'We could not save your enquiry. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -82,10 +101,12 @@ export default function ContactSection({ showHeading = true }) {
                 />
                 <button
                   type="submit"
+                  disabled={submitting}
                   className="h-[50px] rounded-[10px] bg-[#081732] text-white text-[16px] font-bold uppercase hover:bg-navy-800 transition"
                 >
-                  Send
+                  {submitting ? 'Saving…' : 'Send'}
                 </button>
+                {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
               </form>
             )}
 
