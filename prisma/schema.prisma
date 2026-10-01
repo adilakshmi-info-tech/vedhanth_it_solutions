@@ -20,23 +20,64 @@ model Category {
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  description String?
-  images      String[] // relative paths under /public/uploads
-  category    Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  categoryId  String
-  createdAt   DateTime @default(now())
+  id              String                 @id @default(cuid())
+  name            String
+  slug            String                 @unique
+  description     String?
+  images          String[] // relative paths under /public/uploads
+  category        Category               @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  categoryId      String
+  createdAt       DateTime               @default(now())
+  specifications  ProductSpecification[]
+  reviewWorkflows ReviewWorkflow[]
 }
 
 model Review {
-  id        String   @id @default(cuid())
+  id        String          @id @default(cuid())
   name      String
   rating    Int
   comment   String
-  approved  Boolean  @default(false)
+  approved  Boolean         @default(false)
+  createdAt DateTime        @default(now())
+  workflow  ReviewWorkflow?
+}
+
+model ProductSpecification {
+  id           String   @id @default(cuid())
+  productId    String
+  label        String
+  value        String
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, displayOrder])
+}
+
+model ReviewWorkflow {
+  reviewId   String    @id
+  productId  String?
+  reviewType String    @db.VarChar(16)
+  status     String    @default("pending") @db.VarChar(16)
+  approvedAt DateTime?
+  review     Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  product    Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([productId, status])
+  @@index([reviewType, status])
+}
+
+model Enquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String
+  message   String
+  status    String   @default("new") @db.VarChar(16)
   createdAt DateTime @default(now())
+
+  @@index([status, createdAt])
+  @@index([createdAt])
 }
 
 // No AdminUser table — admin identity now lives in Firebase Auth

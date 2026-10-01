@@ -14,7 +14,8 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
 .intro {
   box-sizing: border-box;
-  height: 1008px;
+  height: auto;
+  min-height: calc(1008px + var(--spec-extra-height, 0px));
   padding-top: 50px;
 }
 
@@ -53,6 +54,18 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   overflow: hidden;
   border-radius: 20px;
   background: #f7ede1;
+}
+
+.imageFallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: #667085;
+  font-size: 14px;
+  text-align: center;
 }
 
 .mainImage img {
@@ -103,7 +116,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 }
 
 .details h1 {
-  min-height: 96px;
+  min-height: 0;
   margin: 0;
   color: #1d2939;
   font-size: 40px;
@@ -126,6 +139,11 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   white-space: nowrap;
   font-size: 18px;
   line-height: 28px;
+}
+
+.noRating {
+  color: #667085;
+  font-size: 16px;
 }
 
 .ratingGroup {
@@ -151,6 +169,10 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 }
 
 .resolution {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: inherit;
   font-size: 18px;
   font-weight: 500;
@@ -165,7 +187,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
 .description {
   margin: 23px 0 0;
-  min-height: 96px;
+  min-height: 0;
   color: #1d2939;
   font-size: 16px;
   font-weight: 400;
@@ -209,6 +231,21 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   table-layout: fixed;
 }
 
+.noSpecifications {
+  position: absolute;
+  top: 470px;
+  right: 1px;
+  width: 532px;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid #d9dfe7;
+  border-radius: 6px;
+  background: #fff;
+  color: #778195;
+  font-size: 14px;
+  text-align: center;
+}
+
 .specifications th,
 .specifications td {
   box-sizing: border-box;
@@ -219,7 +256,8 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   font-size: 14px;
   font-weight: 500;
   line-height: 28px;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .specifications tr > :last-child {
@@ -239,7 +277,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 }
 
 .specifications tbody tr {
-  height: 37px;
+  height: auto;
 }
 
 .specifications tbody tr:nth-child(7) td {
@@ -268,6 +306,23 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   height: 472px;
   margin-top: 48px;
   overflow: hidden;
+}
+
+.noReviews,
+.noRelated {
+  display: flex;
+  min-height: 472px;
+  align-items: center;
+  justify-content: center;
+  margin: 48px 24px 0;
+  color: #667085;
+  font-size: 16px;
+  text-align: center;
+}
+
+.noRelated {
+  min-height: 0;
+  margin-top: 24px;
 }
 
 .reviewRow {
@@ -366,24 +421,46 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   object-fit: cover;
 }
 
+.reviewerInitial {
+  display: grid;
+  flex: 0 0 41px;
+  width: 41px;
+  height: 41px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e8eef9;
+  color: #0b1b38;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .reviewerMeta {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 4px;
-  line-height: 20px;
+  gap: 1px;
+  line-height: 1;
 }
 
 .reviewerMeta strong {
   color: #1d2939;
   font-size: 16px;
   font-weight: 600;
+  line-height: 19px;
+}
+
+.reviewerMeta small {
+  color: #667085;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 13px;
 }
 
 .reviewerMeta time {
   color: #667085;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
   white-space: nowrap;
 }
 
@@ -414,19 +491,19 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
 .related {
   box-sizing: border-box;
-  height: 1260px;
+  height: auto;
   margin-top: 100px;
   padding-top: 0;
 }
 
 .relatedGrid {
   display: grid;
-  width: max-content;
-  grid-template-columns: repeat(4, 268px);
+  width: min(100% - 48px, 1200px);
+  grid-template-columns: repeat(auto-fit, minmax(0, 268px));
+  justify-content: center;
   column-gap: 42px;
   row-gap: 50px;
-  margin-top: 50px;
-  margin-left: max(24px, calc(50% - 604px));
+  margin: 50px auto 0;
 }
 
 .relatedCard {
@@ -437,10 +514,6 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   overflow: hidden;
   border-radius: 20px;
   background: #fff;
-}
-
-.relatedCard:nth-child(4) {
-  margin-left: 9px;
 }
 
 .relatedImage {
@@ -466,14 +539,16 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
 .relatedProductImage {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 50%;
   z-index: 1;
   display: block;
-  flex: 0 0 auto;
-  max-width: 100%;
+  width: 88%;
+  height: 80%;
+  max-width: 88%;
+  max-height: 80%;
   object-fit: contain;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
 }
 
 .relatedBody {
@@ -511,6 +586,12 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   display: flex;
   gap: 3px;
   margin-top: 35px;
+}
+
+.relatedNoRating {
+  color: #8d8d8d;
+  font-size: 14px;
+  line-height: 18px;
 }
 
 .relatedStars img {
@@ -558,7 +639,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   height: 394px;
   flex-direction: column;
   align-items: center;
-  margin: 100px auto 0;
+  margin: 56px auto 0;
   padding: 80px;
   border-radius: 24px;
   color: #fff;
@@ -622,7 +703,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 @media (max-width: 1230px) {
   .intro {
     height: auto;
-    min-height: 1120px;
+    min-height: calc(1120px + var(--spec-extra-height, 0px));
     padding-bottom: 60px;
   }
 
@@ -690,6 +771,8 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
     width: calc(50% - 20px);
   }
 
+  .noSpecifications { top: 570px; right: 0; width: calc(50% - 20px); }
+
   .reviews {
     height: auto;
   }
@@ -724,7 +807,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
   .relatedGrid {
     width: min(100% - 48px, 904px);
-    grid-template-columns: repeat(3, minmax(0, 268px));
+    grid-template-columns: repeat(auto-fit, minmax(0, 268px));
     justify-content: center;
     gap: 36px 30px;
     margin: 50px auto 0;
@@ -752,7 +835,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   }
 
   .enquiry {
-    margin-top: 100px;
+    margin-top: 56px;
   }
 }
 
@@ -818,9 +901,12 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
   .ratingRow {
     gap: 10px;
+    height: auto;
     margin-top: 18px;
     font-size: 14px;
     line-height: 22px;
+    white-space: normal;
+    flex-wrap: wrap;
   }
 
   .ratingGroup {
@@ -834,6 +920,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
   .resolution {
     font-size: 14px;
+    white-space: normal;
   }
 
   .horizontalDivider {
@@ -859,6 +946,8 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
     margin-top: 0;
   }
 
+  .noSpecifications { position: static; width: 100%; margin-top: 0; }
+
   .specifications th,
   .specifications td {
     padding: 4px 6px;
@@ -873,7 +962,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   }
 
   .specifications tbody tr {
-    height: 37px;
+    height: auto;
   }
 
   .reviews {
@@ -912,6 +1001,12 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   .relatedCard {
     height: 360px;
     border-radius: 14px;
+  }
+
+  .relatedGrid > .relatedCard:nth-child(odd):last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: min(100%, 268px);
   }
 
   .relatedImage {
@@ -963,6 +1058,11 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
     height: 14px;
   }
 
+  .relatedNoRating {
+    font-size: 11px;
+    line-height: 14px;
+  }
+
   .relatedQuote {
     display: block;
     align-self: flex-start;
@@ -981,7 +1081,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
     width: calc(100% - 32px);
     height: auto;
     min-height: 320px;
-    margin-top: 64px;
+    margin-top: 40px;
     padding: 42px 20px;
     border-radius: 20px;
   }
@@ -1028,4 +1128,20 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
     min-height: 18px;
     flex-basis: 18px;
   }
+}
+
+.productReviewForm { width: min(100% - 40px, 760px); margin: 48px auto 0; padding: 26px; display: grid; gap: 16px; border: 1px solid #d9dfe7; border-radius: 14px; background: #fff; }
+.productReviewForm h3 { margin: 0; color: #081a37; font-size: 20px; }
+.productReviewForm label { display: grid; gap: 7px; color: #273447; font-size: 14px; font-weight: 600; }
+.productReviewForm input, .productReviewForm textarea { width: 100%; border: 1px solid #d6dce5; border-radius: 8px; padding: 10px 12px; color: #1f2937; font: inherit; }
+.productReviewForm fieldset { border: 0; padding: 0; margin: 0; }
+.productReviewForm legend { margin-bottom: 6px; color: #273447; font-size: 14px; font-weight: 600; }
+.productReviewForm fieldset button { padding: 0 4px; color: #f5a900; font-size: 25px; }
+.productReviewForm > button { justify-self: start; padding: 12px 22px; border-radius: 8px; background: #081a37; color: white; font-weight: 600; }
+.productReviewForm > button:disabled { opacity: .6; cursor: wait; }
+.productReviewForm > p, .reviewFormSuccess { margin: 0; color: #758196; font-size: 13px; }
+.reviewFormError { margin: 0; color: #b42318; font-size: 13px; }
+
+@media (max-width: 600px) {
+  .productReviewForm { width: calc(100% - 32px); margin-top: 32px; padding: 20px; }
 }

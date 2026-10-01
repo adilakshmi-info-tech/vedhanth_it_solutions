@@ -49,21 +49,21 @@ export default function FeedbackForm() {
     <form className={styles.formCard} onSubmit={handleSubmit}>
       <div className={styles.fields}>
         <label className={styles.field}>
-          <span>Full name</span>
+          <span>Full Name</span>
           <div className={styles.inputShell}>
             <input name="name" placeholder="Your full name" autoComplete="name" required />
             <Image src={inputIcons.name} alt="" width={16} height={18} />
           </div>
         </label>
         <label className={styles.field}>
-          <span>Company name</span>
+          <span>Company Name</span>
           <div className={styles.inputShell}>
             <input name="company" placeholder="Your company name" autoComplete="organization" />
             <Image src={inputIcons.company} alt="" width={18} height={18} />
           </div>
         </label>
         <label className={`${styles.field} ${styles.phoneField}`}>
-          <span>Phone number</span>
+          <span>Phone Number</span>
           <div className={styles.inputShell}>
             <input name="phone" type="tel" placeholder="(123) 456-7890" autoComplete="tel" />
             <Image src={inputIcons.phone} alt="" width={12} height={18} />
@@ -72,7 +72,7 @@ export default function FeedbackForm() {
       </div>
 
       <fieldset className={styles.ratingField}>
-        <legend>Rate our service</legend>
+        <legend>Service Rating</legend>
         <div className={styles.ratingChoices}>
           {Array.from({ length: 5 }, (_, index) => {
             const value = index + 1;
@@ -94,7 +94,7 @@ export default function FeedbackForm() {
       </fieldset>
 
       <label className={`${styles.field} ${styles.feedbackField}`}>
-        <span>Additional feedback</span>
+        <span>Additional Feedback</span>
         <textarea name="feedback" placeholder="Tell us about your experience with Vedhanth…" required />
       </label>
 

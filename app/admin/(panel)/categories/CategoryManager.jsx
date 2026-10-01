@@ -2,6 +2,9 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { createCategory, updateCategory, deleteCategory } from '@/lib/actions/categories';
+import AdminFormDrawer from '@/components/admin/AdminFormDrawer';
+import AdminConfirmDialog from '@/components/admin/AdminConfirmDialog';
+import styles from '../admin.module.css';
 
 export default function CategoryManager({ initialCategories }) {
   const router = useRouter();
@@ -10,6 +13,7 @@ export default function CategoryManager({ initialCategories }) {
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState('');
   const [isPending, startTransition] = useTransition();
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   function resetForm() {
     setForm({ name: '', description: '' });
@@ -47,9 +51,12 @@ export default function CategoryManager({ initialCategories }) {
     setShowForm(true);
   }
 
-  function handleDelete(id) {
-    if (!confirm('Delete this category?')) return;
-    run(() => deleteCategory(id));
+  function handleDelete(cat) {
+    setError('');
+    startTransition(async () => {
+      try { await deleteCategory(cat.id); setDeleteTarget(null); router.refresh(); }
+      catch (cause) { setError(cause.message || 'Unable to delete this category.'); }
+    });
   }
 
   return (
@@ -67,34 +74,25 @@ export default function CategoryManager({ initialCategories }) {
         <span className="text-sm text-inksoft">Total Categories: <span className="font-bold text-navy-900">{initialCategories.length}</span></span>
       </div>
 
-      {showForm && (
-        <form onSubmit={handleSubmit} className="card text-left mb-8 max-w-md">
-          <h3 className="font-display font-extrabold text-navy-900 mb-4">{editingId ? 'Edit category' : 'Add new category'}</h3>
-          <label className="block text-xs font-semibold text-inksoft mb-1">Name</label>
-          <input
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            required
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm"
-          />
-          <label className="block text-xs font-semibold text-inksoft mb-1">Description</label>
-          <textarea
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            rows={2}
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 mb-4 text-sm"
-          />
-          {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
-          <div className="flex gap-2">
-            <button type="submit" disabled={isPending} className="btn btn-primary">
-              {editingId ? 'Save Changes' : 'Add Category'}
-            </button>
-            <button type="button" onClick={resetForm} className="btn btn-ghost">
-              Cancel
-            </button>
-          </div>
+      <AdminFormDrawer
+        open={showForm}
+        title={editingId ? 'Edit Category' : 'Add New Category'}
+        description="Category details."
+        formId="category-editor-form"
+        submitLabel={editingId ? 'Update Category' : 'Add Category'}
+        busy={isPending}
+        onClose={resetForm}
+      >
+        <form id="category-editor-form" onSubmit={handleSubmit} className={styles.drawerForm}>
+          <label className={styles.formField}>Name
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className={styles.formInput} />
+          </label>
+          <label className={styles.formField}>Description
+            <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className={styles.formTextarea} />
+          </label>
+          {error && <p className={styles.formError} role="alert">{error}</p>}
         </form>
-      )}
+      </AdminFormDrawer>
 
       <div className="space-y-3">
         {initialCategories.map((cat) => (
@@ -105,12 +103,13 @@ export default function CategoryManager({ initialCategories }) {
             </div>
             <div className="flex gap-4 text-sm">
               <button onClick={() => startEdit(cat)} className="text-navy-700 font-bold hover:text-green-600">Edit</button>
-              <button onClick={() => handleDelete(cat.id)} className="text-red-600 font-bold hover:text-red-700">Delete</button>
+              <button onClick={() => { setError(''); setDeleteTarget(cat); }} className="text-red-600 font-bold hover:text-red-700">Delete</button>
             </div>
           </div>
         ))}
         {initialCategories.length === 0 && <p className="text-inksoft text-sm">No categories yet.</p>}
       </div>
+      <AdminConfirmDialog open={Boolean(deleteTarget)} itemName={deleteTarget?.name || ''} itemType="category" busy={isPending} error={error} onCancel={() => { setDeleteTarget(null); setError(''); }} onConfirm={() => handleDelete(deleteTarget)} />
     </div>
   );
 }
