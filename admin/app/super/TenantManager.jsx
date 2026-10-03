@@ -100,7 +100,7 @@ export default function TenantManager({ initialTenants }) {
       <AdminFormDrawer
         open={showForm}
         title={editingId ? 'Edit Tenant' : 'Add New Tenant'}
-        description="Client site branding and feature flags. Not yet consulted by any page — this only manages the setting itself."
+        description="Client site branding and feature flags."
         formId="tenant-editor-form"
         submitLabel={editingId ? 'Update Tenant' : 'Add Tenant'}
         busy={isPending}
@@ -122,10 +122,10 @@ export default function TenantManager({ initialTenants }) {
           <label className={styles.formField}>Green color
             <input value={form.colorGreen} onChange={(e) => setForm({ ...form, colorGreen: e.target.value })} placeholder="#0D3D0E" className={styles.formInput} />
           </label>
-          <label className={styles.formField}>
+          <label className={styles.formField} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <input type="checkbox" checked={form.featureReviews} onChange={(e) => setForm({ ...form, featureReviews: e.target.checked })} /> Reviews enabled
           </label>
-          <label className={styles.formField}>
+          <label className={styles.formField} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <input type="checkbox" checked={form.featureEnquiries} onChange={(e) => setForm({ ...form, featureEnquiries: e.target.checked })} /> Enquiries enabled
           </label>
           <label className={styles.formField}>Admin emails (comma-separated)
