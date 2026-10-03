@@ -1,8 +1,18 @@
 'use client';
 
+import { useEffect } from 'react';
 import styles from '../../app/admin/(panel)/admin.module.css';
 
 export default function AdminConfirmDialog({ open, itemName, itemType, busy = false, error, onCancel, onConfirm }) {
+  useEffect(() => {
+    if (!open || busy) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') onCancel();
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [open, busy, onCancel]);
+
   if (!open) return null;
   return <div className={styles.modalBackdrop} role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !busy) onCancel(); }}>
     <section className={styles.confirmModal} role="alertdialog" aria-modal="true" aria-labelledby="confirm-delete-title">

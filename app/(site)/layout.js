@@ -1,7 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
-import MobileContactBar from '@/components/MobileContactBar';
 
 // Public marketing site chrome — deliberately scoped to this route group
 // (not the root layout) so /admin/* gets a clean shell instead of the
@@ -13,7 +12,6 @@ export default function SiteLayout({ children }) {
       <main>{children}</main>
       <Footer />
       <WhatsAppFloat />
-      <MobileContactBar />
     </>
   );
 }

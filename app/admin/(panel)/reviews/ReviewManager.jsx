@@ -6,7 +6,7 @@ import { setReviewApproval, deleteReview } from '@/lib/actions/reviews';
 import AdminConfirmDialog from '@/components/admin/AdminConfirmDialog';
 import styles from '../admin.module.css';
 
-export default function ReviewManager({ initialReviews }) {
+export default function ReviewManager({ initialReviews, initialLoadError = '' }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [reviewItems, setReviewItems] = useState(initialReviews);
@@ -17,9 +17,13 @@ export default function ReviewManager({ initialReviews }) {
   const [range, setRange] = useState({ from: '', to: '' });
   const [dialog, setDialog] = useState(null);
   const [error, setError] = useState('');
+  const [loadError, setLoadError] = useState(initialLoadError);
   const [notice, setNotice] = useState('');
 
-  useEffect(() => setReviewItems(initialReviews), [initialReviews]);
+  useEffect(() => {
+    setReviewItems(initialReviews);
+    setLoadError(initialLoadError);
+  }, [initialReviews, initialLoadError]);
 
   const statusOf = (review) => review.workflow?.status || (review.approved ? 'approved' : 'pending');
   const typeOf = (review) => review.workflow?.reviewType || 'company';
@@ -72,7 +76,7 @@ export default function ReviewManager({ initialReviews }) {
   return <section>
     <div className={styles.pageIntro}><div><h2>Client Reviews</h2><p>Manage product and Vedhanth IT Solutions customer feedback.</p></div></div>
     <div className={styles.metricStrip}><span><strong>{reviewItems.length}</strong> total reviews</span><span><strong>{approvedCount}</strong> approved</span><span><strong>{pendingCount}</strong> pending</span></div>
-    {notice && <p className={styles.successNotice} role="status">{notice}</p>}{error && !dialog && <p className={styles.errorNotice} role="alert">{error}</p>}
+    {notice && <p className={styles.successNotice} role="status">{notice}</p>}{loadError && <p className={styles.errorNotice} role="alert">{loadError}</p>}{error && !dialog && <p className={styles.errorNotice} role="alert">{error}</p>}
     <div className={styles.card}>
       <div className={styles.reviewFilters}>
         <input className={styles.searchInput} type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by reviewer, product, or text" aria-label="Search reviews" />

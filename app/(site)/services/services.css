@@ -1,13 +1,10 @@
 /* Figma Services page frame: 1440 x 7070. All page chrome and overrides are
-   scoped to this route so the shared site shell remains intact elsewhere. */
-body:has(.services-page) {
-  padding-bottom: 0 !important;
-}
-
-body:has(.services-page) > header,
+   scoped to this route so the shared site shell remains intact elsewhere.
+   The header is the one exception: this page now renders the shared
+   site-wide <Header> (see components/Header.jsx) instead of a bespoke one,
+   so every page shows the same header. */
 body:has(.services-page) > footer,
-body:has(.services-page) > a[aria-label='Chat on WhatsApp'],
-body:has(.services-page) > div[class*='fixed'][class*='bottom-0'] {
+body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
   display: none !important;
 }
 
@@ -17,76 +14,6 @@ body:has(.services-page) > div[class*='fixed'][class*='bottom-0'] {
   background: #f7f7f7;
   color: #10111a;
   font-family: var(--font-sans, inherit);
-}
-
-.services-header {
-  position: sticky;
-  z-index: 50;
-  top: 0;
-  width: 100%;
-  height: 80px;
-  background: #081732;
-}
-
-.services-header-inner {
-  position: relative;
-  width: min(100%, 1440px);
-  height: 80px;
-  margin: 0 auto;
-}
-
-.services-header-logo {
-  position: absolute;
-  top: 5px;
-  left: 50px;
-  display: block;
-  width: 184px;
-  line-height: 0;
-}
-
-.services-header-logo img {
-  display: block;
-  width: 184px;
-  height: auto;
-}
-
-.services-desktop-nav {
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  display: flex;
-  align-items: center;
-  gap: 50px;
-  transform: translateX(-50%);
-  white-space: nowrap;
-}
-
-.services-desktop-nav a {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 510;
-  line-height: 21px;
-  text-decoration: none;
-}
-
-.services-quote-link {
-  position: absolute;
-  top: 14px;
-  right: 50px;
-  display: flex;
-  width: 144px;
-  height: 52px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #fff;
-  border-radius: 26px;
-  color: #fff;
-  font-size: 15px;
-  text-decoration: none;
-}
-
-.services-mobile-nav {
-  display: none;
 }
 
 .services-hero {
@@ -597,28 +524,6 @@ body:has(.services-page) > div[class*='fixed'][class*='bottom-0'] {
 }
 
 @media (max-width: 1439px) {
-  .services-desktop-nav {
-    gap: 26px;
-  }
-
-  .services-desktop-nav a {
-    font-size: 16px;
-  }
-
-  .services-header-logo {
-    left: 28px;
-    width: 160px;
-  }
-
-  .services-header-logo img {
-    width: 160px;
-  }
-
-  .services-quote-link {
-    right: 28px;
-    width: 132px;
-  }
-
   .services-hero {
     height: auto;
     min-height: 650px;
@@ -855,69 +760,6 @@ body:has(.services-page) > div[class*='fixed'][class*='bottom-0'] {
 }
 
 @media (max-width: 899px) {
-  .services-desktop-nav,
-  .services-quote-link {
-    display: none;
-  }
-
-  .services-header-logo {
-    left: 20px;
-    width: 150px;
-  }
-
-  .services-header-logo img {
-    width: 150px;
-  }
-
-  .services-mobile-nav {
-    position: absolute;
-    top: 21px;
-    right: 20px;
-    display: block;
-    color: #fff;
-  }
-
-  .services-mobile-nav summary {
-    display: flex;
-    width: 38px;
-    height: 38px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    list-style: none;
-    cursor: pointer;
-  }
-
-  .services-mobile-nav summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .services-mobile-nav summary span {
-    width: 22px;
-    height: 2px;
-    background: #fff;
-  }
-
-  .services-mobile-nav nav {
-    position: absolute;
-    top: 39px;
-    right: -20px;
-    display: flex;
-    width: 220px;
-    flex-direction: column;
-    padding: 12px 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: #081732;
-  }
-
-  .services-mobile-nav nav a {
-    padding: 11px 0;
-    color: #fff;
-    font-size: 15px;
-    text-decoration: none;
-  }
-
   .services-hero {
     min-height: 0;
   }
@@ -1008,79 +850,91 @@ body:has(.services-page) > div[class*='fixed'][class*='bottom-0'] {
     margin-top: 40px;
   }
 
+  /* One consistent stacking order for every row on mobile, regardless of
+     which side the image sits on at tablet/desktop: image, then heading,
+     then description, then the Enquire Now button last. The old rules here
+     reassigned grid-row per element for [data-image-side='left'] but a
+     later, equal-specificity rule re-overrode the button back onto the same
+     row as the description — that's what caused the button to render on
+     top of the description text. Using one unconditional grid-row per
+     element (no [data-image-side] branching) removes that whole class of
+     cascade bug. */
   .service-row,
   .service-row[data-image-side='left'] {
-    width: min(680px, calc(100% - 40px));
+    width: min(600px, calc(100% - 40px));
     min-height: 0;
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto auto auto;
     align-items: stretch;
     align-content: start;
-    gap: 18px;
-    padding: 30px 0 44px;
+    row-gap: 16px;
+    padding: 0;
+    margin-bottom: 44px;
+  }
+
+  .service-row:last-child,
+  .service-row[data-image-side='left']:last-child {
+    margin-bottom: 0;
+  }
+
+  .service-row-copy,
+  .service-row-description,
+  .service-row-quote,
+  .service-row-art,
+  .service-row[data-image-side='left'] .service-row-copy,
+  .service-row[data-image-side='left'] .service-row-description,
+  .service-row[data-image-side='left'] .service-row-quote,
+  .service-row[data-image-side='left'] .service-row-art {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  .service-row-art,
+  .service-row[data-image-side='left'] .service-row-art {
+    grid-row: 1;
+    width: min(100%, 420px) !important;
+    margin: 0 auto;
+    align-self: center;
   }
 
   .service-row-copy,
   .service-row[data-image-side='left'] .service-row-copy {
-    grid-column: 1;
-    grid-row: 1;
+    grid-row: 2;
     width: 100%;
     max-width: 100%;
+    margin-top: 4px;
   }
 
   .service-row-copy h2 {
-    font-size: clamp(30px, 7vw, 42px);
-    line-height: 1.05;
+    font-size: clamp(28px, 7vw, 38px);
+    line-height: 1.15;
+  }
+
+  .service-row-copy h2 span {
+    white-space: normal;
   }
 
   .service-row-description,
   .service-row[data-image-side='left'] .service-row-description {
     display: block;
-    grid-column: 1;
-    grid-row: 2;
+    grid-row: 3;
     width: 100%;
-    margin-top: -4px;
+    margin-top: 0;
     color: #000;
     font-size: 16px;
-    line-height: 1.45;
-  }
-
-  .service-row-art,
-  .service-row[data-image-side='left'] .service-row-art {
-    grid-column: 1;
-    grid-row: 4;
-    width: min(100%, 420px) !important;
-    align-self: center;
-  }
-
-  .service-row[data-image-side='left'] .service-row-art {
-    grid-row: 1;
-  }
-
-  .service-row[data-image-side='left'] .service-row-copy {
-    grid-row: 2;
-  }
-
-  .service-row[data-image-side='left'] .service-row-description {
-    grid-row: 3;
-  }
-
-  .service-row[data-image-side='left'] .service-row-quote {
-    grid-row: 4;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
   }
 
   .service-row-quote,
   .service-row[data-image-side='left'] .service-row-quote {
-    grid-column: 1;
-    grid-row: 3;
-  }
-
-  .service-row-quote {
     display: inline-flex;
+    grid-row: 4;
     align-self: flex-start;
-    min-height: 48px;
-    margin-top: 0;
-    padding: 13px 16px;
+    justify-self: start;
+    min-height: 50px;
+    margin-top: 6px;
+    padding: 14px 22px;
     font-size: 16px;
     line-height: 22px;
   }
@@ -1195,6 +1049,15 @@ body:has(.services-page) > div[class*='fixed'][class*='bottom-0'] {
 }
 
 @media (max-width: 480px) {
+  .services-hero-copy h1 {
+    letter-spacing: clamp(1px, 0.8vw, 3px);
+    overflow-wrap: anywhere;
+  }
+
+  .services-footer-columns a {
+    overflow-wrap: anywhere;
+  }
+
   .services-hero-inner {
     padding-right: 20px;
     padding-left: 20px;
@@ -1222,11 +1085,6 @@ body:has(.services-page) > div[class*='fixed'][class*='bottom-0'] {
   .services-collage-shadow-bottom {
     left: 24px;
     width: 24%;
-  }
-
-  .service-row,
-  .service-row[data-image-side='left'] {
-    width: calc(100% - 40px);
   }
 
   .delivery-card,
@@ -1482,3 +1340,9 @@ body:has(.services-page) > div[class*='fixed'][class*='bottom-0'] {
     font-size: 13px;
   }
 }
+
+/* The old max-width:760px tier that lived here duplicated/retuned the
+   .service-row rules already set in the max-width:899px block above with
+   slightly different values (14px vs 16px row-gap, 22px vs 0 padding, etc.)
+   — removed so there's a single, consistent set of mobile service-row
+   spacing rules instead of two tiers drifting apart. */

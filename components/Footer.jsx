@@ -3,13 +3,19 @@ import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer className="bg-white text-[#0a142f]">
+    <footer className="site-footer bg-white text-[#0a142f]">
       <div className="max-w-[1440px] mx-auto px-6 md:px-[89px] pt-10 md:pt-[56px] pb-8">
         <div className="grid md:grid-cols-[291px_1fr] gap-8 md:gap-[70px]">
           <div>
-            <Link href="/" className="flex items-end gap-2 mb-5">
-              <Image src="/icons/logo-mark-navy.png" alt="" width={40} height={38} className="h-[36px] w-auto" />
-              <Image src="/icons/logo-wordmark-navy.png" alt="Vedhanth" width={150} height={16} className="h-[13px] w-auto mb-1.5" />
+            <Link href="/" className="flex items-end mb-5">
+              <Image
+                src="/icons/logo-footer.png"
+                alt="Vedhanth IT Solutions"
+                width={968}
+                height={456}
+                unoptimized
+                className="h-[40px] w-auto"
+              />
             </Link>
             <p className="text-[14px] leading-[1.6] text-[#0a142f]/50 max-w-[248px]">
               Vedhanth IT Solutions delivers integrated security, networking, electrical and
@@ -27,10 +33,10 @@ export default function Footer() {
 
             <div className="flex items-center gap-8 mt-7">
               <a href="https://facebook.com" aria-label="Facebook" className="text-[#0a142f] hover:text-accent-500 transition">
-                <Image src="/icons/facebook.png" alt="" width={9} height={18} />
+                <Image src="/icons/facebook.png" alt="" width={9} height={18} style={{ width: '9px', height: '18px' }} />
               </a>
               <a href="https://twitter.com" aria-label="Twitter" className="text-[#0a142f] hover:text-accent-500 transition">
-                <Image src="/icons/twitter.png" alt="" width={19} height={16} />
+                <Image src="/icons/twitter.png" alt="" width={19} height={16} style={{ width: '19px', height: '16px' }} />
               </a>
               <a href="https://instagram.com" aria-label="Instagram" className="text-[#0a142f] hover:text-accent-500 transition">
                 <Image src="/icons/instagram.png" alt="" width={20} height={20} />

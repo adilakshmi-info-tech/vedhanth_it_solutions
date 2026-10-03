@@ -286,7 +286,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
 .reviews {
   box-sizing: border-box;
-  height: 568px;
+  height: auto;
   margin: 0;
   padding-top: 0;
 }
@@ -311,7 +311,6 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 .noReviews,
 .noRelated {
   display: flex;
-  min-height: 472px;
   align-items: center;
   justify-content: center;
   margin: 48px 24px 0;
@@ -325,6 +324,11 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   margin-top: 24px;
 }
 
+.noReviews {
+  min-height: 64px;
+  margin-top: 24px;
+}
+
 .reviewRow {
   position: absolute;
   overflow: visible;
@@ -334,13 +338,13 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 .forwardReviewRow {
   top: 0;
   left: calc(50% - 804.5px);
-  animation: review-row-left 128s linear infinite;
+  animation: review-row-left 48s linear infinite;
 }
 
 .reverseReviewRow {
   top: 252px;
   left: calc(50% - 1078px);
-  animation: review-row-right 128s linear infinite;
+  animation: review-row-right 48s linear infinite;
 }
 
 .reviewMarquee,
@@ -496,126 +500,11 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   padding-top: 0;
 }
 
-.relatedGrid {
-  display: grid;
-  width: min(100% - 48px, 1200px);
-  grid-template-columns: repeat(auto-fit, minmax(0, 268px));
-  justify-content: center;
-  column-gap: 42px;
-  row-gap: 50px;
-  margin: 50px auto 0;
-}
+/* Related Products now reuses the shared <ProductCard> (Tailwind-styled,
+   see components/ProductCard.jsx) and the Products page's own grid classes
+   directly in the JSX, so the old .relatedGrid/.relatedCard/etc. rules that
+   styled the previous bespoke card are no longer needed. */
 
-.relatedCard {
-  position: relative;
-  box-sizing: border-box;
-  width: 268px;
-  height: 522px;
-  overflow: hidden;
-  border-radius: 20px;
-  background: #fff;
-}
-
-.relatedImage {
-  position: relative;
-  display: flex;
-  width: 268px;
-  height: 319px;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background: #fafafa;
-  text-decoration: none;
-}
-
-.cardBackground {
-  position: absolute;
-  z-index: 0;
-  top: 0;
-  left: 0;
-  width: 268px;
-  height: 319px;
-}
-
-.relatedProductImage {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1;
-  display: block;
-  width: 88%;
-  height: 80%;
-  max-width: 88%;
-  max-height: 80%;
-  object-fit: contain;
-  transform: translate(-50%, -50%);
-}
-
-.relatedBody {
-  position: relative;
-  display: flex;
-  height: 203px;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0 21px;
-}
-
-.relatedCategory {
-  margin-top: 1px;
-  color: #8d8d8d;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 20px;
-}
-
-.relatedBody h3 {
-  display: -webkit-box;
-  width: 100%;
-  overflow: hidden;
-  margin: 9px 0 0;
-  color: #0d1b39;
-  font-size: 21px;
-  font-weight: 600;
-  line-height: 26px;
-  text-overflow: ellipsis;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.relatedStars {
-  display: flex;
-  gap: 3px;
-  margin-top: 35px;
-}
-
-.relatedNoRating {
-  color: #8d8d8d;
-  font-size: 14px;
-  line-height: 18px;
-}
-
-.relatedStars img {
-  display: block;
-  width: 18px;
-  height: 18px;
-}
-
-.relatedQuote {
-  align-self: center;
-  margin-top: 26px;
-  color: #e58411;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 18px;
-  text-decoration: none;
-}
-
-.relatedStars img {
-  width: 15.2342px;
-  height: 14.4717px;
-}
-
-.relatedQuote:hover,
 .exploreMore:hover {
   color: #c26f0d;
   text-decoration: underline;
@@ -805,31 +694,6 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
     padding-bottom: 0;
   }
 
-  .relatedGrid {
-    width: min(100% - 48px, 904px);
-    grid-template-columns: repeat(auto-fit, minmax(0, 268px));
-    justify-content: center;
-    gap: 36px 30px;
-    margin: 50px auto 0;
-  }
-
-  .relatedCard {
-    width: 100%;
-  }
-
-  .relatedImage {
-    width: 100%;
-  }
-
-  .cardBackground {
-    width: 100%;
-    height: auto;
-  }
-
-  .relatedQuote {
-    margin-top: 22px;
-  }
-
   .exploreMore {
     margin-top: 50px;
   }
@@ -991,88 +855,6 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
     margin-top: 64px;
   }
 
-  .relatedGrid {
-    width: calc(100% - 32px);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    margin-top: 28px;
-  }
-
-  .relatedCard {
-    height: 360px;
-    border-radius: 14px;
-  }
-
-  .relatedGrid > .relatedCard:nth-child(odd):last-child {
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: min(100%, 268px);
-  }
-
-  .relatedImage {
-    height: 190px;
-  }
-
-  .cardBackground {
-    width: 100%;
-    height: auto;
-  }
-
-.relatedProductImage {
-    max-width: 96%;
-    max-height: 174px;
-    width: auto !important;
-    height: auto !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%);
-  }
-
-  .relatedBody {
-    height: 170px;
-    padding: 0 12px;
-  }
-
-  .relatedCategory {
-    font-size: 12px;
-    line-height: 18px;
-  }
-
-  .relatedBody h3 {
-    margin-top: 4px;
-    height: 36px;
-    min-height: 36px;
-    flex: 0 0 36px;
-    font-size: 14px;
-    line-height: 18px;
-  }
-
-  .relatedStars {
-    height: 14px;
-    flex: 0 0 14px;
-    gap: 1px;
-    margin-top: 12px;
-  }
-
-  .relatedStars img {
-    width: 14px;
-    height: 14px;
-  }
-
-  .relatedNoRating {
-    font-size: 11px;
-    line-height: 14px;
-  }
-
-  .relatedQuote {
-    display: block;
-    align-self: flex-start;
-    min-height: 16px;
-    margin-top: 12px;
-    font-size: 12px;
-    line-height: 16px;
-    white-space: nowrap;
-  }
-
   .exploreMore {
     margin-top: 28px;
   }
@@ -1122,26 +904,28 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   }
 }
 
-@media (min-width: 400px) and (max-width: 760px) {
-  .relatedBody h3 {
-    height: 18px;
-    min-height: 18px;
-    flex-basis: 18px;
-  }
-}
-
-.productReviewForm { width: min(100% - 40px, 760px); margin: 48px auto 0; padding: 26px; display: grid; gap: 16px; border: 1px solid #d9dfe7; border-radius: 14px; background: #fff; }
+.productReviewForm { width: min(100% - 40px, 760px); margin: 32px auto 0; padding: 26px; display: grid; gap: 16px; border: 1px solid #d9dfe7; border-radius: 14px; background: #fff; }
 .productReviewForm h3 { margin: 0; color: #081a37; font-size: 20px; }
 .productReviewForm label { display: grid; gap: 7px; color: #273447; font-size: 14px; font-weight: 600; }
-.productReviewForm input, .productReviewForm textarea { width: 100%; border: 1px solid #d6dce5; border-radius: 8px; padding: 10px 12px; color: #1f2937; font: inherit; }
+.productReviewForm input, .productReviewForm textarea { box-sizing: border-box; width: 100%; min-width: 0; border: 1px solid #d6dce5; border-radius: 8px; padding: 10px 12px; color: #1f2937; font: inherit; }
+.productReviewForm input { min-height: 48px; }
+.productReviewForm textarea { min-height: 120px; resize: vertical; }
 .productReviewForm fieldset { border: 0; padding: 0; margin: 0; }
 .productReviewForm legend { margin-bottom: 6px; color: #273447; font-size: 14px; font-weight: 600; }
-.productReviewForm fieldset button { padding: 0 4px; color: #f5a900; font-size: 25px; }
-.productReviewForm > button { justify-self: start; padding: 12px 22px; border-radius: 8px; background: #081a37; color: white; font-weight: 600; }
+.productReviewForm fieldset button { display: inline-grid; width: 44px; height: 44px; place-items: center; padding: 0; color: #f5a900; font-size: 25px; }
+.productReviewForm > button { min-height: 48px; justify-self: start; padding: 12px 22px; border-radius: 8px; background: #081a37; color: white; font-weight: 600; }
 .productReviewForm > button:disabled { opacity: .6; cursor: wait; }
 .productReviewForm > p, .reviewFormSuccess { margin: 0; color: #758196; font-size: 13px; }
 .reviewFormError { margin: 0; color: #b42318; font-size: 13px; }
 
 @media (max-width: 600px) {
-  .productReviewForm { width: calc(100% - 32px); margin-top: 32px; padding: 20px; }
+  .reviews h2,
+  .related h2 { padding-inline: 16px; overflow-wrap: anywhere; }
+
+  .reviewCard { width: min(360px, calc(100vw - 48px)); height: auto; min-height: 200px; flex-basis: min(360px, calc(100vw - 48px)); gap: 16px; padding: 18px; }
+  .reviewGroup { gap: 16px; padding-right: 16px; }
+
+  .productReviewForm { width: calc(100% - 32px); margin-top: 24px; padding: 20px; }
+  .productReviewForm h3 { font-size: 18px; }
+  .productReviewForm > button { width: 100%; }
 }

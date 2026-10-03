@@ -52,13 +52,9 @@
 .accountText small { overflow: hidden; color: var(--admin-muted); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
 
 .mainColumn { display: flex; flex-direction: column; min-width: 0; width: calc(100% - 248px); margin-left: 248px; }
-.topbar { position: sticky; top: 0; z-index: 15; display: flex; align-items: center; justify-content: space-between; min-height: 82px; padding: 0 clamp(24px, 3.7vw, 54px); border-bottom: 1px solid var(--admin-line); background: rgba(255,255,255,.96); backdrop-filter: blur(12px); }
+.topbar { position: sticky; top: 0; z-index: 15; display: flex; align-items: center; justify-content: flex-start; min-height: 82px; padding: 0 clamp(24px, 3.7vw, 54px); border-bottom: 1px solid var(--admin-line); background: rgba(255,255,255,.96); backdrop-filter: blur(12px); }
 .topbarTitle span { color: #8994a7; font-size: 11px; }
 .topbarTitle h1 { margin: 4px 0 0; color: var(--admin-ink); font-size: 21px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
-.topbarAccount { display: flex; align-items: center; gap: 10px; }
-.topbarAccount > span:last-child { display: flex; flex-direction: column; gap: 3px; }
-.topbarAccount strong { color: var(--admin-ink); font-size: 12px; font-weight: 650; }
-.topbarAccount small { color: var(--admin-muted); font-size: 10px; }
 .mainContent { width: 100%; max-width: 1500px; padding: 32px clamp(24px, 3.7vw, 54px) 52px; margin: 0 auto; }
 .menuButton { display: none; }
 .mobileDrawerLayer { display: none; }
@@ -165,7 +161,7 @@
 .errorPanel p { margin: 0 0 16px; color: var(--admin-muted); font-size: 12px; line-height: 1.6; }
 
 .drawerBackdrop { position: fixed; z-index: 110; inset: 0; display: flex; justify-content: flex-end; background: rgba(8,20,43,.42); backdrop-filter: blur(2px); }
-.formDrawer { display: flex; flex-direction: column; width: min(540px, 100vw); height: 100%; min-height: 0; border-left: 1px solid var(--admin-line); background: #fff; box-shadow: -18px 0 50px rgba(16,35,74,.16); animation: formDrawerIn 190ms ease-out; }
+.formDrawer { display: flex; flex-direction: column; width: min(540px, 100vw); height: 100%; height: 100dvh; min-height: 0; border-left: 1px solid var(--admin-line); background: #fff; box-shadow: -18px 0 50px rgba(16,35,74,.16); animation: formDrawerIn 190ms ease-out; }
 .drawerHeader { position: relative; z-index: 1; display: flex; flex: none; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 22px 17px; border-bottom: 1px solid #e8edf4; background: #fff; }
 .drawerHeader h2 { margin: 0; color: var(--admin-ink); font-size: 17px; font-weight: 700; }
 .drawerHeader p { margin: 5px 0 0; color: var(--admin-muted); font-size: 11px; line-height: 1.5; }
@@ -220,11 +216,10 @@
   .sidebar { display: none; }
   .mainColumn { width: 100%; margin-left: 0; }
   .topbar { min-height: 67px; justify-content: flex-start; gap: 12px; padding: 0 17px; }
-  .menuButton { display: grid; width: 36px; height: 36px; place-items: center; padding: 0; border: 1px solid var(--admin-line); border-radius: 8px; background: #fff; color: var(--admin-ink); }
+  .menuButton { display: grid; width: 44px; height: 44px; flex: none; place-items: center; padding: 0; border: 1px solid var(--admin-line); border-radius: 8px; background: #fff; color: var(--admin-ink); }
   .menuButton svg { width: 18px; height: 18px; }
   .topbarTitle { flex: 1; }
   .topbarTitle h1 { font-size: 17px; }
-  .topbarAccount > span:last-child { display: none; }
   .mainContent { padding: 22px 16px 34px; }
   .mobileDrawerLayer[data-open] { position: fixed; z-index: 80; inset: 0; display: block; }
   .drawerScrim { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: rgba(13,25,47,.38); }
@@ -243,7 +238,6 @@
   .metricGrid { gap: 9px; }
   .metricCard { padding: 13px; }
   .metricValue { font-size: 23px; }
-  .topbarAccount .avatar { width: 30px; height: 30px; }
   .formGrid, .detailMeta { grid-template-columns: 1fr; }
   .formFieldFull { grid-column: auto; }
   .card { padding: 14px; }
@@ -309,6 +303,15 @@
 .dashboardGrid { gap: 18px; }
 .card { padding: 21px; }
 .emptyState { min-height: 150px; }
+.enquiryMobileList { display: none; }
+.enquiryMobileCard { min-width: 0; padding: 15px; border: 1px solid var(--admin-line); border-radius: 11px; background: #fff; }
+.enquiryMobileHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.enquiryMobileHeader h3 { min-width: 0; margin: 0; color: var(--admin-ink); font-size: 14px; font-weight: 680; line-height: 1.4; overflow-wrap: anywhere; }
+.enquiryMobileHeader time { flex: none; color: var(--admin-muted); font-size: 11px; }
+.enquiryMobileContact { margin: 8px 0 0; color: var(--admin-blue); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.enquiryMobileMessage { margin: 10px 0 0; color: #44516a; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; white-space: pre-wrap; }
+.enquiryMobileActions { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 10px; margin-top: 14px; }
+.enquiryMobileActions label { display: grid; gap: 6px; color: var(--admin-muted); font-size: 11px; }
 
 /* Category records use the existing utility classes; normalize their card
    alignment without changing their content or actions. */
@@ -335,9 +338,15 @@
   .card { padding: 16px; }
   .reviewFilters { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 9px; }
   .reviewFilters > * { width: 100%; min-width: 0; }
+  .searchInput, .selectInput { min-height: 44px; }
+  .smallAction { min-height: 44px; }
+  .imagePreviewActions button { min-width: 36px; min-height: 36px; }
+  .mainContent :global(.btn), .quickLinks a { min-height: 44px; }
   .reviewFilters .searchInput { grid-column: 1 / -1; }
   .reviewDesktopList { display: none; }
   .reviewMobileList { display: grid; gap: 12px; }
+  .enquiryDesktopList { display: none; }
+  .enquiryMobileList { display: grid; gap: 12px; }
   .reviewMobileCard { min-width: 0; padding: 15px; border: 1px solid var(--admin-line); border-radius: 11px; background: #fff; }
   .reviewMobileHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
   .reviewMobileHeader h3 { min-width: 0; margin: 0; color: var(--admin-ink); font-size: 14px; font-weight: 680; line-height: 1.4; overflow-wrap: anywhere; }
@@ -350,6 +359,12 @@
   .reviewMobileComment { margin: 8px 0 0; color: #44516a; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
   .reviewMobileActions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; margin-top: 14px; }
   .reviewMobileActions button { width: 100%; min-height: 42px; }
+  .iconButton { width: 44px; height: 44px; }
+  .primaryButton, .secondaryButton, .dangerButton, .quietButton { min-height: 44px; }
+  .mainContent :global(.space-y-3 > * > :last-child button) { min-height: 44px; padding-inline: 10px; }
+  .enquiryMobileCard { padding: 15px; }
+  .enquiryMobileActions { grid-template-columns: minmax(0, 1fr); }
+  .enquiryMobileActions button { width: 100%; min-height: 44px; }
   .dateFilter { justify-content: space-between; min-width: 0; }
   .dateFilter input { width: min(68%, 150px); min-width: 0; }
   .tableScroll { margin-inline: -2px; }

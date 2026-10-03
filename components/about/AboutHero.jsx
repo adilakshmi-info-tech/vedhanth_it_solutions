@@ -23,7 +23,7 @@ function AvatarStack() {
               key={i}
               className="relative w-[22px] h-[22px] rounded-full ring-2 ring-white overflow-hidden -ml-2 first:ml-0"
             >
-              <Image src={AVATARS[(row * 6 + i) % AVATARS.length]} alt="" fill className="object-cover" />
+              <Image src={AVATARS[(row * 6 + i) % AVATARS.length]} alt="" fill sizes="22px" className="object-cover" />
             </div>
           ))}
         </div>
@@ -44,7 +44,7 @@ export default function AboutHero() {
                 src="/images/home/about-main.jpg"
                 alt="Vedhanth technician installing a security device"
                 fill
-                sizes="300px"
+                sizes="(min-width: 1440px) 290px, (min-width: 1024px) 27vw, 46vw"
                 className="object-cover"
               />
             </div>
@@ -53,7 +53,7 @@ export default function AboutHero() {
                 src="/images/home/services-large.jpg"
                 alt="Electrical LT panel maintenance"
                 fill
-                sizes="300px"
+                sizes="(min-width: 1440px) 290px, (min-width: 1024px) 27vw, 46vw"
                 className="object-cover"
               />
             </div>

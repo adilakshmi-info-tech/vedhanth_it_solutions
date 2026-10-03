@@ -8,9 +8,33 @@ html {
   scroll-behavior: smooth;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   color: #1C1A1A;
   background: #ffffff;
+  overflow-x: clip;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid #e58411;
+  outline-offset: 3px;
+}
+
+img,
+svg {
+  max-width: 100%;
 }
 
 .btn {
@@ -134,4 +158,50 @@ body {
 }
 .reveal.is-visible .tech-line {
   transform: scaleX(1);
+}
+
+/* Shared responsive polish for the existing Vedhanth layouts. */
+.site-header-inner { min-width: 0; }
+.site-menu-button { min-width: 44px; min-height: 44px; }
+.site-mobile-navigation a { display: flex; min-height: 44px; align-items: center; }
+.site-footer a[aria-label] { display: inline-flex; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+.contact-card { min-width: 0; }
+.contact-section form button[type="submit"] { min-height: 50px; }
+.contact-section input,
+.contact-section textarea { box-sizing: border-box; min-width: 0; font-size: 16px; }
+.contact-section button[type="submit"] { min-height: 50px; }
+.contact-section img { max-width: 100%; }
+:where(button, a, input, select, textarea) { touch-action: manipulation; }
+
+@media (max-width: 480px) {
+  .site-header-inner { padding-inline: 16px; }
+  .site-footer { padding-bottom: max(2rem, env(safe-area-inset-bottom)); }
+  .contact-section { padding-block: 36px; }
+  .contact-section .max-w-\[1440px\] { padding-inline: 16px; }
+  .contact-section .rounded-\[20px\] { border-radius: 16px; }
+  .contact-section h3 { font-size: clamp(32px, 9vw, 42px); }
+  .contact-section form { gap: 14px; }
+  .contact-section input { height: 48px; }
+  .contact-section textarea { min-height: 112px; }
+}
+
+@media (max-width: 760px) {
+  .contact-card-wrap { width: 100%; }
+  .contact-card { grid-template-columns: minmax(0, 1fr); }
+  .site-footer a[aria-label] { min-width: 44px; min-height: 44px; }
+  .products-filter-toggle,
+  .products-filter-close,
+  .products-reset-button { min-height: 44px; min-width: 44px; }
+  .products-filter-option { min-height: 44px; }
+}
+
+@media (max-width: 360px) {
+  .site-header-inner { padding-inline: 12px; }
+  .contact-section .p-8 { padding: 20px; }
+  .contact-section .gap-x-12 { column-gap: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }

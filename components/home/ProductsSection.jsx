@@ -28,6 +28,7 @@ function ProductCard({ product }) {
             src={product.images[0]}
             alt={product.name}
             fill
+            sizes="268px"
             unoptimized
             className="object-contain p-6 group-hover:scale-105 transition-transform duration-300"
           />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -19,6 +19,15 @@ export default function AdminShell({ children, adminEmail }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const title = titles.find(([path]) => path === '/admin' ? pathname === path : pathname.startsWith(path))?.[1] || 'Dashboard';
   const initials = (adminEmail || 'Admin').slice(0, 1).toUpperCase();
+
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setMenuOpen(false);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [menuOpen]);
 
   return (
     <div className={styles.appShell}>
@@ -57,7 +66,6 @@ export default function AdminShell({ children, adminEmail }) {
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
           </button>
           <div className={styles.topbarTitle}><span>Admin workspace</span><h1>{title}</h1></div>
-          <div className={styles.topbarAccount}><span className={styles.avatar}>{initials}</span><span><strong>Administrator</strong><small>{adminEmail}</small></span></div>
         </header>
         <main className={styles.mainContent}>{children}</main>
       </div>

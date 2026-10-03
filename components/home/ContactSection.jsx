@@ -37,7 +37,7 @@ export default function ContactSection({ showHeading = true }) {
   };
 
   return (
-    <section className="py-16 md:py-20 bg-[#f2f2f2]">
+    <section className="contact-section py-16 md:py-20 bg-[#f2f2f2]">
       <div className="max-w-[1440px] mx-auto px-6 md:px-20">
         {showHeading && (
           <div className="text-center mb-12">
@@ -46,8 +46,8 @@ export default function ContactSection({ showHeading = true }) {
           </div>
         )}
 
-        <div className="relative max-w-[1262px] mx-auto">
-        <div className="rounded-[20px] shadow-[0_60px_100px_-50px_rgba(25,58,75,0.3)] overflow-hidden grid md:grid-cols-[1fr_364px] bg-white">
+        <div className="contact-card-wrap relative max-w-[1262px] mx-auto">
+        <div className="contact-card rounded-[20px] shadow-[0_60px_100px_-50px_rgba(25,58,75,0.3)] overflow-hidden grid md:grid-cols-[1fr_364px] bg-white">
           <div className="p-8 sm:p-12 md:p-[80px_100px]">
             <h3 className="font-display font-bold text-4xl md:text-[54px] leading-tight text-[#1e1e1e]">
               Get in <span className="text-rose">Touch</span>
@@ -118,13 +118,7 @@ export default function ContactSection({ showHeading = true }) {
                   <span className="block text-[13px] font-semibold text-[#1e1e1e] group-hover:text-accent-500 transition">+91 9901975647</span>
                 </span>
               </a>
-              <a href="tel:+919740005741" className="flex items-center gap-3.5 group">
-                <Image src="/icons/fax.png" alt="" width={28} height={28} />
-                <span>
-                  <span className="block text-[13px] font-semibold text-[#1e1e1e]">FAX</span>
-                  <span className="block text-[13px] font-bold text-[#1e1e1e]">+91 9740005741</span>
-                </span>
-              </a>
+              
               <a href="mailto:sales@vedhanthitsolutions.in" className="flex items-center gap-3.5 group">
                 <Image src="/icons/email.png" alt="" width={28} height={28} />
                 <span>

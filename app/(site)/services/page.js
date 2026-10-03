@@ -131,44 +131,6 @@ const services = [
   },
 ];
 
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/products', label: 'Products' },
-  { href: '/about', label: 'About' },
-  { href: '/services', label: 'Services' },
-  { href: '/#reviews', label: 'Reviews' },
-  { href: '/contact', label: 'Contact' },
-];
-
-function ServicesHeader() {
-  return (
-    <header className="services-header">
-      <div className="services-header-inner">
-        <Link href="/" className="services-header-logo" aria-label="Vedhanth IT Solutions home">
-          <Image src={asset('header-logo.svg')} alt="Vedhanth IT Solutions" width={184} height={74} priority />
-        </Link>
-        <nav className="services-desktop-nav" aria-label="Main navigation">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <Link href="/contact" className="services-quote-link">Get a Quote</Link>
-        <details className="services-mobile-nav">
-          <summary aria-label="Open navigation"><span /><span /><span /></summary>
-          <nav aria-label="Mobile navigation">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>{item.label}</Link>
-            ))}
-            <Link href="/contact">Get a Quote</Link>
-          </nav>
-        </details>
-      </div>
-    </header>
-  );
-}
-
 function HeroButton() {
   return (
     <Link href="#top-services" className="services-hero-button" aria-label="Explore our services">
@@ -255,14 +217,14 @@ function ServicesFooter() {
     <footer className="services-footer">
       <div className="services-footer-inner">
         <div className="services-footer-about">
-          <Image src={asset('footer-logo.svg')} alt="Vedhanth IT Solutions" width={208} height={73} />
+          <Image src="/icons/logo-footer.png" alt="Vedhanth IT Solutions" width={968} height={456} unoptimized />
           <p>Vedhanth IT Solutions delivers integrated security, networking, electrical and infrastructure solutions for homes, businesses and industries.</p>
           <form className="services-footer-search" role="search">
             <Image src={asset('search.svg')} alt="" width={16} height={16} />
             <input type="search" aria-label="Search" placeholder="Search" />
           </form>
           <div className="services-footer-socials" aria-label="Social media">
-            <a href="https://facebook.com" aria-label="Facebook"><Image src={asset('facebook.svg')} alt="" width={9} height={19} style={{ width: '8.57088px', height: '18.3411px' }} /></a>
+            <a href="https://facebook.com" aria-label="Facebook"><Image src={asset('facebook.svg')} alt="" width={9} height={19} style={{ width: '8.57088px', height: 'auto' }} /></a>
             <a href="https://twitter.com" aria-label="Twitter"><Image src={asset('twitter.svg')} alt="" width={20} height={16} style={{ width: '19.178px', height: '15.4955px' }} /></a>
             <a href="https://instagram.com" aria-label="Instagram"><Image src={asset('instagram.svg')} alt="" width={20} height={20} style={{ width: '20px', height: '19.8906px' }} /></a>
           </div>
@@ -295,7 +257,6 @@ function ServicesFooter() {
 export default function ServicesPage() {
   return (
     <div className="services-page">
-      <ServicesHeader />
       <ServicesHero />
       <section className="services-main-list" id="top-services" aria-labelledby="top-services-title">
         <div className="services-list-intro">
