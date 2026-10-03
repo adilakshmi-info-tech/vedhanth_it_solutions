@@ -8,14 +8,14 @@ server {
   server_name vedhanthitsolutions.in www.vedhanthitsolutions.in;
   client_max_body_size 2M; # generous headroom for form posts (product images now go straight to the shared upload API, not through this app)
 
-  # /admin and /super both live in the standalone admin app (vedhanth_admin),
+  # /admin and /super both live in the standalone admin app (al_admin),
   # not vedhanth_web — the full original path is forwarded unchanged (no
-  # rewrite), matching that app's own internal routing. vedhanth_backend is
+  # rewrite), matching that app's own internal routing. al_backend is
   # deliberately NOT routed here at all — it's internal-only, reached by
-  # vedhanth_admin/frontend over the Docker network, never from the public
+  # al_admin/frontend over the Docker network, never from the public
   # internet.
   location /admin {
-    proxy_pass http://vedhanth_admin:4001;
+    proxy_pass http://al_admin:4001;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -24,7 +24,7 @@ server {
   }
 
   location /super {
-    proxy_pass http://vedhanth_admin:4001;
+    proxy_pass http://al_admin:4001;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -56,7 +56,7 @@ server {
 #   ssl_protocols       TLSv1.2 TLSv1.3;
 #
 #   location /admin {
-#     proxy_pass http://vedhanth_admin:4001;
+#     proxy_pass http://al_admin:4001;
 #     proxy_http_version 1.1;
 #     proxy_set_header Host $host;
 #     proxy_set_header X-Real-IP $remote_addr;
@@ -65,7 +65,7 @@ server {
 #   }
 #
 #   location /super {
-#     proxy_pass http://vedhanth_admin:4001;
+#     proxy_pass http://al_admin:4001;
 #     proxy_http_version 1.1;
 #     proxy_set_header Host $host;
 #     proxy_set_header X-Real-IP $remote_addr;
