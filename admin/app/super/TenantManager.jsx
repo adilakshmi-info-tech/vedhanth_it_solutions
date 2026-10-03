@@ -6,7 +6,7 @@ import AdminFormDrawer from '@/components/admin/AdminFormDrawer';
 import AdminConfirmDialog from '@/components/admin/AdminConfirmDialog';
 import styles from '../admin/(panel)/admin.module.css';
 
-const emptyForm = { name: '', slug: '', logoUrl: '', colorNavy: '', colorGreen: '', featureReviews: true, featureEnquiries: true, allowedEmails: '' };
+const emptyForm = { name: '', slug: '', logoUrl: '', colorNavy: '', colorGreen: '', featureReviews: true, featureEnquiries: true, featureProducts: true, featureCategories: true, allowedEmails: '' };
 
 function tenantToForm(tenant) {
   return {
@@ -17,6 +17,8 @@ function tenantToForm(tenant) {
     colorGreen: tenant.colors?.green || '',
     featureReviews: tenant.features?.reviews ?? true,
     featureEnquiries: tenant.features?.enquiries ?? true,
+    featureProducts: tenant.features?.products ?? true,
+    featureCategories: tenant.features?.categories ?? true,
     allowedEmails: (tenant.allowedEmails || []).join(', '),
   };
 }
@@ -27,7 +29,7 @@ function formToPayload(form) {
     slug: form.slug,
     logoUrl: form.logoUrl,
     colors: { navy: form.colorNavy, green: form.colorGreen },
-    features: { reviews: form.featureReviews, enquiries: form.featureEnquiries },
+    features: { reviews: form.featureReviews, enquiries: form.featureEnquiries, products: form.featureProducts, categories: form.featureCategories },
     allowedEmails: form.allowedEmails,
   };
 }
@@ -121,6 +123,12 @@ export default function TenantManager({ initialTenants }) {
           </label>
           <label className={styles.formField}>Green color
             <input value={form.colorGreen} onChange={(e) => setForm({ ...form, colorGreen: e.target.value })} placeholder="#0D3D0E" className={styles.formInput} />
+          </label>
+          <label className={styles.formField} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <input type="checkbox" checked={form.featureProducts} onChange={(e) => setForm({ ...form, featureProducts: e.target.checked })} /> Products enabled
+          </label>
+          <label className={styles.formField} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <input type="checkbox" checked={form.featureCategories} onChange={(e) => setForm({ ...form, featureCategories: e.target.checked })} /> Categories enabled
           </label>
           <label className={styles.formField} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <input type="checkbox" checked={form.featureReviews} onChange={(e) => setForm({ ...form, featureReviews: e.target.checked })} /> Reviews enabled

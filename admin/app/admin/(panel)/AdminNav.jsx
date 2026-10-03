@@ -8,8 +8,8 @@ const items = [
   ['Dashboard', '/admin', 'grid'],
   ['Client Reviews', '/admin/reviews', 'review', 'reviews'],
   ['Enquiries', '/admin/enquiries', 'inbox', 'enquiries'],
-  ['Products', '/admin/products', 'box'],
-  ['Categories', '/admin/categories', 'folder'],
+  ['Products', '/admin/products', 'box', 'products'],
+  ['Categories', '/admin/categories', 'folder', 'categories'],
 ];
 
 const paths = {

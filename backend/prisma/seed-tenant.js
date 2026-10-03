@@ -18,6 +18,8 @@ const VEDHANTH_TENANT = {
   features: {
     reviews: true,
     enquiries: true,
+    products: true,
+    categories: true,
   },
   allowedEmails: ['admin@vedhanthitsolutions.com', 'yatheesh@vedhanthitsolutions.in'],
 };

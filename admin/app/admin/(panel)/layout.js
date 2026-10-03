@@ -11,7 +11,7 @@ export default async function AdminPanelLayout({ children }) {
   if (!email) redirect('/admin/login');
 
   const tenant = await getTenantConfig();
-  const features = { reviews: true, enquiries: true, ...(tenant?.features || {}) };
+  const features = { reviews: true, enquiries: true, products: true, categories: true, ...(tenant?.features || {}) };
 
   return <AdminShell adminEmail={email} features={features}>{children}</AdminShell>;
 }
