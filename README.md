@@ -103,8 +103,12 @@ cd /opt/vedhanth
 cp .env.example .env    # fill in POSTGRES_*, DATABASE_URL (host: vedhanth_db), Firebase, admin allowlist
 
 docker compose up -d --build
-docker compose exec web npx prisma migrate deploy
 ```
+
+The `web` container applies any pending Prisma migrations itself on every start (see
+`docker-entrypoint.sh`) before it starts serving — there's no separate `migrate deploy` step to
+remember. `prisma migrate deploy` is a no-op when the database is already up to date, so this is
+safe on a plain restart too.
 
 Then add `/opt/nginx-extra/conf.d/vedhanth.conf` (template in `deploy/nginx/vedhanth.conf.example`)
 and recreate `wacrm_nginx` so it picks up the new bind — full steps in the runbook.
@@ -115,12 +119,12 @@ and recreate `wacrm_nginx` so it picks up the new bind — full steps in the run
 cd /opt/vedhanth
 git pull
 docker compose up -d --build
-docker compose exec web npx prisma migrate deploy   # only if the schema changed
 ```
 
 `--build` is required even for a pure content/copy change — `docker compose up -d` alone won't pick
 up new source, and if any `NEXT_PUBLIC_*` value changed, a plain container restart won't re-inline
-it either.
+it either. Any schema change that shipped in the pull is migrated automatically when the new
+container starts — see the migrations note above.
 
 Postgres data lives under `/opt/vedhanth/data/pgdata/` (bind-mounted, outside the container) — back
 that up. There's no uploads directory to worry about; product images live entirely on the shared
@@ -182,11 +186,24 @@ sudo certbot --nginx -d vedhanthitsolutions.in -d www.vedhanthitsolutions.in
 
 ## 7. Database migrations
 
-When the Prisma schema in `prisma/schema.prisma` changes:
+When the Prisma schema in `prisma/schema.prisma` changes, create the migration in development and
+commit it:
 
 ```bash
-npx prisma migrate dev --name describe_the_change   # development
-npm run prisma:deploy                                # production
+npx prisma migrate dev --name describe_the_change
+```
+
+**Docker deploys apply it automatically** — `docker-entrypoint.sh` runs `prisma migrate deploy`
+every time the `web` container starts, before `next start`, so a plain `docker compose up -d
+--build` after `git pull` is enough; there's nothing extra to run by hand.
+
+**Bare-metal / PM2 deploys are manual** (§6b) — run `npm run prisma:deploy` yourself before
+`npm run build`, since there's no container entrypoint to hook into there.
+
+To check what Prisma thinks is pending without applying anything:
+
+```bash
+docker compose exec web npx prisma migrate status
 ```
 
 ## 8. SEO notes
@@ -203,7 +220,6 @@ npm run prisma:deploy                                # production
 - [ ] Confirm the admin's Firebase user exists in `sjs-technology` and is in `ADMIN_ALLOWED_EMAILS`
 - [ ] Confirm `store.adilakshmi.co` has authorized the `sjs-technology` slug for this admin account
       (ask whoever runs that backend if uploads get rejected)
-- [ ] Run `prisma migrate deploy`
 - [ ] Add real categories/products via the admin panel
 - [ ] Point the real domain at the server and set up SSL (WAF-side — see conversation notes /
       whoever manages `106.51.29.16`)

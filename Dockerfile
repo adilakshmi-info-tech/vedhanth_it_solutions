@@ -48,6 +48,11 @@ COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/next.config.js ./next.config.js
 COPY --from=build /app/prisma ./prisma
+COPY docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
 
 EXPOSE 3000
-CMD ["npm", "start"]
+# Applies any pending Prisma migrations, then starts the server — every
+# `docker compose up -d --build` is self-migrating, no manual `migrate
+# deploy` step needed after a schema change.
+ENTRYPOINT ["./docker-entrypoint.sh"]

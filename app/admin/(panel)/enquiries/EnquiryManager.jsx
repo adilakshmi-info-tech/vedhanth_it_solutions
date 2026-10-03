@@ -38,7 +38,7 @@ export default function EnquiryManager({ initialEnquiries }) {
         <input className={styles.searchInput} type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search enquiries" aria-label="Search enquiries" />
         <select className={styles.selectInput} value={filter} onChange={(event) => setFilter(event.target.value)} aria-label="Filter enquiries by status"><option value="all">All statuses</option>{statuses.map((status) => <option key={status} value={status}>{statusLabels[status]}</option>)}</select>
       </div>
-      <div className={styles.tableScroll}><table className={styles.dataTable}><thead><tr><th>Customer</th><th>Contact</th><th>Message</th><th>Received</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+      <div className={`${styles.tableScroll} ${styles.enquiryDesktopList}`}><table className={styles.dataTable}><thead><tr><th>Customer</th><th>Contact</th><th>Message</th><th>Received</th><th>Status</th><th>Actions</th></tr></thead><tbody>
         {rows.map((item) => <tr key={item.id}>
           <td><span className={styles.tablePrimary}>{item.name}</span></td>
           <td><span className={styles.tableSecondary}>{item.phone}{item.email ? ` · ${item.email}` : ''}</span></td>
@@ -49,6 +49,18 @@ export default function EnquiryManager({ initialEnquiries }) {
         </tr>)}
         {!rows.length && <tr><td colSpan="6"><div className={styles.emptyState}><div><strong>{initialEnquiries.length ? 'No enquiries match these filters' : 'No enquiries yet'}</strong>{initialEnquiries.length ? 'Try changing your search or filter.' : 'Submitted contact forms will appear here.'}</div></div></td></tr>}
       </tbody></table></div>
+      <div className={styles.enquiryMobileList}>
+        {rows.map((item) => <article className={styles.enquiryMobileCard} key={item.id}>
+          <div className={styles.enquiryMobileHeader}><h3>{item.name}</h3><time dateTime={new Date(item.createdAt).toISOString()}>{new Date(item.createdAt).toLocaleDateString('en-IN', { dateStyle: 'medium' })}</time></div>
+          <p className={styles.enquiryMobileContact}>{item.phone}{item.email ? ` · ${item.email}` : ''}</p>
+          <p className={styles.enquiryMobileMessage}>{item.message}</p>
+          <div className={styles.enquiryMobileActions}>
+            <label>Status <select className={styles.selectInput} value={item.status} disabled={isPending} onChange={(event) => run(() => updateEnquiryStatus(item.id, event.target.value))} aria-label={`Status for enquiry from ${item.name}`}>{statuses.map((status) => <option key={status} value={status}>{statusLabels[status]}</option>)}</select></label>
+            <button className={styles.dangerButton} type="button" disabled={isPending} onClick={() => { setError(''); setDialog(item); }}>Delete enquiry</button>
+          </div>
+        </article>)}
+        {!rows.length && <div className={styles.emptyState}><div><strong>{initialEnquiries.length ? 'No enquiries match these filters' : 'No enquiries yet'}</strong>{initialEnquiries.length ? 'Try changing your search or filter.' : 'Submitted contact forms will appear here.'}</div></div>}
+      </div>
       <div className={styles.tableFooter}>Showing {rows.length} of {initialEnquiries.length} enquiries</div>
     </div>
     <AdminConfirmDialog open={Boolean(dialog)} itemName={dialog?.name || ''} itemType="enquiry" busy={isPending} error={error} onCancel={() => { setDialog(null); setError(''); }} onConfirm={() => run(() => deleteEnquiry(dialog.id))} />

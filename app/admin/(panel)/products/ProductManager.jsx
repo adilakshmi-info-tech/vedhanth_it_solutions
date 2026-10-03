@@ -4,7 +4,7 @@ import { useRef, useState, useTransition } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createProduct, updateProduct, deleteProduct } from '@/lib/actions/products';
-import { uploadImage, deleteImage, pathFromImageUrl } from '@/lib/imageUpload';
+import { uploadImages, deleteImage, pathFromImageUrl } from '@/lib/imageUpload';
 import { parseProductContent } from '@/lib/product-content';
 import AdminFormDrawer from '@/components/admin/AdminFormDrawer';
 import AdminConfirmDialog from '@/components/admin/AdminConfirmDialog';
@@ -13,7 +13,8 @@ import styles from '../admin.module.css';
 const emptyForm = { name: '', description: '', categoryId: '' };
 const emptySpecification = () => ({ label: '', value: '' });
 const maxImages = 5;
-const maxImageBytes = 2 * 1024 * 1024;
+const maxImageBytes = 10 * 1024 * 1024;
+const allowedImageExtensions = new Set(['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg']);
 
 export default function ProductManager({ initialCategories, initialProducts }) {
   const router = useRouter();
@@ -73,10 +74,11 @@ export default function ProductManager({ initialCategories, initialProducts }) {
     const messages = [];
     let remaining = maxImages - images.length;
     for (const file of selected) {
-      if (!file.type.startsWith('image/')) {
-        messages.push(`${file.name}: choose an image file.`);
+      const extension = file.name.split('.').pop()?.toLowerCase();
+      if (!allowedImageExtensions.has(extension)) {
+        messages.push(`${file.name}: choose a JPG, JPEG, PNG, GIF, WEBP, or SVG image.`);
       } else if (file.size > maxImageBytes) {
-        messages.push(`${file.name}: images must be 2 MB or smaller.`);
+        messages.push(`${file.name}: images must be 10 MB or smaller.`);
       } else if (remaining <= 0) {
         messages.push('A product can have up to 5 images. Remove an image before adding more.');
         break;
@@ -128,24 +130,25 @@ export default function ProductManager({ initialCategories, initialProducts }) {
       .filter(({ label, value }) => label || value);
 
     startTransition(async () => {
-      const uploadedUrls = [];
+      let uploadedImages = [];
       try {
+        const newFiles = stagedImages.filter((item) => item.kind === 'file').map((item) => item.file);
+        if (newFiles.length) {
+          setUploadProgress({ current: 1, total: newFiles.length, percent: 0 });
+          uploadedImages = await uploadImages(newFiles, 'products', (percent) => {
+            setUploadProgress({ current: newFiles.length, total: newFiles.length, percent });
+          });
+          setUploadProgress({ current: newFiles.length, total: newFiles.length, percent: 100 });
+        }
+
         const finalImages = [];
-        const newFiles = stagedImages.filter((item) => item.kind === 'file');
-        let fileIndex = 0;
-        if (newFiles.length) setUploadProgress({ current: 1, total: newFiles.length, percent: 0 });
+        let uploadIndex = 0;
         for (const item of stagedImages) {
           if (item.kind === 'existing') finalImages.push(item.url);
           else {
-            const currentFile = fileIndex + 1;
-            const uploaded = await uploadImage(item.file, 'products', (percent) => {
-              setUploadProgress({ current: currentFile, total: newFiles.length, percent });
-            });
+            const uploaded = uploadedImages[uploadIndex++];
             if (!uploaded?.url) throw new Error('The image upload did not return a usable image URL.');
-            uploadedUrls.push(uploaded.url);
             finalImages.push(uploaded.url);
-            fileIndex += 1;
-            setUploadProgress({ current: fileIndex, total: newFiles.length, percent: 100 });
           }
         }
 
@@ -162,7 +165,10 @@ export default function ProductManager({ initialCategories, initialProducts }) {
         resetForm();
         router.refresh();
       } catch (actionError) {
-        await Promise.allSettled(uploadedUrls.map((url) => deleteImage(pathFromImageUrl(url))));
+        const cleanupPaths = [...uploadedImages, ...(actionError.uploadedImages || [])]
+          .map((image) => image.path)
+          .filter(Boolean);
+        await Promise.allSettled(cleanupPaths.map((path) => deleteImage(path)));
         setUploadProgress(null);
         setError(actionError.message || 'Something went wrong. Your product was not saved.');
       }
@@ -250,9 +256,9 @@ export default function ProductManager({ initialCategories, initialProducts }) {
             >
               <div><p>Drag and drop images here</p><span>or </span>
                 <button type="button" className={styles.smallAction} onClick={() => fileInputRef.current?.click()}>Choose Images</button>
-                <small>Up to 5 images · 2 MB maximum each</small>
+                <small>Up to 5 images · 10 MB maximum each</small>
               </div>
-              <input ref={fileInputRef} type="file" accept="image/*" multiple hidden onChange={(event) => { addFiles(event.target.files); event.target.value = ''; }} />
+              <input ref={fileInputRef} type="file" accept=".jpg,.jpeg,.png,.gif,.webp,.svg,image/jpeg,image/png,image/gif,image/webp,image/svg+xml" multiple hidden onChange={(event) => { addFiles(event.target.files); event.target.value = ''; }} />
             </div>
             {images.length > 0 && <div className={styles.imagePreviews}>
               {images.map((item, index) => <div className={styles.imagePreview} key={item.id}>
@@ -264,7 +270,7 @@ export default function ProductManager({ initialCategories, initialProducts }) {
                 </div>
               </div>)}
             </div>}
-            {uploadProgress && <p className={styles.formHint} role="status" aria-live="polite">Uploading image {uploadProgress.current} of {uploadProgress.total} · {uploadProgress.percent}%</p>}
+            {uploadProgress && <p className={styles.formHint} role="status" aria-live="polite">Uploading {uploadProgress.total === 1 ? 'image' : `${uploadProgress.total} images`} · {uploadProgress.percent}%</p>}
             <p className={styles.formHint}>Existing images stay in place unless removed. New files upload only when you save.</p>
           </section>
 

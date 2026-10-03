@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -17,12 +17,31 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setMenuOpen(false);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [menuOpen]);
+
   return (
-    <header className="sticky top-0 z-50 bg-[#081732]">
-      <div className="max-w-[1440px] mx-auto h-20 flex items-center justify-between px-6 md:px-[50px]">
-        <Link href="/" className="flex items-end gap-2 shrink-0">
-          <Image src="/icons/logo-mark-white.png" alt="" width={38} height={41} className="h-[42px] w-auto" />
-          <Image src="/icons/logo-wordmark-white.png" alt="Vedhanth IT Solutions" width={133} height={14} className="h-[13px] w-auto mb-2" />
+    <header className="site-header sticky top-0 z-50 bg-[#081732]">
+      <div className="site-header-inner max-w-[1440px] mx-auto h-20 flex items-center justify-between px-6 md:px-[50px]">
+        {/* Raw logo file as supplied — served unoptimized so Next.js never
+            re-encodes/recompresses it; only its on-screen height is set via
+            CSS, the source file itself is untouched. */}
+        <Link href="/" aria-label="Vedhanth IT Solutions home" className="flex items-end shrink-0">
+          <Image
+            src="/icons/logo-header.png"
+            alt="Vedhanth IT Solutions"
+            width={900}
+            height={356}
+            unoptimized
+            priority
+            className="h-[52px] w-auto"
+          />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-[50px]">
@@ -50,8 +69,10 @@ export default function Header() {
           </Link>
           <button
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            aria-controls="site-mobile-navigation"
             onClick={() => setMenuOpen((v) => !v)}
-            className="lg:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5"
+            className="site-menu-button lg:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5"
           >
             <span className={`block h-[2px] w-6 bg-white transition ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
             <span className={`block h-[2px] w-6 bg-white transition ${menuOpen ? 'opacity-0' : ''}`} />
@@ -61,7 +82,7 @@ export default function Header() {
       </div>
 
       {menuOpen && (
-        <nav className="lg:hidden border-t border-white/10 bg-[#081732] px-6 py-4 flex flex-col gap-1">
+        <nav id="site-mobile-navigation" className="site-mobile-navigation lg:hidden border-t border-white/10 bg-[#081732] px-6 py-4 flex flex-col gap-1">
           {navItems.map((item) => {
             const active = pathname === item.href;
             return (
@@ -76,7 +97,6 @@ export default function Header() {
               </Link>
             );
           })}
-          <a href="tel:+919901975647" className="py-2.5 text-sm font-bold text-accent-500">Call — 9901975647</a>
         </nav>
       )}
     </header>

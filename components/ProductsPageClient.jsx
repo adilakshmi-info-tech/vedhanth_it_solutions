@@ -1,19 +1,6 @@
 'use client';
-import { useLayoutEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-
-function Stars({ rating = 5 }) {
-  return (
-    <div className="flex gap-0.5 text-accent-500">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} className="w-3 h-3 sm:w-[18px] sm:h-[18px]" viewBox="0 0 20 20" fill={i < rating ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={i < rating ? 0 : 1.2}>
-          <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.9l-5.2 2.61.99-5.79-4.21-4.1 5.82-.85L10 1.5z" />
-        </svg>
-      ))}
-    </div>
-  );
-}
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import ProductCard from '@/components/ProductCard';
 
 function FilterIcon({ className }) {
   return (
@@ -31,49 +18,6 @@ function CloseIcon({ className }) {
   );
 }
 
-// Mobile (below sm) is a fluid 2-up grid: the card and its image scale with
-// the column width instead of using the fixed 268x522/319 desktop sizing, so
-// nothing overflows or stretches at narrow widths. sm: and up restores the
-// exact original fixed desktop dimensions untouched.
-function ProductCard({ product }) {
-  return (
-    <Link
-      href={`/products/${product.slug}`}
-      className="group w-full sm:max-w-[268px] h-auto sm:h-[522px] bg-white rounded-[14px] sm:rounded-[20px] overflow-hidden flex flex-col mx-auto"
-    >
-      <div className="relative w-full aspect-[268/319] sm:aspect-auto sm:h-[319px] bg-[#fafafa] shrink-0">
-        {product.images?.[0] ? (
-          <Image
-            src={product.images[0]}
-            alt={product.name}
-            fill
-            unoptimized
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-slate-300">
-            <svg className="w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-          </div>
-        )}
-      </div>
-      <div className="px-3 pt-1.5 pb-3 sm:px-[21px] sm:pt-1 sm:pb-0">
-        <p className="text-[#8d8d8d] text-[11px] sm:text-[16.7px] truncate">{product.categoryName}</p>
-        <h3 className="font-semibold text-[13px] sm:text-[21px] text-[#0d1b39] mt-1 leading-snug line-clamp-2">
-          {product.name}
-        </h3>
-        <div className="mt-1.5 sm:mt-4">
-          <Stars rating={5} />
-        </div>
-        <span className="inline-block mt-2 sm:mt-[26px] text-accent-500 font-semibold text-[12px] sm:text-[15px]">
-          Get a Quote
-        </span>
-      </div>
-    </Link>
-  );
-}
-
 function SidebarContent({ withProducts, selected, toggleCategory, onReset }) {
   return (
     <>
@@ -81,7 +25,7 @@ function SidebarContent({ withProducts, selected, toggleCategory, onReset }) {
         <h2 className="text-xl font-bold text-[#1e1e1e]">Filters</h2>
         <button
           onClick={onReset}
-          className="h-8 px-3 rounded-md border border-slate-200 text-xs font-medium text-[#1e1e1e]/70 hover:border-slate-300 hover:text-[#1e1e1e] transition"
+          className="products-reset-button h-8 px-3 rounded-md border border-slate-200 text-xs font-medium text-[#1e1e1e]/70 hover:border-slate-300 hover:text-[#1e1e1e] transition"
         >
           Reset Filters
         </button>
@@ -97,7 +41,7 @@ function SidebarContent({ withProducts, selected, toggleCategory, onReset }) {
             return (
               <label
                 key={cat.id}
-                className="flex items-center gap-3 py-2 cursor-pointer select-none rounded-lg px-2 -mx-2 hover:bg-slate-50 transition"
+                className="products-filter-option flex items-center gap-3 py-2 cursor-pointer select-none rounded-lg px-2 -mx-2 hover:bg-slate-50 transition"
               >
                 <input
                   type="checkbox"
@@ -129,6 +73,15 @@ export default function ProductsPageClient({ categories = [] }) {
   useLayoutEffect(() => {
     if (window.innerWidth >= 1024) setOpen(true);
   }, []);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [open]);
 
   const withProducts = useMemo(() => categories.filter((c) => c.products.length > 0), [categories]);
 
@@ -174,7 +127,10 @@ export default function ProductsPageClient({ categories = [] }) {
             onClick={() => setOpen(false)}
           />
           <div
-            className={`absolute left-0 top-0 h-full w-[85%] max-w-[340px] bg-white shadow-2xl overflow-y-auto px-6 py-6 transition-transform duration-300 ease-in-out ${
+            role="dialog"
+            aria-modal="true"
+            aria-label="Filter products"
+            className={`products-filter-drawer absolute left-0 top-0 h-full w-[85%] max-w-[340px] bg-white shadow-2xl overflow-y-auto px-6 py-6 transition-transform duration-300 ease-in-out ${
               open ? 'translate-x-0' : '-translate-x-full'
             }`}
           >
@@ -183,7 +139,7 @@ export default function ProductsPageClient({ categories = [] }) {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close filters"
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition text-[#1e1e1e]"
+                className="products-filter-close w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition text-[#1e1e1e]"
               >
                 <CloseIcon className="w-5 h-5" />
               </button>
@@ -204,7 +160,7 @@ export default function ProductsPageClient({ categories = [] }) {
             <button
               onClick={() => setOpen((v) => !v)}
               aria-pressed={open}
-              className="shrink-0 inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white border border-slate-200 text-sm font-semibold text-[#1e1e1e] shadow-sm hover:border-accent-500 hover:text-accent-600 transition"
+              className="products-filter-toggle shrink-0 inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white border border-slate-200 text-sm font-semibold text-[#1e1e1e] shadow-sm hover:border-accent-500 hover:text-accent-600 transition"
             >
               <FilterIcon className="w-4 h-4" />
               Filters
