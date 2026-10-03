@@ -1,11 +1,6 @@
 .appShell {
-  --admin-canvas: #f0f3fa;
-  --admin-card: #ffffff;
-  --admin-ink: #15233d;
-  --admin-muted: #68758b;
-  --admin-line: #dce3ef;
-  --admin-blue: #315fca;
-  --admin-blue-soft: #e5edff;
+  /* Color custom properties moved to :root in globals.css — this page
+     chrome isn't the only consumer of admin.module.css's components. */
   display: flex;
   min-height: 100vh;
   background: var(--admin-canvas);

@@ -4,6 +4,20 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
+:root {
+  /* Shared by admin.module.css's components (AdminFormDrawer,
+     AdminConfirmDialog, etc.) — defined app-wide, not just inside
+     AdminShell's .appShell, since those components also render on pages
+     like /super that don't use AdminShell. */
+  --admin-canvas: #f0f3fa;
+  --admin-card: #ffffff;
+  --admin-ink: #15233d;
+  --admin-muted: #68758b;
+  --admin-line: #dce3ef;
+  --admin-blue: #315fca;
+  --admin-blue-soft: #e5edff;
+}
+
 html {
   scroll-behavior: smooth;
 }
