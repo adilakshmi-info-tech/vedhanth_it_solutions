@@ -1,11 +1,11 @@
-# dependencies
-/node_modules
-/.pnp
+# dependencies — unanchored so it also covers backend/, admin/, frontend/
+node_modules
+.pnp
 .pnp.js
 
-# next.js
-/.next/
-/out/
+# next.js — same, each app under backend/admin/frontend builds its own
+.next/
+out/
 
 # production
 /build
@@ -25,7 +25,7 @@ yarn-error.log*
 !.env.example
 
 # prisma
-/prisma/*.db
+prisma/*.db
 
 # raw source photos for prisma/seed-catalog.js — already uploaded to the
 # shared image API and referenced there by URL; don't bloat the repo
