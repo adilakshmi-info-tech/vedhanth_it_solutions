@@ -7,6 +7,19 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import styles from './login.module.css';
 
+// One login page for both tenant admins and the platform super admin —
+// the same Firebase project backs two independent allowlists, and an
+// account might only be in one of them. A requested callbackUrl is only
+// honored if this account actually has access to it; otherwise it's sent
+// to whichever area it does have access to, rather than bouncing between
+// login and a protected page it can never reach.
+function pickDestination(requestedUrl, { isAdmin, isSuperAdmin }) {
+  const wantsSuper = requestedUrl?.startsWith('/super');
+  if (wantsSuper) return isSuperAdmin ? requestedUrl : (isAdmin ? '/admin' : null);
+  if (requestedUrl) return isAdmin ? requestedUrl : (isSuperAdmin ? '/super' : null);
+  return isSuperAdmin ? '/super' : (isAdmin ? '/admin' : null);
+}
+
 function LoginForm() {
   const id = useId();
   const [email, setEmail] = useState('');
@@ -16,7 +29,7 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/admin';
+  const requestedUrl = searchParams.get('callbackUrl');
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -25,11 +38,23 @@ function LoginForm() {
 
     try {
       const credential = await signInWithEmailAndPassword(auth, email, password);
-      // Write the first Firebase token before redirecting so middleware sees
-      // the authenticated session on the dashboard request.
+      // Write the first Firebase token before checking role/redirecting so
+      // middleware and the role check both see the authenticated session.
       const token = await credential.user.getIdToken();
       document.cookie = `fb_token=${token}; path=/; max-age=3600; SameSite=Lax`;
-      router.push(callbackUrl);
+
+      const roleResponse = await fetch('/api/session-role', { cache: 'no-store' });
+      const role = await roleResponse.json();
+      const destination = pickDestination(requestedUrl, role);
+
+      if (!destination) {
+        document.cookie = 'fb_token=; path=/; max-age=0; SameSite=Lax';
+        setError('This account is not authorized for admin access.');
+        setLoading(false);
+        return;
+      }
+
+      router.push(destination);
       router.refresh();
     } catch (authError) {
       setError('Invalid email or password.');
