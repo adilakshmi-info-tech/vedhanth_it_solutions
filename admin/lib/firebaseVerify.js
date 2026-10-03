@@ -8,14 +8,20 @@
 // runtime) — nothing here is Node-specific, just fetch.
 import 'server-only';
 
-const ALLOWED_EMAILS = (process.env.ADMIN_ALLOWED_EMAILS || 'admin@vedhanthitsolutions.com')
-  .split(',')
-  .map((e) => e.trim().toLowerCase())
-  .filter(Boolean);
+function parseAllowlist(value, fallback) {
+  return (value || fallback)
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+}
 
-// Returns the verified admin's email if the token is valid AND allowlisted,
-// otherwise null. Never throws — callers decide what "null" means for them.
-export async function verifyAdminToken(idToken) {
+const ADMIN_ALLOWED_EMAILS = parseAllowlist(process.env.ADMIN_ALLOWED_EMAILS, 'admin@vedhanthitsolutions.com');
+const SUPER_ADMIN_ALLOWED_EMAILS = parseAllowlist(process.env.SUPER_ADMIN_ALLOWED_EMAILS, '');
+
+// Verifies the token itself against Firebase, with no allowlist check.
+// Returns the verified email, or null if the token is missing/invalid.
+// Never throws — callers decide what "null" means for them.
+async function verifyFirebaseToken(idToken) {
   if (!idToken) return null;
 
   const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
@@ -34,11 +40,25 @@ export async function verifyAdminToken(idToken) {
     if (!res.ok) return null;
 
     const data = await res.json();
-    const email = data?.users?.[0]?.email?.toLowerCase();
-    if (!email || !ALLOWED_EMAILS.includes(email)) return null;
-
-    return email;
+    return data?.users?.[0]?.email?.toLowerCase() || null;
   } catch {
     return null;
   }
+}
+
+// Returns the verified admin's email if the token is valid AND allowlisted
+// for the regular (tenant-scoped) admin, otherwise null.
+export async function verifyAdminToken(idToken) {
+  const email = await verifyFirebaseToken(idToken);
+  if (!email || !ADMIN_ALLOWED_EMAILS.includes(email)) return null;
+  return email;
+}
+
+// Same verification, checked against the separate, platform-level
+// super-admin allowlist instead — being a tenant admin never implies
+// being a super admin, and vice versa.
+export async function verifySuperAdminToken(idToken) {
+  const email = await verifyFirebaseToken(idToken);
+  if (!email || !SUPER_ADMIN_ALLOWED_EMAILS.includes(email)) return null;
+  return email;
 }

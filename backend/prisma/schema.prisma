@@ -82,3 +82,22 @@ model Enquiry {
 
 // No AdminUser table — admin identity now lives in Firebase Auth
 // (the shared sjs-technology project). See lib/actions/require-admin.js.
+
+// Platform-level settings for each client site sharing this backend.
+// Category/Product/Review/Enquiry are NOT yet scoped to a tenant — today
+// there is exactly one real tenant (Vedhanth) and this table is the
+// control surface for its (and future tenants') branding/feature flags,
+// not yet consulted by anything. Per-row tenant isolation on the content
+// tables is a separate, larger migration for when a second tenant's data
+// actually needs to live here.
+model Tenant {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  logoUrl       String?
+  colors        Json?
+  features      Json?
+  allowedEmails String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

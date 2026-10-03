@@ -144,6 +144,10 @@ export async function getCounts() {
   return { categories, products, reviews };
 }
 
+export function getTenants() {
+  return prisma.tenant.findMany({ orderBy: { name: 'asc' } });
+}
+
 export async function getAdminDashboardData() {
   const [categories, products, reviews, publishedReviews, recentReviews] = await Promise.all([
     prisma.category.count(),

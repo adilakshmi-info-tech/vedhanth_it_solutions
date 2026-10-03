@@ -4,6 +4,7 @@
 import 'server-only';
 import { backendFetch } from '@/lib/backend';
 import { requireAdmin } from '@/lib/requireAdmin';
+import { requireSuperAdmin } from '@/lib/requireSuperAdmin';
 
 export function getCategories() {
   return backendFetch('/api/categories');
@@ -26,4 +27,9 @@ export async function getEnquiries() {
 export async function getAdminDashboardData() {
   const { token } = await requireAdmin();
   return backendFetch('/api/dashboard', { token });
+}
+
+export async function getTenants() {
+  const { token } = await requireSuperAdmin();
+  return backendFetch('/api/tenants', { token });
 }
