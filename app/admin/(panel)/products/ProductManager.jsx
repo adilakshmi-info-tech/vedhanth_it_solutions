@@ -92,11 +92,18 @@ export default function ProductManager({ initialCategories, initialProducts }) {
   }
 
   function removeImage(index) {
-    setImages((current) => {
-      const item = current[index];
-      if (item?.kind === 'file') URL.revokeObjectURL(item.preview);
-      return current.filter((_, itemIndex) => itemIndex !== index);
-    });
+    const item = images[index];
+    if (!item) return;
+    setImages((current) => current.filter((_, itemIndex) => itemIndex !== index));
+    if (item.kind === 'file') {
+      URL.revokeObjectURL(item.preview);
+      return;
+    }
+    // Existing (already-saved) image: delete it from storage right away rather
+    // than waiting for the form to be submitted.
+    const path = pathFromImageUrl(item.url);
+    if (!path) return;
+    deleteImage(path).catch((err) => setError(err.message || 'Could not delete the image from storage. It has been removed from this form, but may still exist in storage.'));
   }
 
   function moveImage(index, delta) {

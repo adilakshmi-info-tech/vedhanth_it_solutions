@@ -20,9 +20,10 @@ Built for deployment on your own server (not Vercel), backed by a self-hosted Po
   email allowlist (`ADMIN_ALLOWED_EMAILS`), since the Firebase project is shared across other apps
 - **Server Actions** — all admin create/edit/delete and the public review form run on the server;
   each one independently re-verifies the caller's Firebase session server-side
-- **Shared image-upload API** (`store.adilakshmi.co`) — product photos pass through an
-  authenticated same-origin Next.js proxy to the S3-backed service; Firebase admin credentials and
-  upload-service settings stay server-side, and this app's disk never holds product images
+- **Shared image-upload API** (`store.adilakshmi.co`) — the admin's browser uploads product photos
+  directly to the service, authenticated with the admin's live Firebase ID token and the
+  `vedhanthitsolutions` app slug (see `lib/imageUpload.js`); this app's disk never holds product
+  images
 - **Tailwind CSS** — styling, matches the brand (navy + cyan)
 
 ## 1. Prerequisites
@@ -55,7 +56,9 @@ Then edit `.env`:
 | `DATABASE_URL` | `postgresql://vedhanth:PASSWORD@localhost:5432/vedhanth?schema=public` |
 | `NEXT_PUBLIC_FIREBASE_*` | The `sjs-technology` Firebase project's web config — not secret, safe in git (Firebase web API keys aren't privileged credentials; see [Firebase's own docs](https://firebase.google.com/docs/projects/api-keys)) |
 | `ADMIN_ALLOWED_EMAILS` | Comma-separated allowlist — only these Firebase-authenticated emails can pass `requireAdmin()` / middleware, since the project is shared with other apps |
-| `IMAGE_UPLOAD_BASE_URL`, `IMAGE_UPLOAD_APP_SLUG` | Server-only base URL + app slug for the shared image-upload API |
+
+The image-upload API's base URL and this app's slug (`vedhanthitsolutions`) are fixed constants in
+`lib/imageUpload.js`, not environment variables — no extra setup needed.
 
 There is deliberately no admin password anywhere in this app's config — Firebase owns that entirely.
 
