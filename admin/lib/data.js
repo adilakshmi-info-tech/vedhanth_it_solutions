@@ -33,3 +33,17 @@ export async function getTenants() {
   const { token } = await requireSuperAdmin();
   return backendFetch('/api/tenants', { token });
 }
+
+// This app serves exactly one tenant today — hardcoded here the same way
+// lib/imageUpload.js hardcodes its upload slug. Fails open (null) on any
+// error so a transient backend hiccup can't silently hide features that
+// are actually enabled.
+const TENANT_SLUG = 'vedhanthitsolutions';
+
+export async function getTenantConfig() {
+  try {
+    return await backendFetch(`/api/tenants/by-slug/${TENANT_SLUG}`);
+  } catch {
+    return null;
+  }
+}

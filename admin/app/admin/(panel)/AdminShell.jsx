@@ -14,7 +14,7 @@ const titles = [
   ['/admin', 'Dashboard'],
 ];
 
-export default function AdminShell({ children, adminEmail }) {
+export default function AdminShell({ children, adminEmail, features }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const title = titles.find(([path]) => path === '/admin' ? pathname === path : pathname.startsWith(path))?.[1] || 'Dashboard';
@@ -36,7 +36,7 @@ export default function AdminShell({ children, adminEmail }) {
           <Image src="/logo-full.svg" width={178} height={46} alt="Vedhanth IT Solutions" priority />
         </Link>
         <div className={styles.sidebarLabel}>WORKSPACE</div>
-        <AdminNav />
+        <AdminNav features={features} />
         <div className={styles.sidebarBottom}>
           <div className={styles.accountCard}>
             <span className={styles.avatar}>{initials}</span>
@@ -52,7 +52,7 @@ export default function AdminShell({ children, adminEmail }) {
           <Link className={styles.brand} href="/admin" onClick={() => setMenuOpen(false)} aria-label="Vedhanth admin dashboard">
             <Image src="/logo-full.svg" width={178} height={46} alt="Vedhanth IT Solutions" />
           </Link>
-          <AdminNav mobile onNavigate={() => setMenuOpen(false)} />
+          <AdminNav mobile features={features} onNavigate={() => setMenuOpen(false)} />
           <div className={styles.sidebarBottom}>
             <div className={styles.accountCard}><span className={styles.avatar}>{initials}</span><span className={styles.accountText}><strong>Administrator</strong><small>{adminEmail}</small></span></div>
             <AdminLogoutButton />

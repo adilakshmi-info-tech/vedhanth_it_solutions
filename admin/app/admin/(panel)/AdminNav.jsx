@@ -6,8 +6,8 @@ import styles from './admin.module.css';
 
 const items = [
   ['Dashboard', '/admin', 'grid'],
-  ['Client Reviews', '/admin/reviews', 'review'],
-  ['Enquiries', '/admin/enquiries', 'inbox'],
+  ['Client Reviews', '/admin/reviews', 'review', 'reviews'],
+  ['Enquiries', '/admin/enquiries', 'inbox', 'enquiries'],
   ['Products', '/admin/products', 'box'],
   ['Categories', '/admin/categories', 'folder'],
 ];
@@ -20,11 +20,12 @@ const paths = {
   folder: <><path d="M3 6a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Z"/></>,
 };
 
-export default function AdminNav({ onNavigate, mobile = false }) {
+export default function AdminNav({ onNavigate, mobile = false, features = {} }) {
   const pathname = usePathname();
+  const visibleItems = items.filter(([, , , featureKey]) => !featureKey || features[featureKey] !== false);
   return (
     <nav className={mobile ? styles.mobileNav : styles.nav} aria-label="Admin navigation">
-      {items.map(([label, href, icon]) => {
+      {visibleItems.map(([label, href, icon]) => {
         const active = href === '/admin' ? pathname === href : pathname.startsWith(href);
         return (
           <Link key={href} href={href} onClick={onNavigate} aria-current={active ? 'page' : undefined} className={`${styles.navLink} ${active ? styles.navLinkActive : ''}`}>

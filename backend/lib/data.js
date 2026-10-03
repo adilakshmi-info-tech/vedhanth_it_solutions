@@ -148,6 +148,15 @@ export function getTenants() {
   return prisma.tenant.findMany({ orderBy: { name: 'asc' } });
 }
 
+// Public — branding/feature flags aren't sensitive, same as categories/
+// products. allowedEmails is deliberately excluded from this shape.
+export function getTenantBySlug(slug) {
+  return prisma.tenant.findUnique({
+    where: { slug },
+    select: { id: true, slug: true, name: true, logoUrl: true, colors: true, features: true },
+  });
+}
+
 export async function getAdminDashboardData() {
   const [categories, products, reviews, publishedReviews, recentReviews] = await Promise.all([
     prisma.category.count(),

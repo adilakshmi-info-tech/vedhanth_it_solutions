@@ -1,9 +1,21 @@
-import { getAllReviews } from '@/lib/data';
+import { getAllReviews, getTenantConfig } from '@/lib/data';
 import ReviewManager from './ReviewManager';
+import ModuleNotConfigured from '../ModuleNotConfigured';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminReviewsPage() {
+  const tenant = await getTenantConfig();
+  if (tenant?.features?.reviews === false) {
+    return (
+      <ModuleNotConfigured
+        title="Client Reviews"
+        kicker="FEATURE DISABLED"
+        detail="Reviews are turned off for this site in the platform admin's tenant settings."
+      />
+    );
+  }
+
   try {
     const reviews = await getAllReviews();
     return <ReviewManager initialReviews={reviews} />;
