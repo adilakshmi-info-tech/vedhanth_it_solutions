@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getAdminDashboardData } from '@/lib/data';
+import { getAdminDashboardData, getTenantConfig } from '@/lib/data';
 import styles from './admin.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -7,12 +7,15 @@ export const dynamic = 'force-dynamic';
 const formatDate = (date) => new Date(date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 
 export default async function AdminDashboard() {
-  const data = await getAdminDashboardData();
+  const [data, tenant] = await Promise.all([getAdminDashboardData(), getTenantConfig()]);
+  const enquiriesEnabled = tenant?.features?.enquiries !== false;
   const metrics = [
     { label: 'Total client reviews', value: data.reviews, note: 'All customer submissions', icon: '★' },
-    { label: 'Pending enquiries', value: '—', note: 'Enquiry data storage is not configured', icon: '↳', unavailable: true },
     { label: 'Published reviews', value: data.publishedReviews, note: 'Visible on the public website', icon: '✓' },
-    { label: 'New enquiries', value: '—', note: 'Enquiry data storage is not configured', icon: '✉', unavailable: true },
+    ...(enquiriesEnabled ? [
+      { label: 'Total enquiries', value: data.enquiries, note: 'All contact form submissions', icon: '✉' },
+      { label: 'New enquiries', value: data.newEnquiries, note: 'Awaiting first response', icon: '↳' },
+    ] : []),
   ];
 
   return (
@@ -49,9 +52,24 @@ export default async function AdminDashboard() {
         </section>
 
         <section className={styles.card} aria-labelledby="recent-enquiries-heading">
-          <div className={styles.cardHeading}><h2 id="recent-enquiries-heading">Recent enquiries</h2><Link href="/admin/enquiries">Open inbox</Link></div>
-          <div className={styles.emptyState}><div><strong>Enquiry inbox is not connected</strong>The public contact form currently sends messages through WhatsApp. No enquiry records are stored in this application.</div></div>
-          <div className={styles.notice}>Add an Enquiry database model and connect form submissions before showing accurate enquiry counts or managing requests.</div>
+          <div className={styles.cardHeading}><h2 id="recent-enquiries-heading">Recent enquiries</h2>{enquiriesEnabled && <Link href="/admin/enquiries">Open inbox</Link>}</div>
+          {enquiriesEnabled ? (
+            <div className={styles.tableScroll}>
+              <table className={styles.dataTable}>
+                <thead><tr><th>Customer</th><th>Message</th><th>Received</th><th>Status</th></tr></thead>
+                <tbody>{data.recentEnquiries.map((enquiry) => <tr key={enquiry.id}>
+                  <td><span className={styles.tablePrimary}>{enquiry.name}</span><span className={styles.tableSecondary}>{enquiry.phone}{enquiry.email ? ` · ${enquiry.email}` : ''}</span></td>
+                  <td><span className={styles.tableSecondary} title={enquiry.message}>{enquiry.message}</span></td>
+                  <td>{formatDate(enquiry.createdAt)}</td>
+                  <td><span className={`${styles.badge} ${enquiry.status === 'new' ? styles.badgeGreen : styles.badgeMuted}`}>{enquiry.status}</span></td>
+                </tr>)}
+                {data.recentEnquiries.length === 0 && <tr><td colSpan="4"><div className={styles.emptyState}><div><strong>No enquiries yet</strong>Submitted contact forms will appear here.</div></div></td></tr>}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className={styles.emptyState}><div><strong>Enquiries are turned off</strong>Enable this in the platform admin&apos;s tenant settings to collect and manage enquiries here.</div></div>
+          )}
         </section>
       </div>
 

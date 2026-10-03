@@ -158,12 +158,15 @@ export function getTenantBySlug(slug) {
 }
 
 export async function getAdminDashboardData() {
-  const [categories, products, reviews, publishedReviews, recentReviews] = await Promise.all([
+  const [categories, products, reviews, publishedReviews, recentReviews, enquiries, newEnquiries, recentEnquiries] = await Promise.all([
     prisma.category.count(),
     prisma.product.count(),
     prisma.review.count(),
     prisma.review.count({ where: { approved: true } }),
     prisma.review.findMany({ orderBy: { createdAt: 'desc' }, take: 6 }),
+    prisma.enquiry.count(),
+    prisma.enquiry.count({ where: { status: 'new' } }),
+    prisma.enquiry.findMany({ orderBy: { createdAt: 'desc' }, take: 6 }),
   ]);
-  return { categories, products, reviews, publishedReviews, recentReviews };
+  return { categories, products, reviews, publishedReviews, recentReviews, enquiries, newEnquiries, recentEnquiries };
 }
