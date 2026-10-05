@@ -32,6 +32,21 @@ server {
     proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
   }
 
+  # al_admin's static JS/CSS/image-optimizer assets (ASSET_PREFIX in its
+  # .env). Needed because vedhanth_web ALSO serves its own unrelated assets
+  # at plain /_next/static/* on this same domain — without this distinct
+  # prefix + rewrite, the browser can't tell the two apps' assets apart and
+  # /admin or /super loads completely unstyled.
+  location /al-admin-assets/ {
+    rewrite ^/al-admin-assets/(.*) /$1 break;
+    proxy_pass http://al_admin:4001;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+  }
+
   location / {
     proxy_pass http://vedhanth_web:3000;
     proxy_http_version 1.1;
@@ -65,6 +80,16 @@ server {
 #   }
 #
 #   location /super {
+#     proxy_pass http://al_admin:4001;
+#     proxy_http_version 1.1;
+#     proxy_set_header Host $host;
+#     proxy_set_header X-Real-IP $remote_addr;
+#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#     proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+#   }
+#
+#   location /al-admin-assets/ {
+#     rewrite ^/al-admin-assets/(.*) /$1 break;
 #     proxy_pass http://al_admin:4001;
 #     proxy_http_version 1.1;
 #     proxy_set_header Host $host;
