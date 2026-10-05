@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getCategoryProductReviews, getProductBySlug, getRelatedProducts } from '@/lib/data';
+import { getProductDetail } from '@/lib/data';
 import { parseProductContent } from '@/lib/product-content';
 import ProductCard from '@/components/ProductCard';
 import ProductGallery from './ProductGallery';
@@ -68,16 +68,25 @@ function ReviewMarquee({ reviews, reverse = false, label }) {
   </div>;
 }
 
+async function getProductDetailOrNull(slug) {
+  try {
+    return await getProductDetail(slug);
+  } catch {
+    return null; // backend returns a 404 for an unknown slug, surfaced here as a thrown error
+  }
+}
+
 export async function generateMetadata({ params }) {
-  const product = await getProductBySlug(params.slug);
-  if (!product) return { title: 'Product not found' };
-  const { description } = parseProductContent(product.description || '');
-  return { title: product.name, description: description || `${product.name} — ${product.category?.name || 'product'} from Vedhanth IT Solutions.` };
+  const detail = await getProductDetailOrNull(params.slug);
+  if (!detail) return { title: 'Product not found' };
+  const { description } = parseProductContent(detail.product.description || '');
+  return { title: detail.product.name, description: description || `${detail.product.name} — ${detail.product.category?.name || 'product'} from Vedhanth IT Solutions.` };
 }
 
 export default async function ProductDetailPage({ params }) {
-  const product = await getProductBySlug(params.slug);
-  if (!product) notFound();
+  const detail = await getProductDetailOrNull(params.slug);
+  if (!detail) notFound();
+  const { product, relatedProducts, categoryReviews: reviews } = detail;
 
   const categoryName = product.category?.name || 'Products';
   const productImages = (product.images || []).filter((image) => typeof image === 'string' && image.trim());
@@ -86,10 +95,6 @@ export default async function ProductDetailPage({ params }) {
   const description = productContent.description || product.category?.description || `${product.name} from Vedhanth IT Solutions. Contact our team for product details and availability.`;
   const productReviews = (product.reviewWorkflows || []).map((workflow) => workflow.review);
   const rating = getAverageRating(productReviews);
-  const [reviews, relatedProducts] = await Promise.all([
-    getCategoryProductReviews(product.categoryId),
-    getRelatedProducts(product, 8),
-  ]);
   const savedSpecifications = product.specifications?.length
     ? product.specifications.map(({ label, value }) => [label, value])
     : productContent.specifications.map(({ label, value }) => [label, value]);

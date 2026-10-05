@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import styles from './reviews.module.css';
 import FeedbackForm from '@/components/reviews/FeedbackForm';
-import { getAllReviews } from '@/lib/data';
+import { getAllApprovedReviews } from '@/lib/data';
 
 export const metadata = {
   title: 'Client Reviews',
@@ -82,14 +82,14 @@ function appendUnique(existing, additions) {
 export default async function ReviewsPage() {
   let storedReviews = [];
   try {
-    storedReviews = await getAllReviews();
+    // Backend already filters to approved-only — this app has no admin
+    // token to call the unfiltered admin endpoint with.
+    storedReviews = await getAllApprovedReviews();
   } catch {
     // The restored static reviews remain available when the review database is offline.
   }
 
-  const approvedReviews = storedReviews
-    .filter((review) => review.approved && (!review.workflow || review.workflow.status === 'approved'))
-    .map((review, index) => normalizeReview(review, index));
+  const approvedReviews = storedReviews.map((review, index) => normalizeReview(review, index));
   const reviews = appendUnique(COMPANY_REVIEWS, approvedReviews);
 
   return (

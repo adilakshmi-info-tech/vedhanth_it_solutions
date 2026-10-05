@@ -1,120 +1,79 @@
-# Vedhanth IT Solutions — Website + Admin Panel
+# Vedhanth IT Solutions — Public Website
 
-Next.js (App Router) site with an admin panel for managing Categories, Products, and Reviews.
-Built for deployment on your own server (not Vercel), backed by a self-hosted PostgreSQL database.
+Next.js (App Router) public site for Vedhanth IT Solutions. Server-rendered
+straight from a shared backend API, so real product/category/review content
+is in the HTML before it reaches a browser or a search crawler.
 
-> Originally migrated off Firebase to Postgres + NextAuth — see
-> [`DATABASEMIGRATIONPLAN.md`](./DATABASEMIGRATIONPLAN.md) for that history. Admin **auth** has
-> since moved back to Firebase (see below) so it can share the `sjs-technology` project used by
-> `store.adilakshmi.co`'s image-upload API — the **data** (categories/products/reviews) stayed on
-> Postgres throughout.
+> This repo used to be a single app containing the public site, the admin
+> panel, and the database layer together. It's since been split into three
+> independently deployed apps, each in its own repo:
+> - **This repo** — the public website only (no database access, no auth)
+> - [`web_backend`](https://github.com/adilakshmi-info-tech/web_backend) — the
+>   shared data API (Postgres + Prisma), used by this site and the admin panel
+> - [`web_admin`](https://github.com/adilakshmi-info-tech/web_admin) — the
+>   admin panel (product/category/review/enquiry management, platform
+>   super-admin)
+>
+> `DATABASEMIGRATIONPLAN.md` in this repo is historical — it documents the
+> original Firebase→Postgres migration from before this split and no longer
+> describes this app's own architecture.
 
 ## Stack
 
-- **Next.js 14** (App Router) — public pages are **server-rendered** straight from the database, so
-  real product/category content is in the HTML before it reaches a browser or a search crawler
-- **PostgreSQL** — categories, products, reviews (no user/auth tables — see below)
-- **Prisma** — type-safe queries + schema migrations
-- **Firebase Auth** (shared `sjs-technology` project) — protects `/admin/*`. Admin identity lives
-  entirely in Firebase; this app never stores a password. Access is additionally restricted to an
-  email allowlist (`ADMIN_ALLOWED_EMAILS`), since the Firebase project is shared across other apps
-- **Server Actions** — all admin create/edit/delete and the public review form run on the server;
-  each one independently re-verifies the caller's Firebase session server-side
-- **Shared image-upload API** (`store.adilakshmi.co`) — the admin's browser uploads product photos
-  directly to the service, authenticated with the admin's live Firebase ID token and the
-  `vedhanthitsolutions` app slug (see `lib/imageUpload.js`); this app's disk never holds product
-  images
-- **Tailwind CSS** — styling, matches the brand (navy + cyan)
+- **Next.js 14** (App Router) — every public page is server-rendered on each
+  request, fetching from `web_backend`'s API server-side (never from the
+  browser), so content is already in the initial HTML
+- **No database, no auth, no Prisma in this repo** — this app only ever
+  talks to `web_backend` over HTTP (`BACKEND_URL`), and only to its public,
+  unauthenticated endpoints (catalog, product detail, approved reviews,
+  review/enquiry submission)
+- **Tailwind CSS** — styling, matches the brand (navy `#001736` + green
+  `#0D3D0E`)
 
 ## 1. Prerequisites
 
 - Node.js 18.18+ (20 LTS recommended)
-- PostgreSQL 14+ running and reachable from the app
-- A Firebase user in the `sjs-technology` project for whoever will administer this site (create one
-  under Firebase Console → Authentication → Users), and their email added to `ADMIN_ALLOWED_EMAILS`
+- A running `web_backend` instance reachable at `BACKEND_URL` — for local
+  dev against real data, either run `web_backend` locally too (see its own
+  README) or point `BACKEND_URL` at a deployed instance
 
-## 2. Database setup
-
-On the server (or locally for development):
-
-```sql
-CREATE DATABASE vedhanth;
-CREATE USER vedhanth WITH PASSWORD 'a-strong-password';
-GRANT ALL PRIVILEGES ON DATABASE vedhanth TO vedhanth;
-```
-
-## 3. Environment variables
+## 2. Environment variables
 
 ```bash
 cp .env.example .env
 ```
 
-Then edit `.env`:
+Only one variable:
 
 | Variable | What it is |
 |---|---|
-| `DATABASE_URL` | `postgresql://vedhanth:PASSWORD@localhost:5432/vedhanth?schema=public` |
-| `NEXT_PUBLIC_FIREBASE_*` | The `sjs-technology` Firebase project's web config — not secret, safe in git (Firebase web API keys aren't privileged credentials; see [Firebase's own docs](https://firebase.google.com/docs/projects/api-keys)) |
-| `ADMIN_ALLOWED_EMAILS` | Comma-separated allowlist — only these Firebase-authenticated emails can pass `requireAdmin()` / middleware, since the project is shared with other apps |
+| `BACKEND_URL` | Where `web_backend` lives. Local dev: `http://localhost:4000`. Production (Docker Compose on the VM): `http://al_backend:4000` — a container name, never a public address, since backend has no nginx route of its own |
 
-The image-upload API's base URL and this app's slug (`vedhanthitsolutions`) are fixed constants in
-`lib/imageUpload.js`, not environment variables — no extra setup needed.
-
-There is deliberately no admin password anywhere in this app's config — Firebase owns that entirely.
-
-**⚠️ `NEXT_PUBLIC_*` values are inlined at build time, not read at container runtime.** If you change
-any of them, you must rebuild (`docker compose up -d --build`, not just restart) — see §6.
-
-## 4. Local development
+## 3. Local development
 
 ```bash
 npm install
-npx prisma migrate dev --name init      # creates the tables
 npm run dev
-# http://localhost:3000  and  http://localhost:3000/admin/login
+# http://localhost:4002
 ```
 
-Log in with the Firebase user's email/password directly — there's no seed step for admin identity.
+Needs a reachable `web_backend` (see above) to show real content — without
+one, pages render with empty/fallback content rather than erroring.
 
-## 5. Using the admin panel
+## 4. Production deploy — Docker on the shared WACRM VM
 
-- Log in at `/admin/login` with a Firebase account whose email is in `ADMIN_ALLOWED_EMAILS`.
-- **Categories** — add categories first (e.g. "CCTV & Security Solutions").
-  A category can't be deleted while it still has products.
-- **Products** — add products, assign a category, upload up to five images. The browser sends files
-  to this app's authenticated proxy, which forwards them to the shared image API. Editing without
-  choosing a new image keeps the existing one; replacing
-  or deleting a product's image also deletes the old file from the shared storage.
-- **Reviews** — customers submit reviews via the form on the Contact page; they stay hidden until
-  you click **Approve**. Approved reviews then show on the homepage automatically.
-
-To add another admin later: create their user in the `sjs-technology` Firebase project, then add
-their email to `ADMIN_ALLOWED_EMAILS` and redeploy (it's read at request time, not build time, so a
-plain restart is enough for this one).
-
-## 6. Production deploy — Docker on the shared WACRM VM
-
-This is the deploy path actually used for `vedhanthitsolutions.in`: the VM already runs a shared
-`wacrm_nginx` reverse proxy for several sites (see `Deploy_New_Website_on_WACRM_VM.md` for the full
-runbook). Vedhanth gets its **own** app + Postgres containers in `/opt/vedhanth`, on the VM's
-existing `wacrm_wacrm_network` — nothing about WACRM's own stack is touched.
+This is the deploy path actually used for `vedhanthitsolutions.in`. The VM
+runs a shared `wacrm_nginx` reverse proxy for several sites and apps —
+`vedhanth_frontend` (this repo), `al_backend`, and `al_admin` all join the
+VM's existing `wacrm_wacrm_network`; nothing about WACRM's own stack or the
+sibling repos' stacks is touched by this one.
 
 ```bash
-# one-time: clone via the deploy key, per the runbook
-git clone github-vedhanth:adilakshmi-info-tech/vedhanth_it_solutions.git /opt/vedhanth
+# one-time: clone via the deploy key already set up for this repo
 cd /opt/vedhanth
-cp .env.example .env    # fill in POSTGRES_*, DATABASE_URL (host: vedhanth_db), Firebase, admin allowlist
-
+cp .env.example .env    # set BACKEND_URL=http://al_backend:4000
 docker compose up -d --build
 ```
-
-The `web` container applies any pending Prisma migrations itself on every start (see
-`docker-entrypoint.sh`) before it starts serving — there's no separate `migrate deploy` step to
-remember. `prisma migrate deploy` is a no-op when the database is already up to date, so this is
-safe on a plain restart too.
-
-Then add `/opt/nginx-extra/conf.d/vedhanth.conf` (template in `deploy/nginx/vedhanth.conf.example`)
-and recreate `wacrm_nginx` so it picks up the new bind — full steps in the runbook.
 
 **Redeploying after a code change:**
 
@@ -124,106 +83,29 @@ git pull
 docker compose up -d --build
 ```
 
-`--build` is required even for a pure content/copy change — `docker compose up -d` alone won't pick
-up new source, and if any `NEXT_PUBLIC_*` value changed, a plain container restart won't re-inline
-it either. Any schema change that shipped in the pull is migrated automatically when the new
-container starts — see the migrations note above.
+`--build` is required even for a pure content change — `docker compose up
+-d` alone won't pick up new source.
 
-Postgres data lives under `/opt/vedhanth/data/pgdata/` (bind-mounted, outside the container) — back
-that up. There's no uploads directory to worry about; product images live entirely on the shared
-image-upload service.
+Nginx routes the domain root (`location /`) to `vedhanth_frontend` — see
+`deploy/nginx/vedhanth.conf.example` for the full config (also covers
+`/admin` and `/super`, which route to `al_admin` instead; that file is
+shared reference documentation for the whole VM setup, not just this repo).
 
-## 6b. Alternative: bare-metal / PM2 (no Docker)
+## 5. SEO notes
 
-Because `next.config.js` sets `output: 'standalone'`, the build also produces a self-contained
-server that runs directly under PM2 on any Linux host with its own Postgres — useful if a future
-deploy target doesn't have Docker.
+- `/products` and each `/products/[slug]` page are server-rendered from
+  `web_backend` on every request — full content is in the initial HTML.
+- `app/sitemap.js` and `app/robots.js` generate `/sitemap.xml` and
+  `/robots.txt`.
+- Each page exports its own `metadata` (title/description); product pages
+  derive theirs from the product name and description.
 
-```bash
-# On the server, with .env in place (including NEXT_PUBLIC_* — see the warning in §3) and Postgres
-# reachable:
-npm ci
-npm run prisma:deploy          # applies migrations (prisma migrate deploy)
-npm run build
+## 6. Troubleshooting
 
-# assemble the standalone bundle
-cp -r .next/standalone ./deploy
-cp -r .next/static ./deploy/.next/static
-cp -r public ./deploy/public
-cp .env ./deploy/.env
-
-cd deploy
-node server.js                 # listens on port 3000
-```
-
-Run it under **PM2** so it survives restarts:
-
-```bash
-pm2 start server.js --name vedhanth-website
-pm2 save
-```
-
-### Nginx reverse proxy (sample)
-
-```nginx
-server {
-    listen 80;
-    server_name vedhanthitsolutions.in www.vedhanthitsolutions.in;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
-Then add HTTPS with **Certbot** (Let's Encrypt):
-
-```bash
-sudo certbot --nginx -d vedhanthitsolutions.in -d www.vedhanthitsolutions.in
-```
-
-## 7. Database migrations
-
-When the Prisma schema in `prisma/schema.prisma` changes, create the migration in development and
-commit it:
-
-```bash
-npx prisma migrate dev --name describe_the_change
-```
-
-**Docker deploys apply it automatically** — `docker-entrypoint.sh` runs `prisma migrate deploy`
-every time the `web` container starts, before `next start`, so a plain `docker compose up -d
---build` after `git pull` is enough; there's nothing extra to run by hand.
-
-**Bare-metal / PM2 deploys are manual** (§6b) — run `npm run prisma:deploy` yourself before
-`npm run build`, since there's no container entrypoint to hook into there.
-
-To check what Prisma thinks is pending without applying anything:
-
-```bash
-docker compose exec web npx prisma migrate status
-```
-
-## 8. SEO notes
-
-- `/products` and each `/products/[slug]` page are server-rendered from the database on every
-  request — full content is in the initial HTML.
-- `app/sitemap.js` and `app/robots.js` generate `/sitemap.xml` and `/robots.txt`.
-- Each page exports its own `metadata` (title/description); product pages derive theirs from the
-  product name and description.
-
-## 9. What's left to do before going live
-
-- [ ] Provision PostgreSQL on the server and set `DATABASE_URL`
-- [ ] Confirm the admin's Firebase user exists in `sjs-technology` and is in `ADMIN_ALLOWED_EMAILS`
-- [ ] Confirm `store.adilakshmi.co` has authorized the `sjs-technology` slug for this admin account
-      (ask whoever runs that backend if uploads get rejected)
-- [ ] Add real categories/products via the admin panel
-- [ ] Point the real domain at the server and set up SSL (WAF-side — see conversation notes /
-      whoever manages `106.51.29.16`)
-- [ ] Swap the logo in `/public/logo.png` if you get an uncropped version
+- **Pages load but show no products/reviews** — `BACKEND_URL` is wrong or
+  `web_backend` isn't reachable; check `docker exec vedhanth_frontend wget
+  -qO- $BACKEND_URL/api/catalog` from the VM.
+- **A submitted review/enquiry doesn't show up in the admin panel** —
+  confirm `web_backend`'s `DATABASE_URL` points at the same Postgres this
+  site's data actually lives in; frontend, backend, and admin all read/write
+  that one shared database.
