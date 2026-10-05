@@ -1,5 +1,5 @@
 .carouselViewport {
-  width: min(100%, 1186px);
+  width: 100%;
   margin-inline: auto;
   padding-bottom: 16px;
   overflow: hidden;
@@ -8,7 +8,13 @@
 }
 
 .carouselViewport :global(.marquee-track) {
-  gap: 0 !important;
+  gap: 38px !important;
+}
+
+@media (max-width: 767px) {
+  .carouselViewport {
+    padding-inline: 20px;
+  }
 }
 
 .emptyState {
