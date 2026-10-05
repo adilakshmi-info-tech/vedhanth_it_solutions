@@ -5,12 +5,12 @@ export default function AboutSection() {
   return (
     <section className="py-16 md:py-20 bg-[#f2f2f2]">
       <div className="max-w-[1440px] mx-auto px-6 md:px-20">
-        <h2 className="text-center font-display font-bold text-[32px] md:text-[42px] text-[#1e1e1e] mb-12 md:mb-16">
+        <h2 className="text-center font-display font-bold text-[32px] md:text-[42px] text-[#1e1e1e] mb-10 md:mb-12">
           About Us
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-10 md:gap-[70px] items-center">
-          <div className="relative max-w-[629px]">
+        <div className="grid md:grid-cols-[629fr_617fr] gap-10 md:gap-[70px] items-center">
+          <div className="relative max-w-[629px] order-2 md:order-1">
             <div className="aspect-[629/445] rounded-[20px] overflow-hidden relative shadow-[30px_30px_60px_-20px_rgba(0,0,0,0.25)]">
               <Image
                 src="/images/home/about-main.jpg"
@@ -22,7 +22,7 @@ export default function AboutSection() {
             </div>
           </div>
 
-          <div>
+          <div className="order-1 md:order-2">
             <span className="eyebrow">About</span>
             <h3 className="font-display font-bold text-[32px] md:text-[42px] text-[#1e1e1e] mt-4 leading-tight capitalize max-w-[413px]">
               Built Around Your Security &amp; Infrastructure

@@ -27,7 +27,7 @@ export default function ServicesSection() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-[223fr_492fr] gap-4 md:gap-6 w-full max-w-[720px] md:ml-auto">
+          <div className="grid grid-cols-[minmax(92px,223fr)_minmax(0,492fr)] gap-3 md:gap-6 w-full max-w-[720px] md:ml-auto">
             <div className="flex flex-col gap-4 md:gap-6">
               <div className="relative w-full aspect-[223/229] rounded-[10px] overflow-hidden shadow-lg">
                 <Image

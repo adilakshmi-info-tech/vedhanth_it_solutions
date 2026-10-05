@@ -21,7 +21,7 @@ function Stars({ rating = 4 }) {
 // normal flow div that grows to fit whatever review text is passed in.
 function ReviewCard({ name, role, comment, rating, photo, avatar }) {
   return (
-    <div className="shrink-0 w-[300px] sm:w-[340px] md:w-[370px]">
+    <div className="shrink-0 w-[min(82vw,370px)] md:w-[370px]">
       <div className="relative aspect-[370/476] rounded-[10px] overflow-hidden shadow-lg">
         <Image src={photo} alt="" fill sizes="370px" className="object-cover" />
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[90%] drop-shadow-[0_20px_45px_rgba(25,58,75,0.35)]">
@@ -79,8 +79,7 @@ export default function ClientReviews({ reviews = [] }) {
     <section id="reviews" className="scroll-mt-20 pt-16 pb-16 md:pt-20 md:pb-[68px] bg-[#f2f2f2]">
       <div className="max-w-[1440px] mx-auto">
         <div className="text-center px-6 mb-[49px]">
-          <span className="eyebrow">Testimonials</span>
-          <h2 className="font-display font-bold text-[32px] md:text-[42px] text-[#1e1e1e] mt-[22px] capitalize">
+          <h2 className="font-display font-bold text-[32px] md:text-[42px] text-[#1e1e1e] capitalize">
             Our Client Reviews
           </h2>
         </div>

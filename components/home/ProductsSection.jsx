@@ -30,7 +30,7 @@ function ProductCard({ product }) {
             fill
             sizes="268px"
             unoptimized
-            className="object-contain p-6 group-hover:scale-105 transition-transform duration-300"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-slate-300">
@@ -79,9 +79,13 @@ function CategoryTabs({ tabs, active, onChange }) {
 
   return (
     <div className="flex justify-center mt-10 mb-14 px-6">
+      {/* Mobile: the bar fills the available width and every tab shares it
+          equally (flex-1), so all four labels are always visible with no
+          clipping and no horizontal scrolling. md: and up restores the
+          original content-sized, centered pill bar untouched. */}
       <div
         ref={containerRef}
-        className="relative inline-flex items-center bg-[#eee] rounded-[44px] p-1.5 max-w-full overflow-x-auto no-scrollbar"
+        className="relative flex md:inline-flex items-center bg-[#eee] rounded-[44px] p-1.5 w-full md:w-auto md:max-w-full md:overflow-x-auto no-scrollbar"
       >
         <span
           className={`absolute top-1.5 bottom-1.5 rounded-[32px] bg-white shadow-sm ${
@@ -94,7 +98,7 @@ function CategoryTabs({ tabs, active, onChange }) {
             key={tab}
             ref={(el) => { buttonRefs.current[tab] = el; }}
             onClick={() => onChange(tab)}
-            className={`relative z-10 shrink-0 whitespace-nowrap h-[45px] px-6 rounded-[32px] text-[15px] md:text-[18px] transition-colors duration-300 ${
+            className={`relative z-10 flex-1 min-w-0 md:flex-none md:shrink-0 md:min-w-max whitespace-nowrap overflow-hidden text-ellipsis h-[45px] px-0.5 md:px-6 rounded-[32px] text-[11px] min-[400px]:text-[14px] md:text-[18px] text-center transition-colors duration-300 ${
               active === tab ? 'font-medium text-[#1e1e1e]' : 'text-[#1e1e1e]/70 hover:text-[#1e1e1e]'
             }`}
           >
@@ -137,7 +141,7 @@ export default function ProductsSection({ categories = [] }) {
   if (allProducts.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-20 bg-[#f7f7f7]">
+    <section className="py-16 md:py-[50px] bg-[#f7f7f7]">
       <div className="max-w-[1440px] mx-auto">
         <h2 className="text-center font-display font-bold text-[32px] md:text-[42px] text-[#1e1e1e]">Our Products</h2>
 
