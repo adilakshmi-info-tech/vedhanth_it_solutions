@@ -36,14 +36,25 @@ function LoginForm() {
     setError('');
     setLoading(true);
 
+    let token;
     try {
       const credential = await signInWithEmailAndPassword(auth, email, password);
+      token = await credential.user.getIdToken();
+    } catch (authError) {
+      setError('Invalid email or password.');
+      setLoading(false);
+      return;
+    }
+
+    try {
       // Write the first Firebase token before checking role/redirecting so
       // middleware and the role check both see the authenticated session.
-      const token = await credential.user.getIdToken();
       document.cookie = `fb_token=${token}; path=/; max-age=3600; SameSite=Lax`;
 
-      const roleResponse = await fetch('/api/session-role', { cache: 'no-store' });
+      // Root-relative — this app is reached under /admin and /super, so a
+      // bare /api/... path would resolve outside that prefix and 404
+      // against whatever else lives at the domain root.
+      const roleResponse = await fetch('/admin/api/session-role', { cache: 'no-store' });
       const role = await roleResponse.json();
       const destination = pickDestination(requestedUrl, role);
 
@@ -56,9 +67,12 @@ function LoginForm() {
 
       router.push(destination);
       router.refresh();
-    } catch (authError) {
-      setError('Invalid email or password.');
-    } finally {
+    } catch (roleCheckError) {
+      // Sign-in itself succeeded — this is a different failure (network,
+      // the role check, etc.) and showing "Invalid email or password" here
+      // would be actively misleading.
+      document.cookie = 'fb_token=; path=/; max-age=0; SameSite=Lax';
+      setError('Signed in, but could not finish loading your account. Please try again.');
       setLoading(false);
     }
   }

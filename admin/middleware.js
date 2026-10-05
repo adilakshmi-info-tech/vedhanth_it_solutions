@@ -1,8 +1,10 @@
 // Gates every /admin route behind a valid, allowlisted Firebase admin
 // session, and every /super route behind the separate, platform-level
-// super-admin allowlist. /admin/login is public so either kind of admin
-// can actually sign in (the login page itself is shared — see its
-// callbackUrl param). This is a UX-level gate (redirect before the page
+// super-admin allowlist. /admin/login and /admin/api/session-role are
+// public — the login page calls session-role to figure out which (if
+// either) allowlist a just-signed-in account is on, before it's known
+// which area to send them to, so that one specific endpoint can't be
+// behind either gate. This is a UX-level gate (redirect before the page
 // even renders) — the real security boundary is requireAdmin()/
 // requireSuperAdmin() inside each Server Action, since actions can be
 // invoked directly regardless of what page loaded.
@@ -24,5 +26,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/admin/((?!login).*)', '/admin', '/super/((?!login).*)', '/super'],
+  matcher: ['/admin/((?!login|api/session-role).*)', '/admin', '/super/((?!login).*)', '/super'],
 };
