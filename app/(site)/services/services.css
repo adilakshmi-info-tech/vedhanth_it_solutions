@@ -420,10 +420,10 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
 
 .services-footer-about > img {
   position: absolute;
-  top: 49px;
+  top: 6px;
   left: -29px;
   display: block;
-  width: 208px;
+  width: 300px;
   height: auto;
 }
 
@@ -811,15 +811,21 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
     width: 25%;
   }
 
+  /* top is viewport-width-driven (not a fixed px) so it scales at the same
+     rate as the hero copy block's start position below it (which is set by
+     the in-flow main image's height, itself width-proportional). A fixed px
+     top only kept clear of the copy text at one specific viewport width —
+     at narrower phones the gap between them closed and "SERVICE" / "OUR
+     SERVICES" ended up overlapping this image. */
   .services-collage-image-bottom {
-    top: 220px;
+    top: calc(-12px + 46vw);
     bottom: auto;
     left: 24px;
     width: 31%;
   }
 
   .services-collage-shadow-bottom {
-    top: 252px;
+    top: calc(20px + 46vw);
     bottom: auto;
     left: 28px;
     width: 25%;
@@ -994,67 +1000,18 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
     line-height: 1.4;
   }
 
-  .services-footer {
-    height: auto;
-    min-height: 426px;
-  }
-
-  .services-footer-inner {
-    display: grid;
-    width: calc(100% - 40px);
-    height: auto;
-    grid-template-columns: 1fr;
-    gap: 30px;
-    padding: 42px 0 34px;
-  }
-
-  .services-footer-about {
-    position: relative;
-    min-height: 276px;
-  }
-
-  .services-footer-about > img {
-    top: 0;
-    left: 0;
-    width: 184px;
-  }
-
-  .services-footer-about > p {
-    top: 85px;
-    width: min(100%, 300px);
-  }
-
-  .services-footer-search {
-    top: 188px;
-    width: min(100%, 291px);
-  }
-
-  .services-footer-socials {
-    top: 254px;
-  }
-
-  .services-footer-columns {
-    position: relative;
-    top: auto;
-    left: auto;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 30px 22px;
-    white-space: normal;
-  }
-
-  .services-footer-columns > div:last-child {
-    grid-column: 1 / -1;
-  }
 }
+
+/* The ≤899px / ≤480px .services-footer* rules that used to live in these
+   two blocks are gone — this page's own footer is now wrapped in
+   `hidden lg:block` (see page.js), so it never renders below the `lg`
+   breakpoint (1024px) and those overrides had nothing left to style. Below
+   `lg` the shared <Footer> component (same one every other page uses) is
+   shown instead, with its own Tailwind classes. */
 
 @media (max-width: 480px) {
   .services-hero-copy h1 {
     letter-spacing: clamp(1px, 0.8vw, 3px);
-    overflow-wrap: anywhere;
-  }
-
-  .services-footer-columns a {
     overflow-wrap: anywhere;
   }
 

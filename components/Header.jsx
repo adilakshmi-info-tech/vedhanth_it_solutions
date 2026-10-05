@@ -13,6 +13,27 @@ const navItems = [
   { href: '/contact', label: 'Contact' },
 ];
 
+// A dedicated SVG X instead of morphing the hamburger bars via CSS
+// transforms — the morph's rotate+translate on each bar doesn't compose
+// into a visually centered X (each bar rotates around its own center, so
+// the translate then moves it along the rotated axis, not straight up/down),
+// which is what made the previous close icon look uneven/off-center.
+function CloseIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth={2.25} strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function MenuIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -40,7 +61,7 @@ export default function Header() {
             height={356}
             unoptimized
             priority
-            className="h-[52px] w-auto"
+            className="h-[64px] w-auto"
           />
         </Link>
 
@@ -68,15 +89,13 @@ export default function Header() {
             Get a Quote
           </Link>
           <button
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
             aria-controls="site-mobile-navigation"
             onClick={() => setMenuOpen((v) => !v)}
-            className="site-menu-button lg:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5"
+            className="site-menu-button lg:hidden w-9 h-9 flex items-center justify-center text-white"
           >
-            <span className={`block h-[2px] w-6 bg-white transition ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
-            <span className={`block h-[2px] w-6 bg-white transition ${menuOpen ? 'opacity-0' : ''}`} />
-            <span className={`block h-[2px] w-6 bg-white transition ${menuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
+            {menuOpen ? <CloseIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
           </button>
         </div>
       </div>
