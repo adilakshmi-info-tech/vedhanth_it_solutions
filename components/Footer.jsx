@@ -14,7 +14,7 @@ export default function Footer() {
                 width={968}
                 height={456}
                 unoptimized
-                className="h-[40px] w-auto"
+                className="h-[84px] w-auto"
               />
             </Link>
             <p className="text-[14px] leading-[1.6] text-[#0a142f]/50 max-w-[248px]">

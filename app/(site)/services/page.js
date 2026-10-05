@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Footer from '@/components/Footer';
 import DeliveryCarousel from './DeliveryCarousel';
 import './services.css';
 
@@ -268,7 +269,16 @@ export default function ServicesPage() {
         </div>
       </section>
       <DeliverySection />
-      <ServicesFooter />
+      {/* Desktop/tablet keeps this page's own Figma-matched footer; mobile
+          (<lg, matching the shared Header's own desktop/mobile nav split)
+          uses the same shared Footer component every other page uses, so
+          the mobile footer is consistent site-wide. */}
+      <div className="hidden lg:block">
+        <ServicesFooter />
+      </div>
+      <div className="lg:hidden">
+        <Footer />
+      </div>
     </div>
   );
 }
