@@ -8,6 +8,45 @@ server {
   server_name vedhanthitsolutions.in www.vedhanthitsolutions.in;
   client_max_body_size 2M; # generous headroom for form posts (product images now go straight to the shared upload API, not through this app)
 
+  # /admin and /super both live in the standalone admin app (al_admin),
+  # not vedhanth_web — the full original path is forwarded unchanged (no
+  # rewrite), matching that app's own internal routing. al_backend is
+  # deliberately NOT routed here at all — it's internal-only, reached by
+  # al_admin/frontend over the Docker network, never from the public
+  # internet.
+  location /admin {
+    proxy_pass http://al_admin:4001;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+  }
+
+  location /super {
+    proxy_pass http://al_admin:4001;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+  }
+
+  # al_admin's static JS/CSS/image-optimizer assets (ASSET_PREFIX in its
+  # .env). Needed because vedhanth_web ALSO serves its own unrelated assets
+  # at plain /_next/static/* on this same domain — without this distinct
+  # prefix + rewrite, the browser can't tell the two apps' assets apart and
+  # /admin or /super loads completely unstyled.
+  location /al-admin-assets/ {
+    rewrite ^/al-admin-assets/(.*) /$1 break;
+    proxy_pass http://al_admin:4001;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+  }
+
   location / {
     proxy_pass http://vedhanth_web:3000;
     proxy_http_version 1.1;
@@ -30,6 +69,34 @@ server {
 #   ssl_certificate     /etc/letsencrypt/live/vedhanthitsolutions.in/fullchain.pem;
 #   ssl_certificate_key /etc/letsencrypt/live/vedhanthitsolutions.in/privkey.pem;
 #   ssl_protocols       TLSv1.2 TLSv1.3;
+#
+#   location /admin {
+#     proxy_pass http://al_admin:4001;
+#     proxy_http_version 1.1;
+#     proxy_set_header Host $host;
+#     proxy_set_header X-Real-IP $remote_addr;
+#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#     proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+#   }
+#
+#   location /super {
+#     proxy_pass http://al_admin:4001;
+#     proxy_http_version 1.1;
+#     proxy_set_header Host $host;
+#     proxy_set_header X-Real-IP $remote_addr;
+#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#     proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+#   }
+#
+#   location /al-admin-assets/ {
+#     rewrite ^/al-admin-assets/(.*) /$1 break;
+#     proxy_pass http://al_admin:4001;
+#     proxy_http_version 1.1;
+#     proxy_set_header Host $host;
+#     proxy_set_header X-Real-IP $remote_addr;
+#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#     proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+#   }
 #
 #   location / {
 #     proxy_pass http://vedhanth_web:3000;
