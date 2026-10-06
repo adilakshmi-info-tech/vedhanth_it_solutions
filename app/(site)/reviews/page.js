@@ -13,16 +13,16 @@ export const dynamic = 'force-dynamic';
 // Restored from the previous public Reviews page. These display-only cards do
 // not create or change database review records.
 const COMPANY_REVIEWS = [
-  { id: 'company-rajesh', name: 'Rajesh Kumar', role: 'Business Owner', date: 'September 18, 2026', rating: 4.9, avatar: '/reviews/avatars/mirana.png', comment: 'Vedhanth completed our CCTV and networking installation professionally. The team understood our requirements, finished the work on time, and provided excellent support.' },
-  { id: 'company-priya', name: 'Priya Nair', role: 'Operations Manager', date: 'September 10, 2026', rating: 4.9, avatar: '/reviews/avatars/crystal.png', comment: 'The electrical and security solutions provided for our office were reliable and neatly installed. The team was responsive from the first discussion to the final setup.' },
-  { id: 'company-sneha', name: 'Sneha Rao', role: 'Office Administrator', date: 'August 28, 2026', rating: 4.9, avatar: '/reviews/avatars/dazzle.png', comment: 'Vedhanth delivered a complete CCTV and networking setup for our business. Their technical knowledge and attention to detail made the entire process simple and dependable.' },
-  { id: 'company-arjun', name: 'Arjun Mehta', role: 'Facility Manager', date: 'August 16, 2026', rating: 4.8, avatar: '/reviews/avatars/hearts.png', comment: 'The biometric access-control system was installed correctly and explained clearly. Everything has been working reliably, and the support team was very helpful.' },
-  { id: 'company-vikram', name: 'Vikram Shah', role: 'IT Coordinator', date: 'August 4, 2026', rating: 4.9, avatar: '/reviews/avatars/mirana.png', comment: 'Our office network became faster and more organized after Vedhanth completed the installation. The cabling was clean, and the team handled the project with great professionalism.' },
-  { id: 'company-ananya', name: 'Ananya Iyer', role: 'School Administrator', date: 'July 22, 2026', rating: 5.0, avatar: '/reviews/avatars/crystal.png', comment: 'The fire-alarm system was installed safely and completed within the agreed timeline. Vedhanth explained the maintenance process clearly and answered all our questions.' },
-  { id: 'company-karthik', name: 'Karthik Reddy', role: 'Retail Store Owner', date: 'July 8, 2026', rating: 4.8, avatar: '/reviews/avatars/dazzle.png', comment: 'We received quick and reliable AMC support whenever we needed assistance. The team diagnosed the issue quickly and restored our systems without unnecessary delays.' },
-  { id: 'company-meera', name: 'Meera Thomas', role: 'Startup Founder', date: 'June 25, 2026', rating: 4.9, avatar: '/reviews/avatars/hearts.png', comment: 'Vedhanth handled our laptop, desktop, and networking requirements efficiently. The service was transparent, professional, and delivered exactly as promised.' },
-  { id: 'company-sanjay', name: 'Sanjay Menon', role: 'Project Manager', date: 'June 12, 2026', rating: 4.9, avatar: '/reviews/avatars/mirana.png', comment: 'The EPABX and intercom installation improved communication across our office. The setup was clean, dependable, and completed with minimal disruption.' },
-  { id: 'company-divya', name: 'Divya Sharma', role: 'Homeowner', date: 'May 30, 2026', rating: 5.0, avatar: '/reviews/avatars/crystal.png', comment: 'The CCTV installation was neat, properly configured, and easy to use. The team patiently explained every feature and provided excellent after-installation support.' },
+  { id: 'company-rajesh', name: 'Rajesh Kumar', role: 'Business Owner', date: 'September 18, 2026', rating: 4.9, avatar: '/reviews/avatars/mirana.webp', comment: 'Vedhanth completed our CCTV and networking installation professionally. The team understood our requirements, finished the work on time, and provided excellent support.' },
+  { id: 'company-priya', name: 'Priya Nair', role: 'Operations Manager', date: 'September 10, 2026', rating: 4.9, avatar: '/reviews/avatars/crystal.webp', comment: 'The electrical and security solutions provided for our office were reliable and neatly installed. The team was responsive from the first discussion to the final setup.' },
+  { id: 'company-sneha', name: 'Sneha Rao', role: 'Office Administrator', date: 'August 28, 2026', rating: 4.9, avatar: '/reviews/avatars/dazzle.webp', comment: 'Vedhanth delivered a complete CCTV and networking setup for our business. Their technical knowledge and attention to detail made the entire process simple and dependable.' },
+  { id: 'company-arjun', name: 'Arjun Mehta', role: 'Facility Manager', date: 'August 16, 2026', rating: 4.8, avatar: '/reviews/avatars/hearts.webp', comment: 'The biometric access-control system was installed correctly and explained clearly. Everything has been working reliably, and the support team was very helpful.' },
+  { id: 'company-vikram', name: 'Vikram Shah', role: 'IT Coordinator', date: 'August 4, 2026', rating: 4.9, avatar: '/reviews/avatars/mirana.webp', comment: 'Our office network became faster and more organized after Vedhanth completed the installation. The cabling was clean, and the team handled the project with great professionalism.' },
+  { id: 'company-ananya', name: 'Ananya Iyer', role: 'School Administrator', date: 'July 22, 2026', rating: 5.0, avatar: '/reviews/avatars/crystal.webp', comment: 'The fire-alarm system was installed safely and completed within the agreed timeline. Vedhanth explained the maintenance process clearly and answered all our questions.' },
+  { id: 'company-karthik', name: 'Karthik Reddy', role: 'Retail Store Owner', date: 'July 8, 2026', rating: 4.8, avatar: '/reviews/avatars/dazzle.webp', comment: 'We received quick and reliable AMC support whenever we needed assistance. The team diagnosed the issue quickly and restored our systems without unnecessary delays.' },
+  { id: 'company-meera', name: 'Meera Thomas', role: 'Startup Founder', date: 'June 25, 2026', rating: 4.9, avatar: '/reviews/avatars/hearts.webp', comment: 'Vedhanth handled our laptop, desktop, and networking requirements efficiently. The service was transparent, professional, and delivered exactly as promised.' },
+  { id: 'company-sanjay', name: 'Sanjay Menon', role: 'Project Manager', date: 'June 12, 2026', rating: 4.9, avatar: '/reviews/avatars/mirana.webp', comment: 'The EPABX and intercom installation improved communication across our office. The setup was clean, dependable, and completed with minimal disruption.' },
+  { id: 'company-divya', name: 'Divya Sharma', role: 'Homeowner', date: 'May 30, 2026', rating: 5.0, avatar: '/reviews/avatars/crystal.webp', comment: 'The CCTV installation was neat, properly configured, and easy to use. The team patiently explained every feature and provided excellent after-installation support.' },
 ];
 
 function ReviewCard({ review }) {
@@ -52,10 +52,10 @@ function ReviewCard({ review }) {
 
 function normalizeReview(review, avatarIndex = 0) {
   const avatarPaths = [
-    '/reviews/avatars/mirana.png',
-    '/reviews/avatars/crystal.png',
-    '/reviews/avatars/dazzle.png',
-    '/reviews/avatars/hearts.png',
+    '/reviews/avatars/mirana.webp',
+    '/reviews/avatars/crystal.webp',
+    '/reviews/avatars/dazzle.webp',
+    '/reviews/avatars/hearts.webp',
   ];
   const date = new Date(review.createdAt);
   return {

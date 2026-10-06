@@ -20,7 +20,7 @@ export default function WhoWeAre() {
           <div className="relative w-full max-w-[629px] md:ml-auto">
             <div className="aspect-[629/445] rounded-[20px] overflow-hidden relative shadow-lg">
               <Image
-                src="/images/home/services-top-small.jpg"
+                src="/images/home/services-top-small.webp"
                 alt="Vedhanth technician installing a biometric access device"
                 fill
                 sizes="(min-width: 768px) 629px, 100vw"

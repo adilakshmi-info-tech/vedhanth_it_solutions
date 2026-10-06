@@ -9,7 +9,7 @@ const deliverySteps = [
   {
     kind: 'site',
     title: 'Site Assessment',
-    image: 'delivery-assessment.png',
+    image: 'delivery-assessment.webp',
     alt: 'Site assessment checklist illustration',
     width: 139,
     height: 113,
@@ -18,7 +18,7 @@ const deliverySteps = [
   {
     kind: 'installation',
     title: 'Professional Installation',
-    image: 'delivery-installation.png',
+    image: 'delivery-installation.webp',
     alt: 'Professional installation checklist illustration',
     width: 307,
     height: 198,
@@ -27,7 +27,7 @@ const deliverySteps = [
   {
     kind: 'support',
     title: 'Ongoing Support',
-    image: 'delivery-support.png',
+    image: 'delivery-support.webp',
     alt: 'Ongoing maintenance and support illustration',
     width: 205,
     height: 171,

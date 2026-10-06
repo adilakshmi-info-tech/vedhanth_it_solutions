@@ -10,7 +10,7 @@ export default function HeroNew() {
     <section className="relative bg-[#081732] overflow-hidden">
       <div className="absolute inset-0">
         <Image
-          src="/images/home/hero-bg.jpg"
+          src="/images/home/hero-bg.webp"
           alt="Vedhanth technician reviewing CCTV installation"
           fill
           priority

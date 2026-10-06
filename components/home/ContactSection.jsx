@@ -140,7 +140,7 @@ export default function ContactSection({ showHeading = true }) {
           style={{ left: '53.96%', top: '22.44%', width: '43.34%', height: '55.56%' }}
         >
           <Image
-            src="/images/home/contact-illustration.png"
+            src="/images/home/contact-illustration.webp"
             alt="Vedhanth support team ready to help"
             fill
             sizes="547px"

@@ -13,7 +13,7 @@ export default function AboutSection() {
           <div className="relative max-w-[629px] order-2 md:order-1">
             <div className="aspect-[629/445] rounded-[20px] overflow-hidden relative shadow-[30px_30px_60px_-20px_rgba(0,0,0,0.25)]">
               <Image
-                src="/images/home/about-main.jpg"
+                src="/images/home/about-main.webp"
                 alt="Vedhanth technician installing a security camera"
                 fill
                 sizes="(min-width: 768px) 629px, 100vw"

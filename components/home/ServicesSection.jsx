@@ -31,7 +31,7 @@ export default function ServicesSection() {
             <div className="flex flex-col gap-4 md:gap-6">
               <div className="relative w-full aspect-[223/229] rounded-[10px] overflow-hidden shadow-lg">
                 <Image
-                  src="/images/home/services-top-small.jpg"
+                  src="/images/home/services-top-small.webp"
                   alt="Technician installing a biometric access lock"
                   fill
                   sizes="(min-width: 768px) 223px, 30vw"
@@ -40,7 +40,7 @@ export default function ServicesSection() {
               </div>
               <div className="relative w-full aspect-[223/317] rounded-[10px] overflow-hidden shadow-lg">
                 <Image
-                  src="/images/home/services-bottom-small.jpg"
+                  src="/images/home/services-bottom-small.webp"
                   alt="EPABX intercom phone bank installation"
                   fill
                   sizes="(min-width: 768px) 223px, 30vw"
@@ -50,7 +50,7 @@ export default function ServicesSection() {
             </div>
             <div className="relative w-full self-center aspect-[492/445] rounded-[10px] overflow-hidden shadow-lg">
               <Image
-                src="/images/home/services-large.jpg"
+                src="/images/home/services-large.webp"
                 alt="LT panel room maintenance"
                 fill
                 sizes="(min-width: 768px) 492px, 55vw"

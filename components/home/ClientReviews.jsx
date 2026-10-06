@@ -49,9 +49,9 @@ function ReviewCard({ name, role, comment, rating, photo, avatar }) {
 }
 
 const FALLBACK_REVIEWS = [
-  { id: 'static-anil', name: 'Anil Reddy', role: 'Facility Manager', rating: 4, comment: 'From electrical panel work to CCTV, Vedhanth delivered quality solutions on time and within budget.', photo: '/images/home/review-bg-anil.jpg', avatar: '/images/home/avatar-anil.jpg' },
-  { id: 'static-rajesh', name: 'Rajesh Kumar', role: 'Operations Manager', rating: 4, comment: 'Vedhanth handled our CCTV and networking installation professionally. The team was responsive and completed the work as planned.', photo: '/images/home/review-bg-rajesh.jpg', avatar: '/images/home/avatar-rajesh.jpg' },
-  { id: 'static-priya', name: 'Priya Sharma', role: 'Office Administrator', rating: 4, comment: 'Excellent biometric and fire alarm installation. Their AMC support has been reliable and timely.', photo: '/images/home/review-bg-priya.jpg', avatar: '/images/home/avatar-priya.jpg' },
+  { id: 'static-anil', name: 'Anil Reddy', role: 'Facility Manager', rating: 4, comment: 'From electrical panel work to CCTV, Vedhanth delivered quality solutions on time and within budget.', photo: '/images/home/review-bg-anil.webp', avatar: '/images/home/avatar-anil.jpg' },
+  { id: 'static-rajesh', name: 'Rajesh Kumar', role: 'Operations Manager', rating: 4, comment: 'Vedhanth handled our CCTV and networking installation professionally. The team was responsive and completed the work as planned.', photo: '/images/home/review-bg-rajesh.webp', avatar: '/images/home/avatar-rajesh.jpg' },
+  { id: 'static-priya', name: 'Priya Sharma', role: 'Office Administrator', rating: 4, comment: 'Excellent biometric and fire alarm installation. Their AMC support has been reliable and timely.', photo: '/images/home/review-bg-priya.webp', avatar: '/images/home/avatar-priya.jpg' },
 ];
 
 export default function ClientReviews({ reviews = [] }) {

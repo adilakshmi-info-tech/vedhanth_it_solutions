@@ -16,7 +16,7 @@ const services = [
   {
     title: ['Electrical Wiring &', 'LT Panels'],
     desc: 'New house wiring, new LT panel installation, all types of cable laying and glanding work, maintenance of LT panels, motors, transformers & UPS, and troubleshooting for power and control connection panels.',
-    image: 'service-electrical.png',
+    image: 'service-electrical.webp',
     alt: 'Electrical cables, wiring accessories and an LT control panel',
     width: 1106,
     height: 500,
@@ -29,7 +29,7 @@ const services = [
   {
     title: ['CCTV & Security', 'Solutions'],
     desc: 'New CCTV installation and ongoing service — dome, bullet, PTZ and solar-powered cameras for homes, shops, offices and outdoor sites.',
-    image: 'service-cctv.png',
+    image: 'service-cctv.webp',
     alt: 'Dome, bullet and PTZ security cameras with accessories',
     width: 1056,
     height: 500,
@@ -42,7 +42,7 @@ const services = [
   {
     title: ['Biometric & Access', 'Control'],
     desc: 'Fingerprint and card-based attendance systems, electromagnetic door locks, and complete access-control installation for secure premises.',
-    image: 'service-biometric.png',
+    image: 'service-biometric.webp',
     alt: 'Biometric attendance readers, access control and turnstile equipment',
     width: 1114,
     height: 500,
@@ -55,7 +55,7 @@ const services = [
   {
     title: ['Fire Alarm Systems'],
     desc: 'Fire alarm installation — control panels, smoke detectors, manual call points and sirens, wired to primary and backup power.',
-    image: 'service-fire-alarm.png',
+    image: 'service-fire-alarm.webp',
     alt: 'Fire alarm control panel, detectors, call points and sirens',
     width: 1114,
     height: 500,
@@ -68,7 +68,7 @@ const services = [
   {
     title: ['Networking & IT', 'Infrastructure'],
     desc: 'Wired and wireless network setup, structured cabling, and IT infrastructure work for offices and homes.',
-    image: 'service-networking.png',
+    image: 'service-networking.webp',
     alt: 'Networking equipment, structured cabling and IT infrastructure',
     width: 1114,
     height: 451,
@@ -81,7 +81,7 @@ const services = [
   {
     title: ['Intercom & EPABX', 'Systems'],
     desc: 'EPABX and intercom installation, plus video door phone setup for homes and gated premises.',
-    image: 'service-intercom.png',
+    image: 'service-intercom.webp',
     alt: 'Intercom, EPABX, video door phone and communication equipment',
     width: 1114,
     height: 500,
@@ -94,7 +94,7 @@ const services = [
   {
     title: ['Laptop & Desktop', 'Sales and Service'],
     desc: 'Fingerprint and card-based attendance systems, electromagnetic door locks, and complete access-control installation for secure premises.',
-    image: 'service-laptops.png',
+    image: 'service-laptops.webp',
     alt: 'Laptops, desktop computers, monitors and accessories',
     width: 1114,
     height: 500,
@@ -107,7 +107,7 @@ const services = [
   {
     title: ['PA System Installation'],
     desc: 'Public address system setup for offices, shops and event spaces.',
-    image: 'service-pa.png',
+    image: 'service-pa.webp',
     alt: 'Public address speakers, mixer and audio equipment',
     width: 1114,
     height: 500,
@@ -120,7 +120,7 @@ const services = [
   {
     title: ['AMC & Multi-Brand', 'IT Support'],
     desc: 'Annual Maintenance Contracts and all types of IT requirements — sales and service across all major brands, backed by ongoing support.',
-    image: 'service-amc.png',
+    image: 'service-amc.webp',
     alt: 'Multi-brand IT support equipment, computers and accessories',
     width: 1114,
     height: 500,
@@ -150,19 +150,19 @@ function ServicesHero() {
     <section className="services-hero" aria-labelledby="services-hero-title">
       <div className="services-hero-inner">
         <div className="services-collage-shadow services-collage-shadow-top">
-          <Image src={asset('hero-access-shadow.png')} alt="" fill sizes="176px" />
+          <Image src={asset('hero-access-shadow.webp')} alt="" fill sizes="176px" />
         </div>
         <div className="services-collage-image services-collage-image-top">
-          <Image src={asset('hero-access.png')} alt="Technician installing an access control reader" fill sizes="223px" priority />
+          <Image src={asset('hero-access.webp')} alt="Technician installing an access control reader" fill sizes="223px" priority />
         </div>
         <div className="services-collage-shadow services-collage-shadow-bottom">
-          <Image src={asset('hero-intercom-shadow.png')} alt="" fill sizes="177px" />
+          <Image src={asset('hero-intercom-shadow.webp')} alt="" fill sizes="177px" />
         </div>
         <div className="services-collage-image services-collage-image-bottom">
-          <Image src={asset('hero-intercom.png')} alt="Intercom and access control equipment" fill sizes="223px" priority />
+          <Image src={asset('hero-intercom.webp')} alt="Intercom and access control equipment" fill sizes="223px" priority />
         </div>
         <div className="services-hero-main-image">
-          <Image src={asset('hero-control-panels.png')} alt="Electrical control panels with a technician inspecting the installation" fill sizes="492px" priority />
+          <Image src={asset('hero-control-panels.webp')} alt="Electrical control panels with a technician inspecting the installation" fill sizes="492px" priority />
         </div>
         <div className="services-hero-copy">
           <span className="services-eyebrow">Service</span>

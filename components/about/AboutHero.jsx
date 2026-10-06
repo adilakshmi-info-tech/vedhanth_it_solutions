@@ -41,7 +41,7 @@ export default function AboutHero() {
           <div className="relative w-full max-w-[630px] h-[520px] md:h-[600px] mx-auto lg:mx-0">
             <div className="absolute left-0 top-[28%] w-[46%] aspect-[300/378] rounded-[10px] overflow-hidden shadow-lg">
               <Image
-                src="/images/home/about-main.jpg"
+                src="/images/home/about-main.webp"
                 alt="Vedhanth technician installing a security device"
                 fill
                 sizes="(min-width: 1440px) 290px, (min-width: 1024px) 27vw, 46vw"
@@ -50,7 +50,7 @@ export default function AboutHero() {
             </div>
             <div className="absolute right-0 top-[46%] w-[46%] aspect-[300/378] rounded-[10px] overflow-hidden shadow-lg">
               <Image
-                src="/images/home/services-large.jpg"
+                src="/images/home/services-large.webp"
                 alt="Electrical LT panel maintenance"
                 fill
                 sizes="(min-width: 1440px) 290px, (min-width: 1024px) 27vw, 46vw"
