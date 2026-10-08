@@ -7,10 +7,18 @@
 # (vedhanth_frontend, not al_frontend) since, unlike backend/admin, the
 # public frontend is genuinely per-client by design, not shared platform
 # infrastructure.
+#
+# The service key below is vedhanth_frontend, not the generic "frontend"
+# — Compose auto-registers the service key itself as a network alias (on
+# top of container_name) on every network it joins. wacrm_wacrm_network
+# is shared with sm_technology's own frontend stack, which used the same
+# generic "frontend" service key — both were registering the alias
+# "frontend" on the same external network (same class of bug found on
+# al_backend, which collided with WACRM's own "backend" service).
 name: vedhanth
 
 services:
-  frontend:
+  vedhanth_frontend:
     container_name: vedhanth_frontend
     build:
       context: .
