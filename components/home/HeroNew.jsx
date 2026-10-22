@@ -1,11 +1,7 @@
-'use client';
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function HeroNew() {
-  const [query, setQuery] = useState('');
-
   return (
     <section className="relative bg-[#081732] overflow-hidden">
       <div className="absolute inset-0">
@@ -45,26 +41,15 @@ export default function HeroNew() {
           </Link>
         </div>
 
-        <form
-          action="/products"
-          className="mt-8 md:mt-[92px] md:mx-auto flex items-center justify-between max-w-[344px] rounded-[42px] border border-white/60 bg-white/15 backdrop-blur-sm pl-5 pr-2 h-14"
+        <Link
+          href="/products"
+          className="mt-8 md:mt-[92px] md:mx-auto flex items-center justify-center gap-3 w-fit md:w-[344px] rounded-[42px] border border-white/60 bg-white/15 backdrop-blur-sm px-8 h-14 text-white text-[18px] font-medium hover:bg-white/25 transition"
         >
-          <input
-            type="text"
-            name="q"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search solutions"
-            className="bg-transparent text-white placeholder:text-white/80 text-[18px] outline-none w-full"
-          />
-          <button
-            type="submit"
-            aria-label="Search"
-            className="shrink-0 w-10 h-10 rounded-[24px] bg-[#091832] flex items-center justify-center"
-          >
-            <Image src="/icons/search.png" alt="" width={18} height={18} />
-          </button>
-        </form>
+          View Our Products
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m-6-6 6 6-6 6" />
+          </svg>
+        </Link>
       </div>
     </section>
   );
