@@ -11,6 +11,10 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function ProductsPage() {
-  const categories = await getCatalog();
-  return <ProductsPageClient categories={categories} />;
+  try {
+    const categories = await getCatalog();
+    return <ProductsPageClient categories={categories} />;
+  } catch {
+    return <ProductsPageClient categories={[]} dataUnavailable />;
+  }
 }

@@ -64,7 +64,7 @@ function SidebarContent({ withProducts, selected, toggleCategory, onReset }) {
   );
 }
 
-export default function ProductsPageClient({ categories = [] }) {
+export default function ProductsPageClient({ categories = [], dataUnavailable = false }) {
   const [selected, setSelected] = useState([]);
   const [open, setOpen] = useState(false);
 
@@ -183,7 +183,11 @@ export default function ProductsPageClient({ categories = [] }) {
               ))}
             </div>
           ) : (
-            <p className="text-[#1e1e1e]/60 py-20 text-center">No products match the selected filters.</p>
+            <p className="text-[#1e1e1e]/60 py-20 text-center">
+              {dataUnavailable
+                ? 'The product catalogue is temporarily unavailable. Please try again when the backend service is running.'
+                : 'No products match the selected filters.'}
+            </p>
           )}
         </main>
       </div>
