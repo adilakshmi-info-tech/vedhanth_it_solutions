@@ -1,10 +1,8 @@
+import { absoluteUrl } from '@/lib/site';
+
 export default function robots() {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: '/admin/',
-    },
-    sitemap: 'https://vedhanthitsolutions.in/sitemap.xml', // update once domain is live
+    rules: { userAgent: '*', allow: '/' },
+    sitemap: absoluteUrl('/sitemap.xml'),
   };
 }

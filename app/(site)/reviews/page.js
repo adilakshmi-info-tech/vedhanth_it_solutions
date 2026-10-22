@@ -4,8 +4,8 @@ import FeedbackForm from '@/components/reviews/FeedbackForm';
 import { getAllApprovedReviews } from '@/lib/data';
 
 export const metadata = {
-  title: 'Client Reviews',
-  description: 'Share your experience with Vedhanth IT Solutions and read feedback from our clients.',
+  title: 'Client Reviews & Testimonials',
+  description: 'Read what clients say about Vedhanth IT Solutions’ CCTV, networking, electrical, fire alarm and AMC services in Bengaluru, and share your own experience.',
 };
 
 export const dynamic = 'force-dynamic';

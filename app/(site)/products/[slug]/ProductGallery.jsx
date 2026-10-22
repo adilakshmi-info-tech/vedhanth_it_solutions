@@ -25,7 +25,7 @@ export default function ProductGallery({ images, title }) {
               onClick={() => setActiveIndex(index)}
               className={`${styles.thumbnail} ${index === activeIndex ? styles.activeThumbnail : ''}`}
             >
-              <ProductImage src={image} alt="" fill sizes="100px" paddingClassName="p-2" />
+              <ProductImage src={image} alt={`${title} – view ${index + 1}`} fill sizes="100px" paddingClassName="p-2" />
             </button>
           ))}
         </div>

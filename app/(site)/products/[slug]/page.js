@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getProductDetail } from '@/lib/data';
 import { parseProductContent } from '@/lib/product-content';
+import { SITE_NAME, absoluteUrl } from '@/lib/site';
 import ProductCard from '@/components/ProductCard';
 import ProductGallery from './ProductGallery';
 import styles from './product-detail.module.css';
@@ -30,9 +31,25 @@ async function getProductDetailOrNull(slug) {
 
 export async function generateMetadata({ params }) {
   const detail = await getProductDetailOrNull(params.slug);
-  if (!detail) return { title: 'Product not found' };
-  const { description } = parseProductContent(detail.product.description || '');
-  return { title: detail.product.name, description: description || `${detail.product.name} — ${detail.product.category?.name || 'product'} from Vedhanth IT Solutions.` };
+  if (!detail) return { title: 'Product not found', robots: { index: false } };
+  const { product } = detail;
+  const { description } = parseProductContent(product.description || '');
+  const summary = description || `${product.name} — ${product.category?.name || 'product'} from ${SITE_NAME}.`;
+  const image = (product.images || []).find((item) => typeof item === 'string' && item.trim());
+  const path = `/products/${product.slug}`;
+  return {
+    title: product.name,
+    description: summary,
+    alternates: { canonical: path },
+    openGraph: {
+      title: product.name,
+      description: summary,
+      url: path,
+      type: 'website',
+      ...(image ? { images: [{ url: absoluteUrl(image), alt: product.name }] } : {}),
+    },
+    twitter: { card: image ? 'summary_large_image' : 'summary', title: product.name, description: summary, ...(image ? { images: [absoluteUrl(image)] } : {}) },
+  };
 }
 
 export default async function ProductDetailPage({ params }) {
@@ -49,8 +66,19 @@ export default async function ProductDetailPage({ params }) {
     ? product.specifications.map(({ label, value }) => [label, value])
     : productContent.specifications.map(({ label, value }) => [label, value]);
   const specs = savedSpecifications;
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description,
+    category: categoryName,
+    url: absoluteUrl(`/products/${product.slug}`),
+    brand: { '@type': 'Brand', name: SITE_NAME },
+    ...(productImages.length ? { image: productImages.map((image) => absoluteUrl(image)) } : {}),
+  };
 
   return <main className={`${styles.productPage} product-detail-page`}>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
     <div className={styles.intro} style={{ '--spec-extra-height': `${Math.max(0, specs.length - 10) * 37}px` }}>
       <div className={styles.introInner}>
         <p className={styles.breadcrumb}>Category / {categoryName} / {product.name}</p>
