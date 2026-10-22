@@ -48,32 +48,24 @@ function ReviewCard({ name, role, comment, rating, photo, avatar }) {
   );
 }
 
-const FALLBACK_REVIEWS = [
-  { id: 'static-anil', name: 'Anil Reddy', role: 'Facility Manager', rating: 4, comment: 'From electrical panel work to CCTV, Vedhanth delivered quality solutions on time and within budget.', photo: '/images/home/review-bg-anil.webp', avatar: '/images/home/avatar-anil.jpg' },
-  { id: 'static-rajesh', name: 'Rajesh Kumar', role: 'Operations Manager', rating: 4, comment: 'Vedhanth handled our CCTV and networking installation professionally. The team was responsive and completed the work as planned.', photo: '/images/home/review-bg-rajesh.webp', avatar: '/images/home/avatar-rajesh.jpg' },
-  { id: 'static-priya', name: 'Priya Sharma', role: 'Office Administrator', rating: 4, comment: 'Excellent biometric and fire alarm installation. Their AMC support has been reliable and timely.', photo: '/images/home/review-bg-priya.webp', avatar: '/images/home/avatar-priya.jpg' },
+// Background photo + avatar pairs, assigned to backend reviews by position.
+const BACKGROUNDS = [
+  { photo: '/images/home/review-bg-anil.webp', avatar: '/images/home/avatar-anil.jpg' },
+  { photo: '/images/home/review-bg-rajesh.webp', avatar: '/images/home/avatar-rajesh.jpg' },
+  { photo: '/images/home/review-bg-priya.webp', avatar: '/images/home/avatar-priya.jpg' },
 ];
 
 export default function ClientReviews({ reviews = [] }) {
-  const backgroundPhotos = FALLBACK_REVIEWS;
-  const known = new Set(FALLBACK_REVIEWS.map((review) => `${review.name.toLowerCase()}|${review.comment.toLowerCase()}`));
-  const dynamicReviews = reviews
-    .filter((review) => {
-      const key = `${review.name.trim().toLowerCase()}|${review.comment.trim().toLowerCase()}`;
-      if (known.has(key)) return false;
-      known.add(key);
-      return true;
-    })
-    .map((review, index) => ({
-      id: review.id,
-      name: review.name,
-      role: review.role || 'Client',
-      rating: review.rating || 5,
-      comment: review.comment,
-      photo: backgroundPhotos[index % backgroundPhotos.length].photo,
-      avatar: backgroundPhotos[index % backgroundPhotos.length].avatar,
-    }));
-  const items = [...FALLBACK_REVIEWS, ...dynamicReviews];
+  const items = reviews.map((review, index) => ({
+    id: review.id,
+    name: review.name,
+    role: review.role || 'Client',
+    rating: review.rating || 5,
+    comment: review.comment,
+    photo: BACKGROUNDS[index % BACKGROUNDS.length].photo,
+    avatar: BACKGROUNDS[index % BACKGROUNDS.length].avatar,
+  }));
+  if (!items.length) return null;
 
   return (
     <section id="reviews" className="scroll-mt-20 pt-16 pb-16 md:pt-20 md:pb-[68px] bg-[#f2f2f2]">
