@@ -52,7 +52,7 @@ export default function WhyVedhanth() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {REASONS.map((item) => (
             <div key={item.title} className="text-center sm:text-left">
-              <div className="w-12 h-12 mx-auto sm:mx-0 border-2 border-accent-500 rounded-lg flex items-center justify-center text-accent-500">
+              <div className="w-14 h-14 mx-auto sm:mx-0 border-[3px] border-accent-500 rounded-[16px] flex items-center justify-center text-accent-500">
                 {item.icon}
               </div>
               <h3 className="font-display font-bold text-lg text-navy-900 mt-4">{item.title}</h3>

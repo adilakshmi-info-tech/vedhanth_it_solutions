@@ -1,20 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getCategoryProductReviews, getProductBySlug, getRelatedProducts } from '@/lib/data';
+import { getProductBySlug, getRelatedProducts } from '@/lib/data';
 import { parseProductContent } from '@/lib/product-content';
 import ProductCard from '@/components/ProductCard';
 import ProductGallery from './ProductGallery';
-import ProductReviewForm from './ProductReviewForm';
 import styles from './product-detail.module.css';
-
-const reviewerAvatars = {
-  'rajesh kumar': '/images/product-detail/figma/reviewer-rajesh.png',
-  'priya nair': '/images/product-detail/figma/reviewer-priya.png',
-  'sneha rao': '/images/product-detail/figma/reviewer-sneha.png',
-  'arjun mehta': '/images/product-detail/figma/reviewer-arjun.png',
-  'aspen siphron': '/images/product-detail/figma/reviewer-extra.png',
-};
 
 function getAverageRating(reviews) {
   return reviews.length ? (reviews.reduce((total, review) => total + Number(review.rating), 0) / reviews.length).toFixed(1) : null;
@@ -44,30 +35,6 @@ function Specifications({ rows }) {
   </table>;
 }
 
-function ReviewCard({ review }) {
-  const initials = review.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase();
-  const date = new Date(review.createdAt);
-  const avatar = reviewerAvatars[review.name.trim().toLowerCase()];
-  return <article className={styles.reviewCard}>
-    <div className={styles.reviewHeader}>
-      <div className={styles.reviewer}>
-        {avatar ? <Image src={avatar} alt="" width={41} height={41} /> : <span className={styles.reviewerInitial} aria-hidden="true">{initials || 'V'}</span>}
-        <div className={styles.reviewerMeta}><strong>{review.name}</strong><time dateTime={date.toISOString()}>{date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time></div>
-      </div>
-      <span className={styles.reviewRating} aria-label={`${review.rating} out of 5 stars`}><Image src="/images/product-detail/figma/star-full.svg" alt="" width={20} height={20} />{Number(review.rating).toFixed(1)}</span>
-    </div>
-    <p>{review.comment}</p>
-  </article>;
-}
-
-function ReviewMarquee({ reviews, reverse = false, label }) {
-  return <div className={`${styles.reviewRow} ${reverse ? styles.reverseReviewRow : styles.forwardReviewRow}`}>
-    <div className={styles.reviewMarquee}>{[0, 1].map((copy) => <div className={styles.reviewGroup} key={copy} aria-hidden={copy === 1 ? 'true' : undefined}>
-      {reviews.map((review, index) => <ReviewCard key={`${copy}-${review.name}-${index}`} review={review} />)}
-    </div>)}</div><span className={styles.visuallyHidden}>{label}</span>
-  </div>;
-}
-
 export async function generateMetadata({ params }) {
   const product = await getProductBySlug(params.slug);
   if (!product) return { title: 'Product not found' };
@@ -86,10 +53,7 @@ export default async function ProductDetailPage({ params }) {
   const description = productContent.description || product.category?.description || `${product.name} from Vedhanth IT Solutions. Contact our team for product details and availability.`;
   const productReviews = (product.reviewWorkflows || []).map((workflow) => workflow.review);
   const rating = getAverageRating(productReviews);
-  const [reviews, relatedProducts] = await Promise.all([
-    getCategoryProductReviews(product.categoryId),
-    getRelatedProducts(product, 8),
-  ]);
+  const relatedProducts = await getRelatedProducts(product, 8);
   const savedSpecifications = product.specifications?.length
     ? product.specifications.map(({ label, value }) => [label, value])
     : productContent.specifications.map(({ label, value }) => [label, value]);
@@ -118,15 +82,6 @@ export default async function ProductDetailPage({ params }) {
         </div>
       </div>
     </div>
-
-    <section className={styles.reviews} aria-labelledby="reviews-heading">
-      <h2 id="reviews-heading">Reviews &amp; Rating</h2>
-      {reviews.length ? <div className={styles.reviewTrack}>
-        <ReviewMarquee reviews={reviews} label="Approved customer reviews, first row" />
-        <ReviewMarquee reviews={reviews} reverse label="Approved customer reviews, second row" />
-      </div> : <p className={styles.noReviews}>No approved reviews have been added for this product yet.</p>}
-      <ProductReviewForm productId={product.id} />
-    </section>
 
     <section className={styles.related} aria-labelledby="related-heading">
       <h2 id="related-heading">Related Products</h2>

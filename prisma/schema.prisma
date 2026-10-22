@@ -40,6 +40,14 @@ model Review {
   approved  Boolean         @default(false)
   createdAt DateTime        @default(now())
   workflow  ReviewWorkflow?
+  avatarPreference ReviewAvatarPreference?
+}
+
+model ReviewAvatarPreference {
+  reviewId   String   @id
+  avatarStyle String  @default("neutral") @db.VarChar(16)
+  createdAt  DateTime @default(now())
+  review     Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }
 
 model ProductSpecification {

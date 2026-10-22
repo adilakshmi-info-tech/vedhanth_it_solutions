@@ -1,8 +1,8 @@
 const STEPS = [
-  { num: '01', title: 'Understand', desc: 'We assess your site and requirements in detail.' },
-  { num: '02', title: 'Plan', desc: 'We design the right system for your budget and site.' },
-  { num: '03', title: 'Install', desc: 'Our technicians install and configure everything on site.' },
-  { num: '04', title: 'Support', desc: 'Ongoing AMC and maintenance keep systems reliable.' },
+  { num: '01', title: 'Understand', desc: 'We assess your site and requirements in detail.', icon: <><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4M11 8v3l2 1" /></> },
+  { num: '02', title: 'Plan', desc: 'We design the right system for your budget and site.', icon: <><path d="M7 3.75h7l4 4V20H7a2 2 0 0 1-2-2V5.75a2 2 0 0 1 2-2Z" /><path d="M14 4v4h4M8.5 12h7M8.5 15.5h7" /></> },
+  { num: '03', title: 'Install', desc: 'Our technicians install and configure everything on site.', icon: <><path d="m14 6 4 4M5 19l4.5-1 9-9a2.12 2.12 0 0 0-3-3l-9 9L5 19Z" /><path d="m13 7 4 4" /></> },
+  { num: '04', title: 'Support', desc: 'Ongoing AMC and maintenance keep systems reliable.', icon: <><path d="M20 11a8 8 0 0 0-14.9-4M4 4v4h4M4 13a8 8 0 0 0 14.9 4M20 20v-4h-4" /><path d="M12 8v4l2.5 1.5" /></> },
 ];
 
 export default function OurApproach() {
@@ -20,9 +20,12 @@ export default function OurApproach() {
           {STEPS.map((step, i) => (
             <div key={step.num} className="relative text-center">
               {i < STEPS.length - 1 && (
-                <div className="hidden lg:block absolute top-6 left-[calc(50%+32px)] w-[calc(100%-64px)] h-px bg-accent-500/30" />
+                <div className="hidden lg:block absolute top-7 left-[calc(50%+42px)] w-[calc(100%-84px)] h-px bg-accent-500/30" />
               )}
-              <span className="font-display font-bold text-3xl text-accent-500/30">{step.num}</span>
+              <div className="relative z-10 mx-auto flex h-14 w-14 items-center justify-center rounded-[16px] border-[3px] border-accent-500 bg-white text-accent-500">
+                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{step.icon}</svg>
+              </div>
+              <span className="mt-4 block font-display font-bold text-sm tracking-[0.16em] text-accent-500/70">{step.num}</span>
               <h3 className="font-display font-bold text-lg text-navy-900 mt-2">{step.title}</h3>
               <p className="text-sm text-inksoft mt-2 leading-relaxed max-w-[220px] mx-auto">{step.desc}</p>
             </div>

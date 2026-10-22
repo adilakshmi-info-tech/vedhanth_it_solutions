@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+import ProductImage from '@/components/ProductImage';
 import styles from './product-detail.module.css';
 
 export default function ProductGallery({ images, title }) {
@@ -12,7 +12,7 @@ export default function ProductGallery({ images, title }) {
   return (
     <div className={styles.gallery}>
       <div className={styles.mainImage}>
-        {activeImage ? <Image src={activeImage} alt={title} fill priority unoptimized sizes="(max-width: 760px) 100vw, 573px" /> : <span className={styles.imageFallback}>Product image unavailable</span>}
+        {activeImage ? <ProductImage src={activeImage} alt={title} fill priority sizes="(max-width: 760px) 100vw, 573px" /> : <span className={styles.imageFallback}>Product image unavailable</span>}
       </div>
       {availableImages.length > 1 && (
         <div className={styles.thumbnails} aria-label="Product images">
@@ -25,7 +25,7 @@ export default function ProductGallery({ images, title }) {
               onClick={() => setActiveIndex(index)}
               className={`${styles.thumbnail} ${index === activeIndex ? styles.activeThumbnail : ''}`}
             >
-              <Image src={image} alt="" fill unoptimized sizes="100px" />
+              <ProductImage src={image} alt="" fill sizes="100px" paddingClassName="p-2" />
             </button>
           ))}
         </div>

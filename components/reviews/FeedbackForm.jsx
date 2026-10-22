@@ -27,6 +27,7 @@ export default function FeedbackForm() {
         name: formData.get('name'),
         rating,
         comment: formData.get('feedback'),
+        avatarStyle: formData.get('avatarStyle'),
       });
       setStatus('sent');
       formElement.reset();
@@ -96,6 +97,15 @@ export default function FeedbackForm() {
       <label className={`${styles.field} ${styles.feedbackField}`}>
         <span>Additional Feedback</span>
         <textarea name="feedback" placeholder="Tell us about your experience with Vedhanth…" required />
+      </label>
+
+      <label className={styles.field}>
+        <span>Profile Avatar</span>
+        <select name="avatarStyle" defaultValue="neutral">
+          <option value="neutral">Neutral avatar</option>
+          <option value="boy">Boy-style avatar</option>
+          <option value="girl">Girl-style avatar</option>
+        </select>
       </label>
 
       <label className={styles.privacy}>

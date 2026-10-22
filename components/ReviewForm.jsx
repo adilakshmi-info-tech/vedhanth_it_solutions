@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { submitReview } from '@/lib/actions/reviews';
 
 export default function ReviewForm() {
-  const [form, setForm] = useState({ name: '', rating: 5, comment: '' });
+  const [form, setForm] = useState({ name: '', rating: 5, comment: '', avatarStyle: 'neutral' });
   const [status, setStatus] = useState('idle'); // idle | sending | sent | error
 
   async function handleSubmit(e) {
@@ -15,8 +15,9 @@ export default function ReviewForm() {
         name: form.name,
         rating: Number(form.rating),
         comment: form.comment,
+        avatarStyle: form.avatarStyle,
       });
-      setForm({ name: '', rating: 5, comment: '' });
+      setForm({ name: '', rating: 5, comment: '', avatarStyle: 'neutral' });
       setStatus('sent');
     } catch (e) {
       setStatus('error');
@@ -58,6 +59,10 @@ export default function ReviewForm() {
         rows={3}
         className="w-full border border-slate-300 rounded-lg px-3 py-2 mb-4 text-sm"
       />
+      <label className="block text-xs font-semibold text-inksoft mb-1">Profile avatar</label>
+      <select value={form.avatarStyle} onChange={(e) => setForm({ ...form, avatarStyle: e.target.value })} className="w-full border border-slate-300 rounded-lg px-3 py-2 mb-4 text-sm">
+        <option value="neutral">Neutral avatar</option><option value="boy">Boy-style avatar</option><option value="girl">Girl-style avatar</option>
+      </select>
       <button type="submit" disabled={status === 'sending'} className="btn btn-primary">
         {status === 'sending' ? 'Submitting…' : 'Submit Review'}
       </button>

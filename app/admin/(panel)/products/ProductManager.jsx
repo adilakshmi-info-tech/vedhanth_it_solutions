@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useTransition } from 'react';
-import Image from 'next/image';
+import ProductImage from '@/components/ProductImage';
 import { useRouter } from 'next/navigation';
 import { createProduct, updateProduct, deleteProduct } from '@/lib/actions/products';
 import { uploadImages, deleteImage, pathFromImageUrl } from '@/lib/imageUpload';
@@ -262,7 +262,7 @@ export default function ProductManager({ initialCategories, initialProducts }) {
             </div>
             {images.length > 0 && <div className={styles.imagePreviews}>
               {images.map((item, index) => <div className={styles.imagePreview} key={item.id}>
-                <Image src={item.preview} alt={`Product image ${index + 1}`} width={180} height={180} unoptimized />
+                <ProductImage src={item.preview} alt={`Product image ${index + 1}`} width={180} height={180} />
                 <div className={styles.imagePreviewActions}>
                   <button type="button" aria-label={`Move image ${index + 1} left`} title="Move earlier" disabled={index === 0} onClick={() => moveImage(index, -1)}>←</button>
                   <button type="button" aria-label={`Move image ${index + 1} right`} title="Move later" disabled={index === images.length - 1} onClick={() => moveImage(index, 1)}>→</button>
@@ -286,7 +286,7 @@ export default function ProductManager({ initialCategories, initialProducts }) {
         {visibleProducts.map((product) => {
           const description = parseProductContent(product.description || '').description;
           return <div key={product.id} className="bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col">
-            <div className="relative aspect-square bg-navy-100">{product.images?.[0] && <Image src={product.images[0]} alt={product.name} width={600} height={600} unoptimized className="w-full h-full object-cover" />}</div>
+            <div className="relative aspect-square bg-[#f7f8fa]">{product.images?.[0] && <ProductImage src={product.images[0]} alt={product.name} width={600} height={600} className="w-full h-full" />}</div>
             <div className="p-4 flex-1 flex flex-col">
               <h3 className="font-bold text-navy-900 text-sm truncate">{product.name}</h3>
               <p className="text-xs text-inksoft mt-1 line-clamp-2 flex-1">{description || 'No description.'}</p>

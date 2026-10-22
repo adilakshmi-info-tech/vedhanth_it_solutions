@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Marquee from '@/components/Marquee';
 import styles from './ClientReviews.module.css';
+import ReviewAvatar from '@/components/reviews/ReviewAvatar';
 
 function Stars({ rating = 4 }) {
   return (
@@ -19,7 +20,7 @@ function Stars({ rating = 4 }) {
 // avatar simply floating over a plain rounded rectangle. The notch cap is a
 // fixed-height SVG (so the curve never distorts); the body below it is a
 // normal flow div that grows to fit whatever review text is passed in.
-function ReviewCard({ name, role, comment, rating, photo, avatar }) {
+function ReviewCard({ name, role, comment, rating, photo, avatarStyle = 'neutral' }) {
   return (
     <div className="shrink-0 w-[min(82vw,370px)] md:w-[370px]">
       <div className="relative aspect-[370/476] rounded-[10px] overflow-hidden shadow-lg">
@@ -40,7 +41,7 @@ function ReviewCard({ name, role, comment, rating, photo, avatar }) {
             </div>
           </div>
           <div className="absolute left-1/2 -translate-x-1/2 top-[8px] w-[50px] h-[50px] rounded-full overflow-hidden ring-4 ring-white">
-            <Image src={avatar} alt={name} fill sizes="50px" className="object-cover" />
+            <ReviewAvatar style={avatarStyle} alt={name} fill sizes="50px" className="object-cover" />
           </div>
         </div>
       </div>
@@ -49,9 +50,9 @@ function ReviewCard({ name, role, comment, rating, photo, avatar }) {
 }
 
 const FALLBACK_REVIEWS = [
-  { id: 'static-anil', name: 'Anil Reddy', role: 'Facility Manager', rating: 4, comment: 'From electrical panel work to CCTV, Vedhanth delivered quality solutions on time and within budget.', photo: '/images/home/review-bg-anil.jpg', avatar: '/images/home/avatar-anil.jpg' },
-  { id: 'static-rajesh', name: 'Rajesh Kumar', role: 'Operations Manager', rating: 4, comment: 'Vedhanth handled our CCTV and networking installation professionally. The team was responsive and completed the work as planned.', photo: '/images/home/review-bg-rajesh.jpg', avatar: '/images/home/avatar-rajesh.jpg' },
-  { id: 'static-priya', name: 'Priya Sharma', role: 'Office Administrator', rating: 4, comment: 'Excellent biometric and fire alarm installation. Their AMC support has been reliable and timely.', photo: '/images/home/review-bg-priya.jpg', avatar: '/images/home/avatar-priya.jpg' },
+  { id: 'static-anil', name: 'Anil Reddy', role: 'Facility Manager', rating: 4, comment: 'From electrical panel work to CCTV, Vedhanth delivered quality solutions on time and within budget.', photo: '/images/home/review-bg-anil.jpg', avatarStyle: 'neutral' },
+  { id: 'static-rajesh', name: 'Rajesh Kumar', role: 'Operations Manager', rating: 4, comment: 'Vedhanth handled our CCTV and networking installation professionally. The team was responsive and completed the work as planned.', photo: '/images/home/review-bg-rajesh.jpg', avatarStyle: 'boy' },
+  { id: 'static-priya', name: 'Priya Sharma', role: 'Office Administrator', rating: 4, comment: 'Excellent biometric and fire alarm installation. Their AMC support has been reliable and timely.', photo: '/images/home/review-bg-priya.jpg', avatarStyle: 'neutral' },
 ];
 
 export default function ClientReviews({ reviews = [] }) {
@@ -71,7 +72,7 @@ export default function ClientReviews({ reviews = [] }) {
       rating: review.rating || 5,
       comment: review.comment,
       photo: backgroundPhotos[index % backgroundPhotos.length].photo,
-      avatar: backgroundPhotos[index % backgroundPhotos.length].avatar,
+      avatarStyle: review.avatarPreference?.avatarStyle || 'neutral',
     }));
   const items = [...FALLBACK_REVIEWS, ...dynamicReviews];
 

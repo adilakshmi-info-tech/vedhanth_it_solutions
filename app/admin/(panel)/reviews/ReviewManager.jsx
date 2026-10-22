@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { setReviewApproval, deleteReview } from '@/lib/actions/reviews';
+import { setReviewApproval, deleteReview, updateReviewAvatarPreference } from '@/lib/actions/reviews';
 import AdminConfirmDialog from '@/components/admin/AdminConfirmDialog';
+import AdminFormDrawer from '@/components/admin/AdminFormDrawer';
 import styles from '../admin.module.css';
 
 export default function ReviewManager({ initialReviews, initialLoadError = '' }) {
@@ -16,6 +17,7 @@ export default function ReviewManager({ initialReviews, initialLoadError = '' })
   const [type, setType] = useState('all');
   const [range, setRange] = useState({ from: '', to: '' });
   const [dialog, setDialog] = useState(null);
+  const [avatarReview, setAvatarReview] = useState(null);
   const [error, setError] = useState('');
   const [loadError, setLoadError] = useState(initialLoadError);
   const [notice, setNotice] = useState('');
@@ -56,6 +58,10 @@ export default function ReviewManager({ initialReviews, initialLoadError = '' })
             approved: update.status === 'approved',
             workflow: { ...review.workflow, reviewType: typeOf(review), status: update.status, product: review.workflow?.product || null },
           } : review));
+        } else if (update?.avatarStyle) {
+          setReviewItems((current) => current.map((review) => review.id === update.id
+            ? { ...review, avatarPreference: { ...(review.avatarPreference || {}), avatarStyle: update.avatarStyle } }
+            : review));
         }
         setNotice(message);
         router.refresh();
@@ -72,6 +78,27 @@ export default function ReviewManager({ initialReviews, initialLoadError = '' })
     : 'Vedhanth IT Solutions Review';
   const dateLabel = (review) => new Date(review.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   const statusLabel = (value) => value.charAt(0).toUpperCase() + value.slice(1);
+
+  function saveAvatar(event) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const avatarStyle = String(formData.get('avatarStyle') || 'neutral');
+    setError('');
+    setNotice('');
+    startTransition(async () => {
+      try {
+        await updateReviewAvatarPreference(avatarReview.id, avatarStyle);
+        setReviewItems((current) => current.map((review) => review.id === avatarReview.id
+          ? { ...review, avatarPreference: { ...(review.avatarPreference || {}), avatarStyle } }
+          : review));
+        setNotice('Review avatar updated.');
+        setAvatarReview(null);
+        router.refresh();
+      } catch (cause) {
+        setError(cause.message || 'Unable to update this review avatar.');
+      }
+    });
+  }
 
   return <section>
     <div className={styles.pageIntro}><div><h2>Client Reviews</h2><p>Manage product and Vedhanth IT Solutions customer feedback.</p></div></div>
@@ -98,7 +125,7 @@ export default function ReviewManager({ initialReviews, initialLoadError = '' })
             <td><span className={styles.rating} aria-label={`${review.rating} out of 5 stars`}>{'★'.repeat(review.rating)}<span className={styles.ratingValue}> {review.rating}.0</span></span></td>
             <td>{dateLabel(review)}</td>
             <td><span className={`${styles.badge} ${currentStatus === 'approved' ? styles.badgeGreen : styles.badgeMuted}`}>{statusLabel(currentStatus)}</span></td>
-            <td><div className={styles.rowActions}>{currentStatus !== 'approved' && <button className={styles.quietButton} type="button" disabled={isPending} onClick={() => run(() => setReviewApproval(review.id, 'approved'), 'Review approved.', { id: review.id, status: 'approved' })}>Approve</button>}{currentStatus !== 'rejected' && <button className={styles.quietButton} type="button" disabled={isPending} onClick={() => run(() => setReviewApproval(review.id, 'rejected'), 'Review rejected.', { id: review.id, status: 'rejected' })}>Reject</button>}<button className={styles.rowDanger} type="button" disabled={isPending} onClick={() => { setError(''); setDialog({ type: 'delete', review }); }}>Delete</button></div></td>
+            <td><div className={styles.rowActions}><button className={styles.quietButton} type="button" disabled={isPending} onClick={() => setAvatarReview(review)}>Edit avatar</button>{currentStatus !== 'approved' && <button className={styles.quietButton} type="button" disabled={isPending} onClick={() => run(() => setReviewApproval(review.id, 'approved'), 'Review approved.', { id: review.id, status: 'approved' })}>Approve</button>}{currentStatus !== 'rejected' && <button className={styles.quietButton} type="button" disabled={isPending} onClick={() => run(() => setReviewApproval(review.id, 'rejected'), 'Review rejected.', { id: review.id, status: 'rejected' })}>Reject</button>}<button className={styles.rowDanger} type="button" disabled={isPending} onClick={() => { setError(''); setDialog({ type: 'delete', review }); }}>Delete</button></div></td>
           </tr>;
         })}
         {!reviews.length && <tr><td colSpan="7"><div className={styles.emptyState}><div><strong>{reviewItems.length ? 'No reviews match these filters' : 'No reviews yet'}</strong>{reviewItems.length ? 'Try changing or clearing your filters.' : 'Customer submissions will appear here when received.'}</div></div></td></tr>}
@@ -118,6 +145,11 @@ export default function ReviewManager({ initialReviews, initialLoadError = '' })
             </div>
             <p className={styles.reviewMobileType}>{reviewTypeLabel(review)}</p>
             <p className={styles.reviewMobileComment}>{review.comment}</p>
+            <label className={styles.formField}>Profile avatar
+              <select className={styles.formInput} value={review.avatarPreference?.avatarStyle || 'neutral'} onChange={(event) => run(() => updateReviewAvatarPreference(review.id, event.target.value), 'Review avatar updated.', { id: review.id, avatarStyle: event.target.value })} disabled={isPending}>
+                <option value="neutral">Neutral avatar</option><option value="boy">Boy-style avatar</option><option value="girl">Girl-style avatar</option>
+              </select>
+            </label>
             <div className={styles.reviewMobileActions}>
               {statusOf(review) !== 'approved' && <button className={styles.primaryButton} type="button" disabled={isPending} onClick={() => run(() => setReviewApproval(review.id, 'approved'), 'Review approved.', { id: review.id, status: 'approved' })}>Approve</button>}
               {statusOf(review) !== 'rejected' && <button className={styles.secondaryButton} type="button" disabled={isPending} onClick={() => run(() => setReviewApproval(review.id, 'rejected'), 'Review rejected.', { id: review.id, status: 'rejected' })}>Reject</button>}
@@ -129,6 +161,23 @@ export default function ReviewManager({ initialReviews, initialLoadError = '' })
       </div>
       <div className={styles.tableFooter}>Showing {reviews.length} of {reviewItems.length} reviews</div>
     </div>
+    <AdminFormDrawer
+      open={Boolean(avatarReview)}
+      title="Edit Review Avatar"
+      description={avatarReview ? `Choose the profile avatar for ${avatarReview.name}.` : ''}
+      formId="review-avatar-form"
+      submitLabel="Save Avatar"
+      busy={isPending}
+      onClose={() => setAvatarReview(null)}
+    >
+      <form id="review-avatar-form" className={styles.drawerForm} onSubmit={saveAvatar}>
+        <label className={styles.formField}>Profile avatar
+          <select className={styles.formInput} name="avatarStyle" defaultValue={avatarReview?.avatarPreference?.avatarStyle || 'neutral'}>
+            <option value="neutral">Neutral avatar</option><option value="boy">Boy-style avatar</option><option value="girl">Girl-style avatar</option>
+          </select>
+        </label>
+      </form>
+    </AdminFormDrawer>
     <AdminConfirmDialog open={dialog?.type === 'delete'} itemName={dialog?.review?.name || ''} itemType="review" busy={isPending} error={error} onCancel={() => { setDialog(null); setError(''); }} onConfirm={() => run(() => deleteReview(dialog.review.id), 'Review deleted.', { id: dialog.review.id, remove: true })} />
   </section>;
 }

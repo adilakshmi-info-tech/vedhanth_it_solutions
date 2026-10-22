@@ -1,7 +1,7 @@
 'use client';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import ProductImage from '@/components/ProductImage';
 import Marquee from '@/components/Marquee';
 
 function Stars({ rating = 5 }) {
@@ -22,15 +22,13 @@ function ProductCard({ product }) {
       href={`/products/${product.slug}`}
       className="group shrink-0 w-[268px] h-[522px] bg-white rounded-[20px] overflow-hidden flex flex-col"
     >
-      <div className="relative w-full h-[319px] bg-white">
+      <div className="relative w-full h-[319px] bg-[#f7f8fa]">
         {product.images?.[0] ? (
-          <Image
+          <ProductImage
             src={product.images[0]}
             alt={product.name}
             fill
             sizes="268px"
-            unoptimized
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-slate-300">
@@ -122,6 +120,20 @@ const FIGMA_TABS = [
   { label: 'Network', match: /intercom|epabx|network/i },
 ];
 
+// The marquee animates by -50% of a track containing two copies of one row
+// plus the gap between the copies. Keep the established CCTV/Biometric
+// durations, and use their actual CSS-pixel travel rates to tune the other
+// two categories for the fixed homepage card and gap dimensions.
+const PRODUCT_CARD_WIDTH = 268;
+const PRODUCT_GAP = 42;
+function marqueeTravelDistance(productCount) {
+  const rowWidth = productCount * PRODUCT_CARD_WIDTH + Math.max(0, productCount - 1) * PRODUCT_GAP;
+  return rowWidth + PRODUCT_GAP / 2;
+}
+function existingMarqueeDuration(productCount) {
+  return Math.max(productCount * 4, 20);
+}
+
 export default function ProductsSection({ categories = [] }) {
   const allProducts = categories.flatMap((cat) =>
     (cat.products || []).map((p) => ({ ...p, categoryName: cat.name }))
@@ -138,6 +150,19 @@ export default function ProductsSection({ categories = [] }) {
     ? allProducts.filter((p) => activeMatch.test(p.categoryName))
     : allProducts;
 
+  const referenceRates = ['CCTV', 'Biometric'].flatMap((label) => {
+    const category = FIGMA_TABS.find((tab) => tab.label === label);
+    const count = allProducts.filter((product) => category.match.test(product.categoryName)).length;
+    return count ? [marqueeTravelDistance(count) / existingMarqueeDuration(count)] : [];
+  });
+  const referencePixelsPerSecond = referenceRates.length
+    ? referenceRates.reduce((total, rate) => total + rate, 0) / referenceRates.length
+    : null;
+  const currentDistance = marqueeTravelDistance(displayProducts.length);
+  const marqueeDuration = ['Fire Alarm', 'Network'].includes(active) && referencePixelsPerSecond
+    ? currentDistance / referencePixelsPerSecond
+    : existingMarqueeDuration(displayProducts.length);
+
   if (allProducts.length === 0) return null;
 
   return (
@@ -150,7 +175,7 @@ export default function ProductsSection({ categories = [] }) {
         <Marquee
           key={active}
           gap={42}
-          speed={Math.max(displayProducts.length * 4, 20)}
+          speed={marqueeDuration}
           className="animate-fadeIn [mask-image:linear-gradient(90deg,transparent,black_5%,black_95%,transparent)]"
         >
           {displayProducts.map((product) => (

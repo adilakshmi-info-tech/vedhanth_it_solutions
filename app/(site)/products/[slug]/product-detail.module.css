@@ -1,14 +1,13 @@
 .productPage {
   box-sizing: border-box;
   overflow: hidden;
-  padding-bottom: 99px;
+  padding-bottom: 48px;
   color: #1d2939;
   background: #f3f3f3;
   font-family: inherit;
 }
 
-body:has(.productPage) :global(a[aria-label="Chat on WhatsApp"]),
-body:has(.productPage) :global(div[class*="grid-cols-3"]) {
+body:has(.productPage) :global(a[aria-label="Chat on WhatsApp"]) {
   display: none !important;
 }
 
@@ -70,13 +69,14 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
 .mainImage img {
   position: absolute !important;
-  inset: auto !important;
-  top: 50% !important;
-  left: 50% !important;
-  width: min(455px, 100%) !important;
-  height: min(455px, 100%) !important;
-  transform: translate(-50%, -50%);
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box;
+  padding: 20px;
+  transform: none !important;
   object-fit: contain;
+  object-position: center;
 }
 
 .thumbnails {
@@ -104,7 +104,11 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 }
 
 .thumbnail img {
-  object-fit: cover;
+  box-sizing: border-box;
+  padding: 8px;
+  object-fit: contain;
+  object-position: center;
+  transform: none !important;
 }
 
 .activeThumbnail {
@@ -284,14 +288,6 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   font-size: 12px;
 }
 
-.reviews {
-  box-sizing: border-box;
-  height: auto;
-  margin: 0;
-  padding-top: 0;
-}
-
-.reviews h2,
 .related h2 {
   margin: 0;
   color: #1d2939;
@@ -301,14 +297,6 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   text-align: center;
 }
 
-.reviewTrack {
-  position: relative;
-  height: 472px;
-  margin-top: 48px;
-  overflow: hidden;
-}
-
-.noReviews,
 .noRelated {
   display: flex;
   align-items: center;
@@ -322,175 +310,6 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 .noRelated {
   min-height: 0;
   margin-top: 24px;
-}
-
-.noReviews {
-  min-height: 64px;
-  margin-top: 24px;
-}
-
-.reviewRow {
-  position: absolute;
-  overflow: visible;
-  width: max-content;
-}
-
-.forwardReviewRow {
-  top: 0;
-  left: calc(50% - 804.5px);
-  animation: review-row-left 48s linear infinite;
-}
-
-.reverseReviewRow {
-  top: 252px;
-  left: calc(50% - 1078px);
-  animation: review-row-right 48s linear infinite;
-}
-
-.reviewMarquee,
-.reviewGroup {
-  display: flex;
-  width: max-content;
-}
-
-.reviewGroup {
-  flex: 0 0 auto;
-  gap: 32px;
-  padding-right: 32px;
-}
-
-.reviewTrack:hover .reviewRow {
-  animation-play-state: paused;
-}
-
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-@keyframes review-row-left {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
-}
-
-@keyframes review-row-right {
-  from { transform: translate3d(-50%, 0, 0); }
-  to { transform: translate3d(0, 0, 0); }
-}
-
-.reviewCard {
-  box-sizing: border-box;
-  display: flex;
-  width: 515px;
-  height: 220px;
-  flex: 0 0 515px;
-  flex-direction: column;
-  gap: 24px;
-  padding: 24px;
-  border: 1px solid #d0d5dd;
-  border-radius: 16px;
-  color: #475467;
-  background: transparent;
-}
-
-.reviewHeader,
-.reviewer,
-.reviewRating {
-  display: flex;
-  align-items: center;
-}
-
-.reviewHeader {
-  width: 100%;
-  justify-content: space-between;
-}
-
-.reviewer {
-  min-width: 0;
-  gap: 12px;
-}
-
-.reviewer > img {
-  flex: 0 0 41px;
-  width: 41px;
-  height: 41px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.reviewerInitial {
-  display: grid;
-  flex: 0 0 41px;
-  width: 41px;
-  height: 41px;
-  place-items: center;
-  border-radius: 50%;
-  background: #e8eef9;
-  color: #0b1b38;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.reviewerMeta {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 1px;
-  line-height: 1;
-}
-
-.reviewerMeta strong {
-  color: #1d2939;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 19px;
-}
-
-.reviewerMeta small {
-  color: #667085;
-  font-size: 11px;
-  font-weight: 400;
-  line-height: 13px;
-}
-
-.reviewerMeta time {
-  color: #667085;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 14px;
-  white-space: nowrap;
-}
-
-.reviewRating {
-  flex: 0 0 auto;
-  gap: 4px;
-  color: #1d2939;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.reviewRating img {
-  width: 20px;
-  height: 20px;
-}
-
-.reviewCard > p {
-  display: -webkit-box;
-  overflow: hidden;
-  margin: 0;
-  color: #475467;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 26px;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
 }
 
 .related {
@@ -662,32 +481,6 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
   .noSpecifications { top: 570px; right: 0; width: calc(50% - 20px); }
 
-  .reviews {
-    height: auto;
-  }
-
-  .reviewTrack {
-    height: 472px;
-    margin-top: 42px;
-    overflow: hidden;
-  }
-
-  .reviewRow {
-    position: absolute;
-    display: block;
-    width: max-content;
-  }
-
-  .forwardReviewRow {
-    top: 0;
-    left: calc(50% - 804.5px);
-  }
-
-  .reverseReviewRow {
-    top: 252px;
-    left: calc(50% - 1078px);
-  }
-
   .related {
     height: auto;
     margin-top: 100px;
@@ -705,7 +498,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
 
 @media (max-width: 760px) {
   .productPage {
-    padding-bottom: 64px;
+    padding-bottom: 32px;
   }
 
   .intro {
@@ -743,7 +536,7 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   }
 
   .mainImage img {
-    padding: 8px;
+    padding: 12px;
   }
 
   .thumbnails {
@@ -829,26 +622,9 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
     height: auto;
   }
 
-  .reviews {
-    padding-top: 4px;
-  }
-
-  .reviews h2,
   .related h2 {
     font-size: 32px;
     line-height: 40px;
-  }
-
-  .reviewTrack {
-    margin-top: 28px;
-  }
-
-  .forwardReviewRow {
-    left: calc(50% - 257.5px);
-  }
-
-  .reverseReviewRow {
-    left: calc(50% - 450px);
   }
 
   .related {
@@ -898,34 +674,13 @@ body:has(.productPage) :global(div[class*="grid-cols-3"]) {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .reviewRow {
-    animation: none;
-  }
+@media (max-width: 600px) {
+  .related h2 { padding-inline: 16px; overflow-wrap: anywhere; }
 }
 
-.productReviewForm { width: min(100% - 40px, 760px); margin: 32px auto 0; padding: 26px; display: grid; gap: 16px; border: 1px solid #d9dfe7; border-radius: 14px; background: #fff; }
-.productReviewForm h3 { margin: 0; color: #081a37; font-size: 20px; }
-.productReviewForm label { display: grid; gap: 7px; color: #273447; font-size: 14px; font-weight: 600; }
-.productReviewForm input, .productReviewForm textarea { box-sizing: border-box; width: 100%; min-width: 0; border: 1px solid #d6dce5; border-radius: 8px; padding: 10px 12px; color: #1f2937; font: inherit; }
-.productReviewForm input { min-height: 48px; }
-.productReviewForm textarea { min-height: 120px; resize: vertical; }
-.productReviewForm fieldset { border: 0; padding: 0; margin: 0; }
-.productReviewForm legend { margin-bottom: 6px; color: #273447; font-size: 14px; font-weight: 600; }
-.productReviewForm fieldset button { display: inline-grid; width: 44px; height: 44px; place-items: center; padding: 0; color: #f5a900; font-size: 25px; }
-.productReviewForm > button { min-height: 48px; justify-self: start; padding: 12px 22px; border-radius: 8px; background: #081a37; color: white; font-weight: 600; }
-.productReviewForm > button:disabled { opacity: .6; cursor: wait; }
-.productReviewForm > p, .reviewFormSuccess { margin: 0; color: #758196; font-size: 13px; }
-.reviewFormError { margin: 0; color: #b42318; font-size: 13px; }
-
-@media (max-width: 600px) {
-  .reviews h2,
-  .related h2 { padding-inline: 16px; overflow-wrap: anywhere; }
-
-  .reviewCard { width: min(360px, calc(100vw - 48px)); height: auto; min-height: 200px; flex-basis: min(360px, calc(100vw - 48px)); gap: 16px; padding: 18px; }
-  .reviewGroup { gap: 16px; padding-right: 16px; }
-
-  .productReviewForm { width: calc(100% - 32px); margin-top: 24px; padding: 20px; }
-  .productReviewForm h3 { font-size: 18px; }
-  .productReviewForm > button { width: 100%; }
+@media (min-width: 640px) and (max-width: 1023px) {
+  body:has(.productPage) :global(.site-footer > div > div:first-child) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
 }
