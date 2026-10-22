@@ -21,27 +21,6 @@ export default function Footer() {
               Vedhanth IT Solutions delivers integrated security, networking, electrical and
               infrastructure solutions for homes, businesses and industries.
             </p>
-
-            <form className="mt-6 flex items-center gap-2.5 border border-[#d9d9d9] rounded-[5px] p-2 max-w-[291px]">
-              <Image src="/icons/search.png" alt="" width={14} height={14} className="invert opacity-60" />
-              <input
-                type="text"
-                placeholder="Search"
-                className="bg-transparent text-sm text-[#0a142f]/60 placeholder:text-[#d9d9d9] outline-none w-full"
-              />
-            </form>
-
-            <div className="flex items-center gap-8 mt-7">
-              <a href="https://facebook.com" aria-label="Facebook" className="text-[#0a142f] hover:text-accent-500 transition">
-                <Image src="/icons/facebook.png" alt="" width={9} height={18} style={{ width: '9px', height: '18px' }} />
-              </a>
-              <a href="https://twitter.com" aria-label="Twitter" className="text-[#0a142f] hover:text-accent-500 transition">
-                <Image src="/icons/twitter.png" alt="" width={19} height={16} style={{ width: '19px', height: '16px' }} />
-              </a>
-              <a href="https://instagram.com" aria-label="Instagram" className="text-[#0a142f] hover:text-accent-500 transition">
-                <Image src="/icons/instagram.png" alt="" width={20} height={20} />
-              </a>
-            </div>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
