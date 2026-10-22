@@ -24,7 +24,7 @@ function ReviewCard({ name, role, comment, rating, photo }) {
     <div className="shrink-0 w-[min(82vw,370px)] md:w-[370px]">
       <div className="relative aspect-[370/476] rounded-[10px] overflow-hidden shadow-lg">
         <Image src={photo} alt="" fill sizes="370px" className="object-cover" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[90%] drop-shadow-[0_20px_45px_rgba(25,58,75,0.35)]">
+        <div className="absolute bottom-[calc(min(82vw,370px)*0.05)] left-1/2 -translate-x-1/2 w-[90%] drop-shadow-[0_20px_45px_rgba(25,58,75,0.35)]">
           <svg viewBox="0 0 334 70" preserveAspectRatio="none" className="block w-full h-[70px]">
             <path
               d="M167 0C179.67 0 190.673 7.14061 196.203 17.6171C200.251 25.286 202.275 29.1204 203.466 30.2512C204.997 31.7055 205.153 31.7994 207.154 32.4748C208.71 33 211.14 33 216 33H305.011C315.158 33 320.232 32.9998 324.107 34.9746C327.517 36.7117 330.288 39.4834 332.025 42.8926C334 46.7683 334 51.8421 334 61.9893V70H0V61.9893C0 51.8421 -0.000152248 46.7683 1.97461 42.8926C3.71166 39.4834 6.48345 36.7117 9.89258 34.9746C13.7683 32.9998 18.8421 33 28.9893 33H118C122.86 33 125.29 33 126.846 32.4748C128.847 31.7994 129.003 31.7055 130.534 30.2512C131.725 29.1204 133.749 25.286 137.797 17.6171C143.327 7.14061 154.33 0 167 0Z"
