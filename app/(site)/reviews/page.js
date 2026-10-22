@@ -25,7 +25,7 @@ function ReviewCard({ review }) {
       </div>
       <div className={styles.divider} />
       <div className={styles.profile}>
-        <Image className={styles.avatar} src={review.avatar} alt="" width={72} height={72} sizes="72px" />
+        <div className={styles.avatar} aria-hidden="true">{review.name.trim().charAt(0).toUpperCase()}</div>
         <div className={styles.profileText}>
           <h3>{review.name}</h3>
           <p>{review.role}{review.date ? <> <span aria-hidden="true">·</span> {review.date}</> : null}</p>
@@ -35,13 +35,7 @@ function ReviewCard({ review }) {
   );
 }
 
-function normalizeReview(review, avatarIndex = 0) {
-  const avatarPaths = [
-    '/reviews/avatars/mirana.webp',
-    '/reviews/avatars/crystal.webp',
-    '/reviews/avatars/dazzle.webp',
-    '/reviews/avatars/hearts.webp',
-  ];
+function normalizeReview(review) {
   const date = new Date(review.createdAt);
   return {
     id: review.id,
@@ -49,7 +43,6 @@ function normalizeReview(review, avatarIndex = 0) {
     role: 'Customer',
     date: Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('en-IN', { dateStyle: 'medium' }),
     rating: Number(review.rating) || 5,
-    avatar: avatarPaths[avatarIndex % avatarPaths.length],
     comment: review.comment,
   };
 }
@@ -64,7 +57,7 @@ export default async function ReviewsPage() {
     // Backend unreachable — render the page with no review cards.
   }
 
-  const approvedReviews = storedReviews.map((review, index) => normalizeReview(review, index));
+  const approvedReviews = storedReviews.map(normalizeReview);
 
   return (
     <div className={styles.page}>

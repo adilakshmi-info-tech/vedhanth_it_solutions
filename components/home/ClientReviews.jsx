@@ -19,7 +19,7 @@ function Stars({ rating = 4 }) {
 // avatar simply floating over a plain rounded rectangle. The notch cap is a
 // fixed-height SVG (so the curve never distorts); the body below it is a
 // normal flow div that grows to fit whatever review text is passed in.
-function ReviewCard({ name, role, comment, rating, photo, avatar }) {
+function ReviewCard({ name, role, comment, rating, photo }) {
   return (
     <div className="shrink-0 w-[min(82vw,370px)] md:w-[370px]">
       <div className="relative aspect-[370/476] rounded-[10px] overflow-hidden shadow-lg">
@@ -40,7 +40,7 @@ function ReviewCard({ name, role, comment, rating, photo, avatar }) {
             </div>
           </div>
           <div className="absolute left-1/2 -translate-x-1/2 top-[8px] w-[50px] h-[50px] rounded-full overflow-hidden ring-4 ring-white">
-            <Image src={avatar} alt={name} fill sizes="50px" className="object-cover" />
+            <span className="flex h-full w-full items-center justify-center bg-[#0d3d0e] text-xl font-bold text-white" aria-hidden="true">{name.trim().charAt(0).toUpperCase()}</span>
           </div>
         </div>
       </div>
@@ -48,11 +48,11 @@ function ReviewCard({ name, role, comment, rating, photo, avatar }) {
   );
 }
 
-// Background photo + avatar pairs, assigned to backend reviews by position.
+// Background photos, assigned to backend reviews by position.
 const BACKGROUNDS = [
-  { photo: '/images/home/review-bg-anil.webp', avatar: '/images/home/avatar-anil.jpg' },
-  { photo: '/images/home/review-bg-rajesh.webp', avatar: '/images/home/avatar-rajesh.jpg' },
-  { photo: '/images/home/review-bg-priya.webp', avatar: '/images/home/avatar-priya.jpg' },
+  { photo: '/images/home/review-bg-anil.webp' },
+  { photo: '/images/home/review-bg-rajesh.webp' },
+  { photo: '/images/home/review-bg-priya.webp' },
 ];
 
 export default function ClientReviews({ reviews = [] }) {
@@ -63,7 +63,6 @@ export default function ClientReviews({ reviews = [] }) {
     rating: review.rating || 5,
     comment: review.comment,
     photo: BACKGROUNDS[index % BACKGROUNDS.length].photo,
-    avatar: BACKGROUNDS[index % BACKGROUNDS.length].avatar,
   }));
   if (!items.length) return null;
 
