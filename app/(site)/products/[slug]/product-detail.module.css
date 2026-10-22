@@ -129,47 +129,15 @@ body:has(.productPage) :global(a[aria-label="Chat on WhatsApp"]) {
   line-height: 48px;
 }
 
-.ratingRow,
-.ratingGroup,
-.stars {
+.ratingRow {
   display: flex;
   align-items: center;
-}
-
-.ratingRow {
   gap: 20px;
   height: 28px;
   margin-top: 24px;
   white-space: nowrap;
   font-size: 18px;
   line-height: 28px;
-}
-
-.noRating {
-  color: #667085;
-  font-size: 16px;
-}
-
-.ratingGroup {
-  gap: 12px;
-}
-
-.stars {
-  flex: 0 0 auto;
-  gap: 4px;
-  color: #f59e0b;
-}
-
-.stars img {
-  display: block;
-  width: 24px;
-  height: 24px;
-}
-
-.verticalDivider {
-  width: 1px;
-  height: 20px;
-  background: #d0d5dd;
 }
 
 .resolution {
@@ -456,19 +424,6 @@ body:has(.productPage) :global(a[aria-label="Chat on WhatsApp"]) {
     font-size: 15px;
   }
 
-  .ratingGroup {
-    gap: 8px;
-  }
-
-  .stars {
-    gap: 1px;
-  }
-
-  .stars img {
-    width: 19px;
-    height: 19px;
-  }
-
   .resolution {
     font-size: 15px;
   }
@@ -564,15 +519,6 @@ body:has(.productPage) :global(a[aria-label="Chat on WhatsApp"]) {
     line-height: 22px;
     white-space: normal;
     flex-wrap: wrap;
-  }
-
-  .ratingGroup {
-    gap: 7px;
-  }
-
-  .stars img {
-    width: 17px;
-    height: 17px;
   }
 
   .resolution {
