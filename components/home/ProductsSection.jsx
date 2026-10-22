@@ -2,12 +2,9 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import ProductImage from '@/components/ProductImage';
-import Stars from '@/components/Stars';
-import { getProductRating } from '@/lib/ratings';
 import Marquee from '@/components/Marquee';
 
 function ProductCard({ product }) {
-  const rating = getProductRating(product);
   return (
     <Link
       href={`/products/${product.slug}`}
@@ -34,9 +31,6 @@ function ProductCard({ product }) {
         <h3 className="font-semibold text-[21px] text-[#0d1b39] mt-1 leading-snug line-clamp-2">
           {product.name}
         </h3>
-        <div className="mt-4">
-          <Stars rating={rating?.average} count={rating?.count} className="w-[18px] h-[18px]" />
-        </div>
         <span className="inline-block mt-5 text-accent-500 font-semibold text-[15px]">
           Get a Quote
         </span>
