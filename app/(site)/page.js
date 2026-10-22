@@ -19,7 +19,7 @@ export default async function HomePage() {
 
   try {
     [reviews, catalog] = await Promise.all([
-      getApprovedReviews(3),
+      getApprovedReviews(10),
       getCatalog(),
     ]);
   } catch {

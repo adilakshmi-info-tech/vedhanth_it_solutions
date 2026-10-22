@@ -1,18 +1,6 @@
 import Link from 'next/link';
 import ProductImage from '@/components/ProductImage';
 
-function Stars({ rating = 5 }) {
-  return (
-    <div className="flex gap-0.5 text-accent-500">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} className="w-3 h-3 sm:w-[18px] sm:h-[18px]" viewBox="0 0 20 20" fill={i < rating ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={i < rating ? 0 : 1.2}>
-          <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.9l-5.2 2.61.99-5.79-4.21-4.1 5.82-.85L10 1.5z" />
-        </svg>
-      ))}
-    </div>
-  );
-}
-
 // Shared product card — used on the Products page grid and on the product
 // detail page's Related Products section, so both stay visually identical.
 // Mobile (below sm) is a fluid 2-up grid: the card and its image scale with
@@ -46,9 +34,6 @@ export default function ProductCard({ product }) {
         <h3 className="font-semibold text-[13px] sm:text-[21px] text-[#0d1b39] mt-1 leading-snug line-clamp-2">
           {product.name}
         </h3>
-        <div className="mt-1.5 sm:mt-4">
-          <Stars rating={5} />
-        </div>
         <span className="inline-block mt-2 sm:mt-[26px] text-accent-500 font-semibold text-[12px] sm:text-[15px]">
           Get a Quote
         </span>

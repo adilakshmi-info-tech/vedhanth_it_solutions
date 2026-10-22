@@ -10,21 +10,6 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic';
 
-// Restored from the previous public Reviews page. These display-only cards do
-// not create or change database review records.
-const COMPANY_REVIEWS = [
-  { id: 'company-rajesh', name: 'Rajesh Kumar', role: 'Business Owner', date: 'September 18, 2026', rating: 4.9, avatar: '/reviews/avatars/mirana.webp', comment: 'Vedhanth completed our CCTV and networking installation professionally. The team understood our requirements, finished the work on time, and provided excellent support.' },
-  { id: 'company-priya', name: 'Priya Nair', role: 'Operations Manager', date: 'September 10, 2026', rating: 4.9, avatar: '/reviews/avatars/crystal.webp', comment: 'The electrical and security solutions provided for our office were reliable and neatly installed. The team was responsive from the first discussion to the final setup.' },
-  { id: 'company-sneha', name: 'Sneha Rao', role: 'Office Administrator', date: 'August 28, 2026', rating: 4.9, avatar: '/reviews/avatars/dazzle.webp', comment: 'Vedhanth delivered a complete CCTV and networking setup for our business. Their technical knowledge and attention to detail made the entire process simple and dependable.' },
-  { id: 'company-arjun', name: 'Arjun Mehta', role: 'Facility Manager', date: 'August 16, 2026', rating: 4.8, avatar: '/reviews/avatars/hearts.webp', comment: 'The biometric access-control system was installed correctly and explained clearly. Everything has been working reliably, and the support team was very helpful.' },
-  { id: 'company-vikram', name: 'Vikram Shah', role: 'IT Coordinator', date: 'August 4, 2026', rating: 4.9, avatar: '/reviews/avatars/mirana.webp', comment: 'Our office network became faster and more organized after Vedhanth completed the installation. The cabling was clean, and the team handled the project with great professionalism.' },
-  { id: 'company-ananya', name: 'Ananya Iyer', role: 'School Administrator', date: 'July 22, 2026', rating: 5.0, avatar: '/reviews/avatars/crystal.webp', comment: 'The fire-alarm system was installed safely and completed within the agreed timeline. Vedhanth explained the maintenance process clearly and answered all our questions.' },
-  { id: 'company-karthik', name: 'Karthik Reddy', role: 'Retail Store Owner', date: 'July 8, 2026', rating: 4.8, avatar: '/reviews/avatars/dazzle.webp', comment: 'We received quick and reliable AMC support whenever we needed assistance. The team diagnosed the issue quickly and restored our systems without unnecessary delays.' },
-  { id: 'company-meera', name: 'Meera Thomas', role: 'Startup Founder', date: 'June 25, 2026', rating: 4.9, avatar: '/reviews/avatars/hearts.webp', comment: 'Vedhanth handled our laptop, desktop, and networking requirements efficiently. The service was transparent, professional, and delivered exactly as promised.' },
-  { id: 'company-sanjay', name: 'Sanjay Menon', role: 'Project Manager', date: 'June 12, 2026', rating: 4.9, avatar: '/reviews/avatars/mirana.webp', comment: 'The EPABX and intercom installation improved communication across our office. The setup was clean, dependable, and completed with minimal disruption.' },
-  { id: 'company-divya', name: 'Divya Sharma', role: 'Homeowner', date: 'May 30, 2026', rating: 5.0, avatar: '/reviews/avatars/crystal.webp', comment: 'The CCTV installation was neat, properly configured, and easy to use. The team patiently explained every feature and provided excellent after-installation support.' },
-];
-
 function ReviewCard({ review }) {
   const rating = Number(review.rating) || 5;
   return (
@@ -40,7 +25,7 @@ function ReviewCard({ review }) {
       </div>
       <div className={styles.divider} />
       <div className={styles.profile}>
-        <Image className={styles.avatar} src={review.avatar} alt="" width={72} height={72} sizes="72px" />
+        <div className={styles.avatar} aria-hidden="true">{review.name.trim().charAt(0).toUpperCase()}</div>
         <div className={styles.profileText}>
           <h3>{review.name}</h3>
           <p>{review.role}{review.date ? <> <span aria-hidden="true">·</span> {review.date}</> : null}</p>
@@ -50,13 +35,7 @@ function ReviewCard({ review }) {
   );
 }
 
-function normalizeReview(review, avatarIndex = 0) {
-  const avatarPaths = [
-    '/reviews/avatars/mirana.webp',
-    '/reviews/avatars/crystal.webp',
-    '/reviews/avatars/dazzle.webp',
-    '/reviews/avatars/hearts.webp',
-  ];
+function normalizeReview(review) {
   const date = new Date(review.createdAt);
   return {
     id: review.id,
@@ -64,19 +43,8 @@ function normalizeReview(review, avatarIndex = 0) {
     role: 'Customer',
     date: Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('en-IN', { dateStyle: 'medium' }),
     rating: Number(review.rating) || 5,
-    avatar: avatarPaths[avatarIndex % avatarPaths.length],
     comment: review.comment,
   };
-}
-
-function appendUnique(existing, additions) {
-  const known = new Set(existing.map((review) => `${review.name.trim().toLowerCase()}|${review.comment.trim().toLowerCase()}`));
-  return [...existing, ...additions.filter((review) => {
-    const key = `${review.name.trim().toLowerCase()}|${review.comment.trim().toLowerCase()}`;
-    if (known.has(key)) return false;
-    known.add(key);
-    return true;
-  })];
 }
 
 export default async function ReviewsPage() {
@@ -86,11 +54,10 @@ export default async function ReviewsPage() {
     // token to call the unfiltered admin endpoint with.
     storedReviews = await getAllApprovedReviews();
   } catch {
-    // The restored static reviews remain available when the review database is offline.
+    // Backend unreachable — render the page with no review cards.
   }
 
-  const approvedReviews = storedReviews.map((review, index) => normalizeReview(review, index));
-  const reviews = appendUnique(COMPANY_REVIEWS, approvedReviews);
+  const approvedReviews = storedReviews.map(normalizeReview);
 
   return (
     <div className={styles.page}>
@@ -115,7 +82,9 @@ export default async function ReviewsPage() {
           </header>
 
           <div className={styles.reviewGrid}>
-            {reviews.map((review) => <ReviewCard key={review.id} review={review} />)}
+            {approvedReviews.length
+              ? approvedReviews.map((review) => <ReviewCard key={review.id} review={review} />)
+              : <p>No reviews yet — be the first to share your experience.</p>}
           </div>
         </div>
       </section>

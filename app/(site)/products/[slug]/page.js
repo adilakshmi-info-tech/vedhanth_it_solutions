@@ -7,24 +7,9 @@ import ProductCard from '@/components/ProductCard';
 import ProductGallery from './ProductGallery';
 import styles from './product-detail.module.css';
 
-function getAverageRating(reviews) {
-  return reviews.length ? (reviews.reduce((total, review) => total + Number(review.rating), 0) / reviews.length).toFixed(1) : null;
-}
-
 function getProductHighlight(product, categoryName) {
   const resolution = `${product.name} ${product.description || ''}`.match(/\b\d+(?:\.\d+)?\s?MP(?:\s+[\w-]+){0,2}/i)?.[0];
   return resolution || categoryName;
-}
-
-function StarRow({ rating, small = false }) {
-  const roundedRating = Number(rating);
-  const fullStarCount = roundedRating >= 4.95 ? 5 : 4;
-  return (
-    <span className={`${styles.stars} ${small ? styles.smallStars : ''}`} aria-label={`Rated ${rating} out of 5`}>
-      {Array.from({ length: fullStarCount }, (_, star) => <Image key={star} src="/images/product-detail/figma/star-full.svg" alt="" width={24} height={24} />)}
-      {fullStarCount < 5 && <Image src="/images/product-detail/figma/star-half.svg" alt="" width={24} height={24} />}
-    </span>
-  );
 }
 
 function Specifications({ rows }) {
@@ -60,8 +45,6 @@ export default async function ProductDetailPage({ params }) {
   const productContent = parseProductContent(product.description || '');
   const cleanProduct = { ...product, description: productContent.description };
   const description = productContent.description || product.category?.description || `${product.name} from Vedhanth IT Solutions. Contact our team for product details and availability.`;
-  const productReviews = (product.reviewWorkflows || []).map((workflow) => workflow.review);
-  const rating = getAverageRating(productReviews);
   const savedSpecifications = product.specifications?.length
     ? product.specifications.map(({ label, value }) => [label, value])
     : productContent.specifications.map(({ label, value }) => [label, value]);
@@ -76,10 +59,6 @@ export default async function ProductDetailPage({ params }) {
           <section className={styles.details}>
             <h1>{product.name}</h1>
             <div className={styles.ratingRow}>
-              <div className={styles.ratingGroup}>
-                {rating ? <><StarRow rating={rating} /><span>{rating} rating</span></> : <span className={styles.noRating}>No ratings yet</span>}
-              </div>
-              <span className={styles.verticalDivider} aria-hidden="true" />
               <span className={styles.resolution}>{getProductHighlight(cleanProduct, categoryName)}</span>
             </div>
             <Image className={styles.horizontalDivider} src="/images/product-detail/figma/divider-horizontal.svg" alt="" width={537} height={1} />
