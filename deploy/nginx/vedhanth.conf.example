@@ -1,26 +1,45 @@
-# Reference copy only — the file that actually matters lives outside git on
-# the VM at /opt/nginx-extra/conf.d/vedhanth.conf (see
-# Deploy_New_Website_on_WACRM_VM.md). Keep this copy in sync by hand.
+# Reference copy of /opt/nginx-extra/conf.d/vedhanth.conf on the VM (the live
+# file is not in git; keep this in sync by hand). Canonical host is
+# https://www.vedhanthitsolutions.in (see lib/site.js): every other variant
+# redirects to it. Needs a certificate covering BOTH the apex and the
+# wildcard: /etc/letsencrypt/live/vedhanthitsolutions.in/.
 
-# --- HTTP (use alone until DNS points at the server / cert is issued) -----
+# --- HTTP: everything redirects to https://www ----------------------------
 server {
   listen 80;
   server_name vedhanthitsolutions.in www.vedhanthitsolutions.in;
-  client_max_body_size 2M; # generous headroom for form posts (product images now go straight to the shared upload API, not through this app)
+  return 301 https://www.vedhanthitsolutions.in$request_uri;
+}
 
-  # /admin and /super both live in the standalone admin app (al_admin),
-  # not vedhanth_web — the full original path is forwarded unchanged (no
-  # rewrite), matching that app's own internal routing. al_backend is
-  # deliberately NOT routed here at all — it's internal-only, reached by
-  # al_admin/frontend over the Docker network, never from the public
-  # internet.
+# --- HTTPS, bare domain: redirect to www ----------------------------------
+server {
+  listen 443 ssl;
+  server_name vedhanthitsolutions.in;
+
+  ssl_certificate     /etc/letsencrypt/live/vedhanthitsolutions.in/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/vedhanthitsolutions.in/privkey.pem;
+  ssl_protocols       TLSv1.2 TLSv1.3;
+
+  return 301 https://www.vedhanthitsolutions.in$request_uri;
+}
+
+# --- HTTPS, www: the real site --------------------------------------------
+server {
+  listen 443 ssl;
+  server_name www.vedhanthitsolutions.in;
+  client_max_body_size 6M;
+
+  ssl_certificate     /etc/letsencrypt/live/vedhanthitsolutions.in/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/vedhanthitsolutions.in/privkey.pem;
+  ssl_protocols       TLSv1.2 TLSv1.3;
+
   location /admin {
     proxy_pass http://al_admin:4001;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+    proxy_set_header X-Forwarded-Proto $scheme;
   }
 
   location /super {
@@ -29,14 +48,9 @@ server {
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+    proxy_set_header X-Forwarded-Proto $scheme;
   }
 
-  # al_admin's static JS/CSS/image-optimizer assets (ASSET_PREFIX in its
-  # .env). Needed because vedhanth_web ALSO serves its own unrelated assets
-  # at plain /_next/static/* on this same domain — without this distinct
-  # prefix + rewrite, the browser can't tell the two apps' assets apart and
-  # /admin or /super loads completely unstyled.
   location /al-admin-assets/ {
     rewrite ^/al-admin-assets/(.*) /$1 break;
     proxy_pass http://al_admin:4001;
@@ -44,73 +58,22 @@ server {
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+    proxy_set_header X-Forwarded-Proto $scheme;
   }
 
   location / {
-    proxy_pass http://vedhanth_web:3000;
+    proxy_pass http://vedhanth_frontend:4002;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+    proxy_set_header X-Forwarded-Proto $scheme;
   }
+
+  add_header X-Frame-Options        "SAMEORIGIN"                       always;
+  add_header X-Content-Type-Options "nosniff"                          always;
+  add_header Referrer-Policy        "strict-origin-when-cross-origin"  always;
 
   access_log /var/log/nginx/vedhanth.access.log;
   error_log  /var/log/nginx/vedhanth.error.log;
 }
-
-# --- HTTPS (add once `certbot certonly` has issued the cert) --------------
-# server {
-#   listen 443 ssl;
-#   server_name vedhanthitsolutions.in www.vedhanthitsolutions.in;
-#   client_max_body_size 2M; # generous headroom for form posts (product images now go straight to the shared upload API, not through this app)
-#
-#   ssl_certificate     /etc/letsencrypt/live/vedhanthitsolutions.in/fullchain.pem;
-#   ssl_certificate_key /etc/letsencrypt/live/vedhanthitsolutions.in/privkey.pem;
-#   ssl_protocols       TLSv1.2 TLSv1.3;
-#
-#   location /admin {
-#     proxy_pass http://al_admin:4001;
-#     proxy_http_version 1.1;
-#     proxy_set_header Host $host;
-#     proxy_set_header X-Real-IP $remote_addr;
-#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-#     proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
-#   }
-#
-#   location /super {
-#     proxy_pass http://al_admin:4001;
-#     proxy_http_version 1.1;
-#     proxy_set_header Host $host;
-#     proxy_set_header X-Real-IP $remote_addr;
-#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-#     proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
-#   }
-#
-#   location /al-admin-assets/ {
-#     rewrite ^/al-admin-assets/(.*) /$1 break;
-#     proxy_pass http://al_admin:4001;
-#     proxy_http_version 1.1;
-#     proxy_set_header Host $host;
-#     proxy_set_header X-Real-IP $remote_addr;
-#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-#     proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
-#   }
-#
-#   location / {
-#     proxy_pass http://vedhanth_web:3000;
-#     proxy_http_version 1.1;
-#     proxy_set_header Host $host;
-#     proxy_set_header X-Real-IP $remote_addr;
-#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-#     proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
-#   }
-#
-#   add_header X-Frame-Options        "SAMEORIGIN"                       always;
-#   add_header X-Content-Type-Options "nosniff"                          always;
-#   add_header Referrer-Policy        "strict-origin-when-cross-origin"  always;
-#
-#   access_log /var/log/nginx/vedhanth.access.log;
-#   error_log  /var/log/nginx/vedhanth.error.log;
-# }
