@@ -1,17 +1,7 @@
 import Link from 'next/link';
 import ProductImage from '@/components/ProductImage';
-
-function Stars({ rating = 5 }) {
-  return (
-    <div className="flex gap-0.5 text-accent-500">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} className="w-3 h-3 sm:w-[18px] sm:h-[18px]" viewBox="0 0 20 20" fill={i < rating ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={i < rating ? 0 : 1.2}>
-          <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.9l-5.2 2.61.99-5.79-4.21-4.1 5.82-.85L10 1.5z" />
-        </svg>
-      ))}
-    </div>
-  );
-}
+import Stars from '@/components/Stars';
+import { getProductRating } from '@/lib/ratings';
 
 // Shared product card — used on the Products page grid and on the product
 // detail page's Related Products section, so both stay visually identical.
@@ -20,6 +10,7 @@ function Stars({ rating = 5 }) {
 // nothing overflows or stretches at narrow widths. sm: and up restores the
 // exact original fixed desktop dimensions untouched.
 export default function ProductCard({ product }) {
+  const rating = getProductRating(product);
   return (
     <Link
       href={`/products/${product.slug}`}
@@ -47,7 +38,7 @@ export default function ProductCard({ product }) {
           {product.name}
         </h3>
         <div className="mt-1.5 sm:mt-4">
-          <Stars rating={5} />
+          <Stars rating={rating?.average} count={rating?.count} className="w-3 h-3 sm:w-[18px] sm:h-[18px]" />
         </div>
         <span className="inline-block mt-2 sm:mt-[26px] text-accent-500 font-semibold text-[12px] sm:text-[15px]">
           Get a Quote

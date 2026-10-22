@@ -18,11 +18,12 @@ function getProductHighlight(product, categoryName) {
 
 function StarRow({ rating, small = false }) {
   const roundedRating = Number(rating);
-  const fullStarCount = roundedRating >= 4.95 ? 5 : 4;
+  const fullStarCount = Math.floor(roundedRating);
+  const hasHalf = roundedRating - fullStarCount >= 0.25 && fullStarCount < 5;
   return (
     <span className={`${styles.stars} ${small ? styles.smallStars : ''}`} aria-label={`Rated ${rating} out of 5`}>
       {Array.from({ length: fullStarCount }, (_, star) => <Image key={star} src="/images/product-detail/figma/star-full.svg" alt="" width={24} height={24} />)}
-      {fullStarCount < 5 && <Image src="/images/product-detail/figma/star-half.svg" alt="" width={24} height={24} />}
+      {hasHalf && <Image src="/images/product-detail/figma/star-half.svg" alt="" width={24} height={24} />}
     </span>
   );
 }
