@@ -162,7 +162,7 @@ function ServicesHero() {
           <Image src={asset('hero-intercom.webp')} alt="Intercom and access control equipment" fill sizes="223px" priority />
         </div>
         <div className="services-hero-main-image">
-          <Image src={asset('hero-control-panels.webp')} alt="Electrical control panels with a technician inspecting the installation" fill sizes="492px" priority />
+        <Image src={asset('hero-control-panels.png')} alt="Electrical control panels with a technician inspecting the installation" fill sizes="492px" priority />
         </div>
         <div className="services-hero-copy">
           <span className="services-eyebrow">Service</span>

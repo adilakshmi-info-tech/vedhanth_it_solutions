@@ -132,9 +132,6 @@ export default function ContactSection({ showHeading = true }) {
           <div className="hidden md:block bg-[#183a4a]" />
         </div>
 
-        {/* Positioned exactly as in Figma: the illustration straddles the
-            white/navy boundary rather than sitting centered in the navy
-            column, so it's laid out as an absolute overlay on the card. */}
         <div
           className="hidden md:block absolute pointer-events-none"
           style={{ left: '53.96%', top: '22.44%', width: '43.34%', height: '55.56%' }}

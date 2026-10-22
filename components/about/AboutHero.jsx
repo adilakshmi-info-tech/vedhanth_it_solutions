@@ -50,7 +50,7 @@ export default function AboutHero() {
             </div>
             <div className="absolute right-0 top-[46%] w-[46%] aspect-[300/378] rounded-[10px] overflow-hidden shadow-lg">
               <Image
-                src="/images/home/services-large.webp"
+                src="/images/home/about-electrical-meter.png"
                 alt="Electrical LT panel maintenance"
                 fill
                 sizes="(min-width: 1440px) 290px, (min-width: 1024px) 27vw, 46vw"
@@ -108,18 +108,23 @@ export default function AboutHero() {
             </p>
             <Link
               href="/services"
-              className="relative inline-flex w-[270px] max-w-full items-center justify-center h-[80px] px-8 mt-10 rounded-[10px] bg-[#081732] text-white text-[18px] font-semibold tracking-[1.8px] uppercase hover:bg-[#0a1f42] transition"
-              style={{
-                boxShadow: '0px 1.85185px 3.14815px rgba(68, 68, 68, 0.02), 0px 8.14815px 6.51852px rgba(68, 68, 68, 0.04), 0px 20px 13px rgba(68, 68, 68, 0.05), 0px 38.51852px 25.48148px rgba(68, 68, 68, 0.06), 0px 64.81481px 46.85185px rgba(68, 68, 68, 0.08), 0px 100px 80px rgba(68, 68, 68, 0.10)',
-                maskImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 270 80\' preserveAspectRatio=\'none\'%3E%3Cpath d=\'M10 0 H246 Q258 0 254 12 L232 68 Q229 80 218 80 H10 Q0 80 0 70 V10 Q0 0 10 0Z\' fill=\'black\'/%3E%3C/svg%3E")',
-                maskSize: '100% 100%',
-                maskRepeat: 'no-repeat',
-                WebkitMaskImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 270 80\' preserveAspectRatio=\'none\'%3E%3Cpath d=\'M10 0 H246 Q258 0 254 12 L232 68 Q229 80 218 80 H10 Q0 80 0 70 V10 Q0 0 10 0Z\' fill=\'black\'/%3E%3C/svg%3E")',
-                WebkitMaskSize: '100% 100%',
-                WebkitMaskRepeat: 'no-repeat',
-              }}
+              aria-label="Explore more services"
+              className="relative block w-[223px] h-[65px] mt-10 text-white no-underline"
             >
-              Explore More
+              <span className="absolute inset-0 flex items-center justify-center overflow-visible" aria-hidden="true">
+                <span className="relative flex-none w-[223px] h-[65px]" style={{ transform: 'rotate(180deg)' }}>
+                  <Image
+                    src="/images/services/figma/button.svg"
+                    alt=""
+                    width={378}
+                    height={246}
+                    style={{ position: 'absolute', display: 'block', maxWidth: 'none', inset: '-1.99% -35.87% -276.92% -33.68%' }}
+                  />
+                </span>
+              </span>
+              <span className="absolute top-[19px] left-[30px] whitespace-nowrap font-sans text-[18px] font-[590] leading-[28px] tracking-[1.8px] uppercase text-white">
+                Explore More
+              </span>
             </Link>
           </div>
         </div>

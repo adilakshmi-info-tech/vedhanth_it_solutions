@@ -71,9 +71,9 @@ export default function Capabilities() {
           {CAPABILITIES.map((item) => (
             <div
               key={item.title}
-              className="bg-white border border-slate-200 rounded-lg p-6 transition hover:border-accent-500 hover:shadow-lg hover:-translate-y-1"
+              className="bg-white border border-slate-200 rounded-2xl p-6 transition hover:border-accent-500 hover:shadow-lg hover:-translate-y-1"
             >
-              <div className="w-12 h-12 border-2 border-accent-500 rounded-lg flex items-center justify-center text-accent-500 mb-4">
+              <div className="w-14 h-14 border-[3px] border-accent-500 rounded-[16px] flex items-center justify-center text-accent-500 mb-5">
                 {item.icon}
               </div>
               <h3 className="font-display font-bold text-navy-900">{item.title}</h3>

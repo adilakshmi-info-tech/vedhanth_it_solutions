@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import ProductImage from '@/components/ProductImage';
 
 function Stars({ rating = 5 }) {
   return (
@@ -25,15 +25,13 @@ export default function ProductCard({ product }) {
       href={`/products/${product.slug}`}
       className="group w-full sm:max-w-[268px] h-auto sm:h-[522px] bg-white rounded-[14px] sm:rounded-[20px] overflow-hidden flex flex-col mx-auto"
     >
-      <div className="relative w-full aspect-[268/319] sm:aspect-auto sm:h-[319px] bg-[#fafafa] shrink-0">
+      <div className="relative w-full aspect-[268/319] sm:aspect-auto sm:h-[319px] bg-[#f7f8fa] shrink-0">
         {product.images?.[0] ? (
-          <Image
+          <ProductImage
             src={product.images[0]}
             alt={product.name}
             fill
             sizes="(max-width: 639px) calc(50vw - 30px), (max-width: 1023px) 42vw, 268px"
-            unoptimized
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-slate-300">
