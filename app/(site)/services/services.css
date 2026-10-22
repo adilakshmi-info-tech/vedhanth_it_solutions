@@ -19,7 +19,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
 .services-hero {
   position: relative;
   height: 807px;
-  background: #eff6ff;
+  background: #f2f2f2;
 }
 
 .services-hero-inner {
@@ -184,7 +184,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
 .services-list-intro h2,
 .delivery-intro h2 {
   margin: 0;
-  color: #000;
+  color: #1e1e1e;
   font-size: 35px;
   font-weight: 700;
   line-height: 42px;
@@ -192,7 +192,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
 }
 
 .services-list-intro h2 strong {
-  color: #1963b9;
+  color: #081732;
   font-weight: 700;
 }
 
@@ -229,7 +229,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
 
 .service-row-copy h2 {
   margin: 0;
-  color: #1963b9;
+  color: #081732;
   font-size: 50px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -247,7 +247,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
   z-index: 1;
   width: 401px;
   margin: 0;
-  color: #000;
+  color: #1e1e1e;
   font-size: 21px;
   font-weight: 500;
   letter-spacing: 1px;
@@ -264,7 +264,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
   overflow: hidden;
   padding: 18px 20px;
   border-radius: 10px;
-  background: #1963b9;
+  background: #081732;
   color: #fff;
   font-size: 19px;
   font-weight: 700;
@@ -276,7 +276,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
 }
 
 .service-row-quote:hover {
-  background: #15559e;
+  background: #10284e;
 }
 
 .service-row-art {
@@ -303,7 +303,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
   height: 456px;
   margin: 0 auto;
   overflow: hidden;
-  background: #eff6ff;
+  background: #f2f2f2;
 }
 
 .delivery-card {
@@ -327,7 +327,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
   width: 574px;
   height: 358px;
   border-radius: 30px;
-  box-shadow: 0 4px 4px #d7e9ff;
+  box-shadow: 0 4px 4px rgba(8, 23, 50, 0.15);
   transform: translateX(-50%);
 }
 
@@ -364,7 +364,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
   top: 22px;
   left: 175px;
   width: 251px;
-  color: #000;
+  color: #1e1e1e;
   letter-spacing: 1px;
 }
 
@@ -926,7 +926,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
     grid-row: 3;
     width: 100%;
     margin-top: 0;
-    color: #000;
+    color: #1e1e1e;
     font-size: 16px;
     line-height: 1.55;
     overflow-wrap: anywhere;
@@ -1086,7 +1086,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
   margin: 0 auto;
   padding: 0;
   overflow: hidden;
-  background: #eff6ff;
+  background: #f2f2f2;
   isolation: isolate;
 }
 
@@ -1134,7 +1134,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
 }
 
 .delivery-carousel .delivery-card[data-position='center'] {
-  box-shadow: 0 4px 4px #d7e9ff;
+  box-shadow: 0 4px 4px rgba(8, 23, 50, 0.15);
 }
 
 .delivery-carousel .delivery-card-image,
@@ -1162,7 +1162,7 @@ body:has(.services-page) > a[aria-label='Chat on WhatsApp'] {
   min-width: 0;
   flex: 1;
   padding: 0;
-  color: #000;
+  color: #1e1e1e;
   letter-spacing: 1px;
 }
 
